@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Codon Usage Methods — Nucleora</title>
+  <meta name="description" content="How Nucleora's codon usage tables are calculated: RefSeq source, filtering criteria, tally method, and proxy selection for species with limited data.">
+  <meta name="theme-color" content="#080c12">
+  <link rel="icon" href="../assets/img/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="../assets/img/favicon.png">
+  <link rel="canonical" href="https://nucleoragene.github.io/nucleora-site/codon-usage/methods.html">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    .methods-page { padding: 140px 0 100px; }
+    .methods-page h1 { font-size: clamp(36px,5vw,60px); font-weight:300; color:var(--text-bright); line-height:1.1; letter-spacing:-0.03em; margin-bottom:16px; }
+    .methods-page .lead { font-size:18px; color:var(--text-dim); max-width:58ch; line-height:1.7; margin-bottom:60px; }
+    .method-section { padding: 48px 0; border-top: 1px solid var(--border-dim); max-width: 800px; }
+    .method-section h2 { font-size:22px; font-weight:400; color:var(--text-bright); margin-bottom:16px; }
+    .method-section p, .method-section li { font-size:15px; color:var(--text-dim); line-height:1.8; margin-bottom:12px; }
+    .method-section ul { padding-left: 0; }
+    .method-section li { list-style: none; padding-left: 20px; position: relative; }
+    .method-section li::before { content: '—'; position:absolute; left:0; color:var(--accent); }
+    .method-callout {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--accent);
+      padding: 20px 24px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin: 24px 0;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.7;
+    }
+    code { font-family: var(--ff-mono); font-size: 13px; background: var(--bg-card); padding: 2px 6px; border-radius: 3px; color: var(--accent); }
+    .version-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 13px; font-family: var(--ff-mono); }
+    .version-table th { text-align: left; font-size:9px; letter-spacing:0.14em; color:var(--accent); text-transform:uppercase; padding:8px 12px; border-bottom:1px solid var(--border); }
+    .version-table td { padding:7px 12px; border-bottom:1px solid var(--border-dim); color:var(--text); }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<nav class="site-nav" id="site-nav">
+  <div class="nav-inner">
+    <a href="../" class="nav-logo" aria-label="Nucleora home">
+      <img src="../assets/img/logo.png" alt="Nucleora" class="nav-logo-img">
+      <span class="nav-logo-text">Nucleora</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html#features">Features</a></li>
+      <li><a href="../index.html#drc">Design Rules</a></li>
+      <li><a href="../index.html#local">Local-first</a></li>
+      <li><a href="./index.html">Codon Data</a></li>
+      <li><a href="../how-it-works.html">How it works</a></li>
+    </ul>
+    <a href="../index.html#download" class="nav-cta btn-primary">Download free</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<main id="main-content">
+<div class="container">
+<section class="methods-page">
+  <p class="section-label mono">DATA · METHODS</p>
+  <h1>How we calculate the tables.</h1>
+  <p class="lead">Codon usage tables in Nucleora are computed from primary sequence data, not copied from secondary databases. Every decision in the pipeline is documented here.</p>
+
+  <div class="method-section">
+    <h2>Data source</h2>
+    <p>All tables are computed from NCBI RefSeq annotated CDS sequences, fetched via the NCBI Datasets API. We use the <code>*_cds_from_genomic.fna.gz</code> file from each species' reference assembly.</p>
+    <p>We do not use CDS sequences from Ensembl, UniProt, or third-party codon databases. Using a single, named, versioned source makes the data reproducible and auditable.</p>
+    <div class="method-callout">
+      RefSeq release numbers and the tally date are recorded alongside every table. If you're comparing across species, you're comparing tables computed with the same pipeline from the same release.
+    </div>
+  </div>
+
+  <div class="method-section">
+    <h2>Filtering criteria</h2>
+    <p>CDS sequences are included in the tally if they pass all of the following:</p>
+    <ul>
+      <li>Annotated as protein-coding (<code>feature_type=CDS</code> in RefSeq annotation)</li>
+      <li>Length divisible by 3 with no internal stop codons</li>
+      <li>Minimum 100 nt after stripping start and stop codons</li>
+      <li>No ambiguous IUPAC bases (N, R, Y, S, W, K, M, B, D, H, V)</li>
+      <li>Sequence begins with ATG</li>
+    </ul>
+    <p>These filters remove pseudogenes, partial sequences, and annotation errors. The <em>n</em> count on each table reflects how many CDS sequences passed all filters, not the species' total gene count.</p>
+  </div>
+
+  <div class="method-section">
+    <h2>Tally method</h2>
+    <p>For each sequence that passes filtering, every codon position is counted (excluding the start ATG and stop codon). Counts are summed across all sequences. Relative synonymous codon usage (RSCU) and per-1000 frequencies are calculated from the raw counts.</p>
+    <p>The tally is unweighted — each CDS sequence contributes equally regardless of expression level. This is the standard approach for codon optimization context. Expression-weighted tables (using RNA-seq TPM data) are planned for a future release; that document will note the distinction explicitly.</p>
+  </div>
+
+  <div class="method-section">
+    <h2>Proxy species policy</h2>
+    <p>For species where RefSeq has fewer than 500 CDS sequences passing filters, Nucleora selects a proxy species and reports it explicitly. The proxy is selected by:</p>
+    <ul>
+      <li>Taxonomic distance (closest named relative with ≥ 2,000 CDS sequences)</li>
+      <li>If multiple candidates exist at the same distance, the one with the highest CDS count wins</li>
+    </ul>
+    <div class="method-callout">
+      When a proxy is used, the in-app codon optimization panel shows the proxy species name in amber, the distance metric, and the proxy's n-count. Nucleora never approximates silently.
+    </div>
+    <p>We do not interpolate, blend, or weight-average across species to produce a "synthetic" table. If the data doesn't exist, we say so and name the closest real table we have.</p>
+  </div>
+
+  <div class="method-section">
+    <h2>Update cadence</h2>
+    <p>Tables are re-tallied after each major RefSeq release (approximately every 3 months). The release number and tally date are embedded in every table file distributed with Nucleora. Updates ship as part of the standard application update; no manual data download is required.</p>
+    <table class="version-table">
+      <thead><tr><th>Table version</th><th>RefSeq release</th><th>Tally date</th><th>Species covered</th></tr></thead>
+      <tbody>
+        <tr><td>1.0</td><td>223</td><td>2025-11</td><td>107</td></tr>
+        <tr><td>0.9</td><td>221</td><td>2025-08</td><td>94</td></tr>
+        <tr><td>0.8</td><td>219</td><td>2025-05</td><td>82</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="method-section">
+    <h2>Benchmarks we publish</h2>
+    <p>We validate each table against published RSCU values for Human, Mouse, E. coli K-12, and S. cerevisiae. Discrepancies &gt; 5% in any synonymous codon fraction are investigated before the table is released.</p>
+    <p>Known systematic differences (e.g., from using unweighted vs. expression-weighted tallies) are documented in the release notes. If our table differs from a published value and we can't explain why, we flag the codon and note the discrepancy rather than silently accepting it.</p>
+    <div class="method-callout">
+      We publish the benchmarks we lose. Transparent method documentation is part of the product.
+    </div>
+  </div>
+</section>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="../assets/img/logo.png" alt="Nucleora" class="footer-logo" loading="lazy">
+        <p class="mono">CAD for DNA and mRNA.<br>nucleora.org</p>
+      </div>
+      <div class="footer-links">
+        <h4 class="mono">Tool</h4>
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#drc">Design rules</a>
+        <a href="../how-it-works.html">How it works</a>
+        <a href="../index.html#download">Download</a>
+      </div>
+      <div class="footer-links">
+        <h4 class="mono">Data</h4>
+        <a href="./index.html">Codon usage tables</a>
+        <a href="./methods.html" aria-current="page">Methods</a>
+      </div>
+      <div class="footer-links">
+        <h4 class="mono">Contact</h4>
+        <a href="../contact.html">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom mono">
+      <span>© 2026 Nucleora</span>
+      <span class="sep">·</span>
+      <span>Local-first · Method-transparent · Honest about limits</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

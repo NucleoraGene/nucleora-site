@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nucleoragene.github.io/nucleora-site/sitemap.xml

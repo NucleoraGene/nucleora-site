@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Codon Usage Tables — Nucleora</title>
+  <meta name="description" content="Codon usage frequency tables calculated from RefSeq CDS sequences for 100+ species. Real data, named sources, no interpolation.">
+  <meta property="og:title" content="Codon Usage Tables — Nucleora">
+  <meta property="og:description" content="Real codon usage data from RefSeq CDS sequences for 100+ species.">
+  <meta property="og:image" content="../assets/img/screen-dashboard.jpg">
+  <meta name="theme-color" content="#080c12">
+  <link rel="icon" href="../assets/img/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="../assets/img/favicon.png">
+  <link rel="canonical" href="https://nucleoragene.github.io/nucleora-site/codon-usage/">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    .page-hero { padding: 140px 0 60px; }
+    .page-hero h1 { font-size: clamp(36px, 5vw, 60px); font-weight: 300; color: var(--text-bright); line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 16px; }
+    .page-hero p { font-size: 17px; color: var(--text-dim); max-width: 54ch; line-height: 1.7; }
+
+    .search-bar { margin: 40px 0 48px; display: flex; gap: 12px; align-items: center; }
+    .search-input {
+      flex: 1; max-width: 400px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-bright);
+      font-family: var(--ff-mono);
+      font-size: 13px;
+      padding: 10px 16px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .search-input::placeholder { color: var(--text-dim); }
+    .search-input:focus { border-color: var(--accent); }
+
+    .species-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 80px;
+    }
+    .species-card {
+      background: var(--bg-card);
+      padding: 24px;
+      cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+      display: block;
+    }
+    .species-card:hover { background: var(--bg-card-2); }
+    .species-name { font-size: 16px; font-weight: 400; color: var(--text-bright); margin-bottom: 4px; }
+    .species-latin { font-size: 11px; font-style: italic; color: var(--text-dim); margin-bottom: 12px; }
+    .species-meta { display: flex; gap: 12px; font-family: var(--ff-mono); font-size: 10px; color: var(--text-dim); letter-spacing: 0.06em; }
+    .species-cds { color: var(--accent); }
+
+    .codon-table-section { padding: 60px 0; border-top: 1px solid var(--border-dim); }
+    .codon-table-section h2 { font-size: 28px; font-weight: 300; color: var(--text-bright); margin-bottom: 8px; }
+    .codon-table-section .species-latin-head { font-style: italic; color: var(--text-dim); margin-bottom: 32px; }
+
+    .codon-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--ff-mono);
+      font-size: 12px;
+    }
+    .codon-table th {
+      text-align: left;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      text-transform: uppercase;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .codon-table td { padding: 7px 12px; border-bottom: 1px solid var(--border-dim); color: var(--text); }
+    .codon-table tr:hover td { background: var(--bg-card); }
+    .codon-freq { color: var(--text-dim); }
+    .codon-aa { color: var(--accent); width: 36px; }
+
+    .data-note { margin-top: 24px; font-size: 12px; color: var(--text-dim); font-family: var(--ff-mono); line-height: 1.6; }
+    .data-note a { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .species-grid { grid-template-columns: 1fr; }
+      .search-bar { flex-direction: column; align-items: stretch; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<nav class="site-nav" id="site-nav">
+  <div class="nav-inner">
+    <a href="../" class="nav-logo" aria-label="Nucleora home">
+      <img src="../assets/img/logo.png" alt="Nucleora" class="nav-logo-img">
+      <span class="nav-logo-text">Nucleora</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html#features">Features</a></li>
+      <li><a href="../index.html#drc">Design Rules</a></li>
+      <li><a href="../index.html#local">Local-first</a></li>
+      <li><a href="./index.html" aria-current="page">Codon Data</a></li>
+      <li><a href="../how-it-works.html">How it works</a></li>
+    </ul>
+    <a href="../index.html#download" class="nav-cta btn-primary">Download free</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<main id="main-content">
+<section class="page-hero">
+  <div class="container">
+    <p class="section-label mono">OPEN DATA</p>
+    <h1>Codon usage tables.</h1>
+    <p>Calculated from RefSeq CDS sequences — not interpolated, not approximated. Every table names its source accession count and the date the data was tallied.</p>
+  </div>
+</section>
+
+<section style="padding: 0 0 80px;">
+  <div class="container">
+    <div class="search-bar">
+      <input type="text" class="search-input" id="speciesSearch" placeholder="Search species..." aria-label="Search species">
+      <span class="mono" id="speciesCount" style="font-size:11px;color:var(--text-dim);white-space:nowrap;">100+ species</span>
+    </div>
+
+    <div class="species-grid" id="speciesGrid">
+      <!-- Row 1: Mammals -->
+      <a class="species-card" href="#human" data-name="human homo sapiens">
+        <div class="species-name">Human</div>
+        <div class="species-latin">Homo sapiens</div>
+        <div class="species-meta"><span class="species-cds">CDS: 41,238</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#mouse" data-name="mouse mus musculus">
+        <div class="species-name">Mouse</div>
+        <div class="species-latin">Mus musculus</div>
+        <div class="species-meta"><span class="species-cds">CDS: 22,416</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#rat" data-name="rat rattus norvegicus">
+        <div class="species-name">Rat</div>
+        <div class="species-latin">Rattus norvegicus</div>
+        <div class="species-meta"><span class="species-cds">CDS: 14,891</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#chimpanzee" data-name="chimpanzee pan troglodytes">
+        <div class="species-name">Chimpanzee</div>
+        <div class="species-latin">Pan troglodytes</div>
+        <div class="species-meta"><span class="species-cds">CDS: 18,033</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#gorilla" data-name="gorilla gorilla gorilla">
+        <div class="species-name">Gorilla</div>
+        <div class="species-latin">Gorilla gorilla</div>
+        <div class="species-meta"><span class="species-cds">CDS: 16,790</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#rhesus" data-name="rhesus macaque macaca mulatta">
+        <div class="species-name">Rhesus macaque</div>
+        <div class="species-latin">Macaca mulatta</div>
+        <div class="species-meta"><span class="species-cds">CDS: 19,244</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#dog" data-name="dog canis lupus familiaris">
+        <div class="species-name">Dog</div>
+        <div class="species-latin">Canis lupus familiaris</div>
+        <div class="species-meta"><span class="species-cds">CDS: 20,114</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#cat" data-name="cat felis catus">
+        <div class="species-name">Cat</div>
+        <div class="species-latin">Felis catus</div>
+        <div class="species-meta"><span class="species-cds">CDS: 18,671</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#cattle" data-name="cattle bovine bos taurus">
+        <div class="species-name">Cattle</div>
+        <div class="species-latin">Bos taurus</div>
+        <div class="species-meta"><span class="species-cds">CDS: 22,388</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#pig" data-name="pig sus scrofa">
+        <div class="species-name">Pig</div>
+        <div class="species-latin">Sus scrofa</div>
+        <div class="species-meta"><span class="species-cds">CDS: 21,907</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#horse" data-name="horse equus caballus">
+        <div class="species-name">Horse</div>
+        <div class="species-latin">Equus caballus</div>
+        <div class="species-meta"><span class="species-cds">CDS: 19,042</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#sheep" data-name="sheep ovis aries">
+        <div class="species-name">Sheep</div>
+        <div class="species-latin">Ovis aries</div>
+        <div class="species-meta"><span class="species-cds">CDS: 20,111</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#elephant" data-name="elephant loxodonta africana">
+        <div class="species-name">Elephant</div>
+        <div class="species-latin">Loxodonta africana</div>
+        <div class="species-meta"><span class="species-cds">CDS: 17,232</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#tiger" data-name="tiger panthera tigris">
+        <div class="species-name">Tiger</div>
+        <div class="species-latin">Panthera tigris</div>
+        <div class="species-meta"><span class="species-cds">CDS: 16,874</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#lion" data-name="lion panthera leo">
+        <div class="species-name">Lion</div>
+        <div class="species-latin">Panthera leo</div>
+        <div class="species-meta"><span class="species-cds">CDS: 15,941</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#dolphin" data-name="dolphin tursiops truncatus">
+        <div class="species-name">Dolphin</div>
+        <div class="species-latin">Tursiops truncatus</div>
+        <div class="species-meta"><span class="species-cds">CDS: 14,803</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#polar-bear" data-name="polar bear ursus maritimus">
+        <div class="species-name">Polar Bear</div>
+        <div class="species-latin">Ursus maritimus</div>
+        <div class="species-meta"><span class="species-cds">CDS: 14,218</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#giant-panda" data-name="giant panda ailuropoda melanoleuca">
+        <div class="species-name">Giant Panda</div>
+        <div class="species-latin">Ailuropoda melanoleuca</div>
+        <div class="species-meta"><span class="species-cds">CDS: 15,114</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#cheetah" data-name="cheetah acinonyx jubatus">
+        <div class="species-name">Cheetah</div>
+        <div class="species-latin">Acinonyx jubatus</div>
+        <div class="species-meta"><span class="species-cds">CDS: 13,988</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#white-rhino" data-name="white rhinoceros ceratotherium simum">
+        <div class="species-name">White Rhino</div>
+        <div class="species-latin">Ceratotherium simum</div>
+        <div class="species-meta"><span class="species-cds">CDS: 12,441</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <!-- Birds -->
+      <a class="species-card" href="#chicken" data-name="chicken gallus gallus">
+        <div class="species-name">Chicken</div>
+        <div class="species-latin">Gallus gallus</div>
+        <div class="species-meta"><span class="species-cds">CDS: 16,736</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#zebrafinch" data-name="zebra finch taeniopygia guttata">
+        <div class="species-name">Zebra finch</div>
+        <div class="species-latin">Taeniopygia guttata</div>
+        <div class="species-meta"><span class="species-cds">CDS: 14,101</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <!-- Reptiles / Fish -->
+      <a class="species-card" href="#zebrafish" data-name="zebrafish danio rerio">
+        <div class="species-name">Zebrafish</div>
+        <div class="species-latin">Danio rerio</div>
+        <div class="species-meta"><span class="species-cds">CDS: 25,912</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#axolotl" data-name="axolotl ambystoma mexicanum">
+        <div class="species-name">Axolotl</div>
+        <div class="species-latin">Ambystoma mexicanum</div>
+        <div class="species-meta"><span class="species-cds">CDS: 9,814</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <!-- Invertebrates -->
+      <a class="species-card" href="#drosophila" data-name="fruit fly drosophila melanogaster">
+        <div class="species-name">Fruit fly</div>
+        <div class="species-latin">Drosophila melanogaster</div>
+        <div class="species-meta"><span class="species-cds">CDS: 13,987</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#celegans" data-name="c. elegans caenorhabditis elegans roundworm">
+        <div class="species-name">C. elegans</div>
+        <div class="species-latin">Caenorhabditis elegans</div>
+        <div class="species-meta"><span class="species-cds">CDS: 19,711</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <!-- Yeast -->
+      <a class="species-card" href="#yeast" data-name="yeast saccharomyces cerevisiae">
+        <div class="species-name">Baker's yeast</div>
+        <div class="species-latin">Saccharomyces cerevisiae</div>
+        <div class="species-meta"><span class="species-cds">CDS: 5,918</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#pichia" data-name="pichia pastoris komagataella phaffii">
+        <div class="species-name">Pichia pastoris</div>
+        <div class="species-latin">Komagataella phaffii</div>
+        <div class="species-meta"><span class="species-cds">CDS: 4,981</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <!-- Plants -->
+      <a class="species-card" href="#arabidopsis" data-name="arabidopsis thaliana thale cress">
+        <div class="species-name">Arabidopsis</div>
+        <div class="species-latin">Arabidopsis thaliana</div>
+        <div class="species-meta"><span class="species-cds">CDS: 27,416</span><span>RefSeq · 2025-11</span></div>
+      </a>
+      <a class="species-card" href="#tobacco" data-name="tobacco nicotiana tabacum">
+        <div class="species-name">Tobacco</div>
+        <div class="species-latin">Nicotiana tabacum</div>
+        <div class="species-meta"><span class="species-cds">CDS: 36,114</span><span>RefSeq · 2025-11</span></div>
+      </a>
+    </div>
+
+    <!-- Human codon table (sample) -->
+    <section class="codon-table-section" id="human">
+      <p class="section-label mono">HUMAN</p>
+      <h2>Homo sapiens</h2>
+      <p class="species-latin-head">RefSeq CDS n=41,238 · Tally date: 2025-11 · Source: NCBI RefSeq</p>
+      <table class="codon-table" aria-label="Codon usage for Homo sapiens">
+        <thead>
+          <tr><th>Codon</th><th>AA</th><th>Fraction</th><th>per 1000</th><th>Count</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="mono">UUU</td><td class="mono codon-aa">Phe</td><td class="codon-freq">0.45</td><td>17.0</td><td>492,884</td></tr>
+          <tr><td class="mono">UUC</td><td class="mono codon-aa">Phe</td><td class="codon-freq">0.55</td><td>20.7</td><td>600,812</td></tr>
+          <tr><td class="mono">UUA</td><td class="mono codon-aa">Leu</td><td class="codon-freq">0.07</td><td>7.0</td><td>202,919</td></tr>
+          <tr><td class="mono">UUG</td><td class="mono codon-aa">Leu</td><td class="codon-freq">0.13</td><td>12.8</td><td>371,397</td></tr>
+          <tr><td class="mono">CUU</td><td class="mono codon-aa">Leu</td><td class="codon-freq">0.13</td><td>13.1</td><td>380,074</td></tr>
+          <tr><td class="mono">CUC</td><td class="mono codon-aa">Leu</td><td class="codon-freq">0.20</td><td>19.5</td><td>565,942</td></tr>
+          <tr><td class="mono">CUA</td><td class="mono codon-aa">Leu</td><td class="codon-freq">0.07</td><td>7.1</td><td>206,007</td></tr>
+          <tr><td class="mono">CUG</td><td class="mono codon-aa">Leu</td><td class="codon-freq">0.41</td><td>39.8</td><td>1,154,887</td></tr>
+          <tr><td class="mono">AUU</td><td class="mono codon-aa">Ile</td><td class="codon-freq">0.36</td><td>16.0</td><td>464,187</td></tr>
+          <tr><td class="mono">AUC</td><td class="mono codon-aa">Ile</td><td class="codon-freq">0.47</td><td>20.8</td><td>603,492</td></tr>
+          <tr><td class="mono">AUA</td><td class="mono codon-aa">Ile</td><td class="codon-freq">0.17</td><td>7.4</td><td>214,773</td></tr>
+          <tr><td class="mono">AUG</td><td class="mono codon-aa">Met</td><td class="codon-freq">1.00</td><td>22.2</td><td>644,013</td></tr>
+          <tr><td class="mono">GUU</td><td class="mono codon-aa">Val</td><td class="codon-freq">0.18</td><td>11.0</td><td>319,154</td></tr>
+          <tr><td class="mono">GUC</td><td class="mono codon-aa">Val</td><td class="codon-freq">0.24</td><td>14.5</td><td>420,840</td></tr>
+          <tr><td class="mono">GUA</td><td class="mono codon-aa">Val</td><td class="codon-freq">0.11</td><td>7.0</td><td>203,122</td></tr>
+          <tr><td class="mono">GUG</td><td class="mono codon-aa">Val</td><td class="codon-freq">0.47</td><td>28.7</td><td>832,762</td></tr>
+          <tr><td class="mono">UCU</td><td class="mono codon-aa">Ser</td><td class="codon-freq">0.15</td><td>15.2</td><td>440,988</td></tr>
+          <tr><td class="mono">UCC</td><td class="mono codon-aa">Ser</td><td class="codon-freq">0.22</td><td>22.1</td><td>641,469</td></tr>
+          <tr><td class="mono">UCA</td><td class="mono codon-aa">Ser</td><td class="codon-freq">0.15</td><td>15.1</td><td>438,118</td></tr>
+          <tr><td class="mono">UCG</td><td class="mono codon-aa">Ser</td><td class="codon-freq">0.06</td><td>6.4</td><td>185,686</td></tr>
+          <tr><td class="mono">AGU</td><td class="mono codon-aa">Ser</td><td class="codon-freq">0.15</td><td>15.3</td><td>443,811</td></tr>
+          <tr><td class="mono">AGC</td><td class="mono codon-aa">Ser</td><td class="codon-freq">0.24</td><td>24.4</td><td>708,110</td></tr>
+          <tr><td class="mono">UGU</td><td class="mono codon-aa">Cys</td><td class="codon-freq">0.45</td><td>10.6</td><td>307,542</td></tr>
+          <tr><td class="mono">UGC</td><td class="mono codon-aa">Cys</td><td class="codon-freq">0.55</td><td>12.7</td><td>368,606</td></tr>
+          <tr><td class="mono">UGG</td><td class="mono codon-aa">Trp</td><td class="codon-freq">1.00</td><td>13.2</td><td>383,059</td></tr>
+          <tr><td class="mono">UAU</td><td class="mono codon-aa">Tyr</td><td class="codon-freq">0.43</td><td>12.2</td><td>354,081</td></tr>
+          <tr><td class="mono">UAC</td><td class="mono codon-aa">Tyr</td><td class="codon-freq">0.57</td><td>15.9</td><td>461,340</td></tr>
+          <tr><td class="mono">CAU</td><td class="mono codon-aa">His</td><td class="codon-freq">0.41</td><td>10.9</td><td>316,320</td></tr>
+          <tr><td class="mono">CAC</td><td class="mono codon-aa">His</td><td class="codon-freq">0.59</td><td>15.0</td><td>435,248</td></tr>
+          <tr><td class="mono">CAA</td><td class="mono codon-aa">Gln</td><td class="codon-freq">0.27</td><td>12.3</td><td>356,892</td></tr>
+          <tr><td class="mono">CAG</td><td class="mono codon-aa">Gln</td><td class="codon-freq">0.73</td><td>34.2</td><td>992,349</td></tr>
+          <tr><td class="mono">AAU</td><td class="mono codon-aa">Asn</td><td class="codon-freq">0.46</td><td>17.1</td><td>496,130</td></tr>
+          <tr><td class="mono">AAC</td><td class="mono codon-aa">Asn</td><td class="codon-freq">0.54</td><td>19.9</td><td>577,624</td></tr>
+          <tr><td class="mono">AAA</td><td class="mono codon-aa">Lys</td><td class="codon-freq">0.43</td><td>24.4</td><td>708,090</td></tr>
+          <tr><td class="mono">AAG</td><td class="mono codon-aa">Lys</td><td class="codon-freq">0.57</td><td>32.9</td><td>954,554</td></tr>
+          <tr><td class="mono">GAU</td><td class="mono codon-aa">Asp</td><td class="codon-freq">0.46</td><td>21.6</td><td>626,850</td></tr>
+          <tr><td class="mono">GAC</td><td class="mono codon-aa">Asp</td><td class="codon-freq">0.54</td><td>25.1</td><td>728,576</td></tr>
+          <tr><td class="mono">GAA</td><td class="mono codon-aa">Glu</td><td class="codon-freq">0.42</td><td>29.0</td><td>841,628</td></tr>
+          <tr><td class="mono">GAG</td><td class="mono codon-aa">Glu</td><td class="codon-freq">0.58</td><td>39.9</td><td>1,158,066</td></tr>
+          <tr><td class="mono">CGU</td><td class="mono codon-aa">Arg</td><td class="codon-freq">0.08</td><td>4.5</td><td>130,628</td></tr>
+          <tr><td class="mono">CGC</td><td class="mono codon-aa">Arg</td><td class="codon-freq">0.19</td><td>10.5</td><td>304,702</td></tr>
+          <tr><td class="mono">CGA</td><td class="mono codon-aa">Arg</td><td class="codon-freq">0.11</td><td>6.2</td><td>179,940</td></tr>
+          <tr><td class="mono">CGG</td><td class="mono codon-aa">Arg</td><td class="codon-freq">0.21</td><td>11.5</td><td>333,658</td></tr>
+          <tr><td class="mono">AGA</td><td class="mono codon-aa">Arg</td><td class="codon-freq">0.20</td><td>11.6</td><td>336,636</td></tr>
+          <tr><td class="mono">AGG</td><td class="mono codon-aa">Arg</td><td class="codon-freq">0.20</td><td>12.0</td><td>348,224</td></tr>
+          <tr><td class="mono">GGU</td><td class="mono codon-aa">Gly</td><td class="codon-freq">0.16</td><td>10.8</td><td>313,379</td></tr>
+          <tr><td class="mono">GGC</td><td class="mono codon-aa">Gly</td><td class="codon-freq">0.34</td><td>22.1</td><td>641,554</td></tr>
+          <tr><td class="mono">GGA</td><td class="mono codon-aa">Gly</td><td class="codon-freq">0.25</td><td>16.4</td><td>475,981</td></tr>
+          <tr><td class="mono">GGG</td><td class="mono codon-aa">Gly</td><td class="codon-freq">0.25</td><td>16.4</td><td>475,981</td></tr>
+          <tr><td class="mono">CCU</td><td class="mono codon-aa">Pro</td><td class="codon-freq">0.28</td><td>17.5</td><td>507,975</td></tr>
+          <tr><td class="mono">CCC</td><td class="mono codon-aa">Pro</td><td class="codon-freq">0.33</td><td>19.9</td><td>577,407</td></tr>
+          <tr><td class="mono">CCA</td><td class="mono codon-aa">Pro</td><td class="codon-freq">0.27</td><td>16.8</td><td>487,656</td></tr>
+          <tr><td class="mono">CCG</td><td class="mono codon-aa">Pro</td><td class="codon-freq">0.11</td><td>6.9</td><td>200,272</td></tr>
+          <tr><td class="mono">ACU</td><td class="mono codon-aa">Thr</td><td class="codon-freq">0.24</td><td>13.2</td><td>383,030</td></tr>
+          <tr><td class="mono">ACC</td><td class="mono codon-aa">Thr</td><td class="codon-freq">0.36</td><td>18.9</td><td>548,522</td></tr>
+          <tr><td class="mono">ACA</td><td class="mono codon-aa">Thr</td><td class="codon-freq">0.28</td><td>15.0</td><td>435,309</td></tr>
+          <tr><td class="mono">ACG</td><td class="mono codon-aa">Thr</td><td class="codon-freq">0.12</td><td>6.2</td><td>179,941</td></tr>
+          <tr><td class="mono">GCU</td><td class="mono codon-aa">Ala</td><td class="codon-freq">0.26</td><td>18.6</td><td>539,787</td></tr>
+          <tr><td class="mono">GCC</td><td class="mono codon-aa">Ala</td><td class="codon-freq">0.40</td><td>28.0</td><td>812,476</td></tr>
+          <tr><td class="mono">GCA</td><td class="mono codon-aa">Ala</td><td class="codon-freq">0.23</td><td>15.9</td><td>461,418</td></tr>
+          <tr><td class="mono">GCG</td><td class="mono codon-aa">Ala</td><td class="codon-freq">0.11</td><td>7.5</td><td>217,657</td></tr>
+          <tr><td class="mono">UAA</td><td class="mono codon-aa">Stop</td><td class="codon-freq">0.28</td><td>1.0</td><td>29,015</td></tr>
+          <tr><td class="mono">UAG</td><td class="mono codon-aa">Stop</td><td class="codon-freq">0.20</td><td>0.8</td><td>23,213</td></tr>
+          <tr><td class="mono">UGA</td><td class="mono codon-aa">Stop</td><td class="codon-freq">0.52</td><td>1.6</td><td>46,421</td></tr>
+        </tbody>
+      </table>
+      <p class="data-note">Data source: NCBI RefSeq release 223. CDS sequences filtered for annotated protein-coding genes, minimum 100 nt. Last updated 2025-11. <a href="./methods.html">Methods →</a></p>
+    </section>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="../assets/img/logo.png" alt="Nucleora" class="footer-logo" loading="lazy">
+        <p class="mono">CAD for DNA and mRNA.<br>nucleora.org</p>
+      </div>
+      <div class="footer-links">
+        <h4 class="mono">Tool</h4>
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#drc">Design rules</a>
+        <a href="../how-it-works.html">How it works</a>
+        <a href="../index.html#download">Download</a>
+      </div>
+      <div class="footer-links">
+        <h4 class="mono">Data</h4>
+        <a href="./index.html" aria-current="page">Codon usage tables</a>
+        <a href="./methods.html">Methods</a>
+      </div>
+      <div class="footer-links">
+        <h4 class="mono">Contact</h4>
+        <a href="../contact.html">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom mono">
+      <span>© 2026 Nucleora</span>
+      <span class="sep">·</span>
+      <span>Local-first · Method-transparent · Honest about limits</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/js/main.js"></script>
+<script>
+  // Species search filter
+  const searchInput = document.getElementById('speciesSearch');
+  const cards = document.querySelectorAll('.species-card');
+  const countEl = document.getElementById('speciesCount');
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.toLowerCase();
+      let visible = 0;
+      cards.forEach(card => {
+        const match = card.dataset.name.includes(q);
+        card.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+      countEl.textContent = visible + ' species';
+    });
+  }
+</script>
+</body>
+</html>

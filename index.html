@@ -7,22 +7,45 @@
   <meta name="description" content="Nucleora is CAD for DNA and mRNA. Assemble constructs from parametric parts, run continuous design-rule checks, fold locally, simulate — all on your own machine.">
   <meta property="og:title" content="Nucleora — CAD for DNA and mRNA">
   <meta property="og:description" content="Sequences are not designs. Nucleora is the CAD system molecular biology never had.">
-  <meta property="og:image" content="assets/img/og-card.png">
+  <meta property="og:image" content="assets/img/screen-dashboard.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nucleoragene.github.io/nucleora-site/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nucleora — CAD for DNA and mRNA">
+  <meta name="twitter:description" content="Sequences are not designs. Nucleora is the CAD system molecular biology never had.">
+  <meta name="twitter:image" content="https://nucleoragene.github.io/nucleora-site/assets/img/screen-dashboard.jpg">
+  <meta name="theme-color" content="#080c12">
   <link rel="icon" href="assets/img/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/favicon.png">
+  <link rel="canonical" href="https://nucleoragene.github.io/nucleora-site/">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Nucleora",
+    "description": "CAD for DNA and mRNA — design, constrain, simulate, and release nucleic acid constructs.",
+    "applicationCategory": "ScienceApplication",
+    "operatingSystem": "macOS, Windows",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "url": "https://nucleora.org",
+    "screenshot": "https://nucleoragene.github.io/nucleora-site/assets/img/screen-dashboard.jpg"
+  }
+  </script>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to content</a>
 
 <!-- NAV -->
-<nav class="site-nav" id="site-nav">
+<nav class="site-nav" id="site-nav" role="navigation" aria-label="Site navigation">
   <div class="nav-inner">
-    <a href="/" class="nav-logo" aria-label="Nucleora home">
+    <a href="./" class="nav-logo" aria-label="Nucleora home">
       <img src="assets/img/logo.png" alt="Nucleora" class="nav-logo-img">
       <span class="nav-logo-text">Nucleora</span>
     </a>
-    <ul class="nav-links">
+    <ul class="nav-links" id="navLinks">
       <li><a href="#features">Features</a></li>
       <li><a href="#drc">Design Rules</a></li>
       <li><a href="#local">Local-first</a></li>
@@ -30,16 +53,17 @@
       <li><a href="how-it-works.html">How it works</a></li>
     </ul>
     <a href="#download" class="nav-cta btn-primary">Download free</a>
-    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
 </nav>
 
 <!-- HERO -->
+<main id="main-content">
 <section class="hero" id="hero">
   <div class="hero-video-wrap">
-    <video class="hero-video" autoplay muted loop playsinline poster="assets/img/hero-poster.jpg">
+    <video class="hero-video" autoplay muted loop playsinline preload="none" poster="assets/img/hero-poster.jpg">
       <source src="assets/video/Nucleora_Film_36s.mp4" type="video/mp4">
     </video>
     <div class="hero-video-fade"></div>
@@ -145,11 +169,19 @@
         <p class="showcase-caption mono">ANALYSIS & QC — Align sequencing results to your design, classify every variant</p>
       </div>
     </div>
-    <div class="showcase-nav">
-      <button class="showcase-dot active" data-slide="0" aria-label="Dashboard"></button>
-      <button class="showcase-dot" data-slide="1" aria-label="Design Studio"></button>
-      <button class="showcase-dot" data-slide="2" aria-label="Sequence Editor"></button>
-      <button class="showcase-dot" data-slide="3" aria-label="Analysis QC"></button>
+    <div class="showcase-controls">
+      <button class="showcase-arrow prev" id="showcasePrev" aria-label="Previous screen">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="showcase-nav" role="tablist" aria-label="App screens">
+        <button class="showcase-dot active" data-slide="0" role="tab" aria-selected="true" aria-label="Dashboard screen"></button>
+        <button class="showcase-dot" data-slide="1" role="tab" aria-selected="false" aria-label="Design Studio screen"></button>
+        <button class="showcase-dot" data-slide="2" role="tab" aria-selected="false" aria-label="Sequence Editor screen"></button>
+        <button class="showcase-dot" data-slide="3" role="tab" aria-selected="false" aria-label="Analysis QC screen"></button>
+      </div>
+      <button class="showcase-arrow next" id="showcaseNext" aria-label="Next screen">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
   </div>
 </section>
@@ -331,23 +363,23 @@
 <section class="audience-section section-pad-sm" id="who">
   <div class="container">
     <p class="section-label mono center">WHO IT'S FOR — 007</p>
-    <div class="audience-tabs">
-      <button class="audience-tab active" data-tab="bench">Bench scientists</button>
-      <button class="audience-tab" data-tab="pharma">Biotech &amp; pharma</button>
-      <button class="audience-tab" data-tab="academic">Academic labs</button>
-      <button class="audience-tab" data-tab="conservation">Conservation</button>
+    <div class="audience-tabs" role="tablist" aria-label="Who Nucleora is for">
+      <button class="audience-tab active" data-tab="bench" role="tab" aria-selected="true" aria-controls="panel-bench" id="tab-bench">Bench scientists</button>
+      <button class="audience-tab" data-tab="pharma" role="tab" aria-selected="false" aria-controls="panel-pharma" id="tab-pharma">Biotech &amp; pharma</button>
+      <button class="audience-tab" data-tab="academic" role="tab" aria-selected="false" aria-controls="panel-academic" id="tab-academic">Academic labs</button>
+      <button class="audience-tab" data-tab="conservation" role="tab" aria-selected="false" aria-controls="panel-conservation" id="tab-conservation">Conservation</button>
     </div>
     <div class="audience-panels">
-      <div class="audience-panel active" id="panel-bench">
+      <div class="audience-panel active" id="panel-bench" role="tabpanel" aria-labelledby="tab-bench">
         <p class="audience-quote">"Assemble a construct from parametric parts, fold it as you edit, and catch the homopolymer run before your vendor does. 350+ tools underneath when you need them. Free while in development."</p>
       </div>
-      <div class="audience-panel" id="panel-pharma">
+      <div class="audience-panel" id="panel-pharma" role="tabpanel" aria-labelledby="tab-pharma" hidden>
         <p class="audience-quote">"Local-first design for regulated work: continuous design-rule checking, 21 CFR 11 signatures, an immutable audit trail, and a single signed release record tying the design, checks, waivers, and BOM together. Nothing leaves your infrastructure."</p>
       </div>
-      <div class="audience-panel" id="panel-academic">
+      <div class="audience-panel" id="panel-academic" role="tabpanel" aria-labelledby="tab-academic" hidden>
         <p class="audience-quote">"The full workbench, free for academic use — no crippled tier. Version control, reproducible results, and every computed number traced to the paper it came from."</p>
       </div>
-      <div class="audience-panel" id="panel-conservation">
+      <div class="audience-panel" id="panel-conservation" role="tabpanel" aria-labelledby="tab-conservation" hidden>
         <p class="audience-quote">"Built for the animals that don't have a codon table yet. Where a species doesn't have real data — an okapi, a bongo — Nucleora names the proxy it used. It never approximates silently."</p>
       </div>
     </div>
@@ -378,11 +410,11 @@
       <h2 class="download-heading center">Free while in development.<br>macOS and Windows.</h2>
       <p class="download-sub center mono">No account. No credit card. No expiry. Just download and run.</p>
       <div class="download-buttons">
-        <a href="https://nucleora.org/download" class="btn-primary btn-lg btn-platform">
+        <a href="https://nucleora.org/download" class="btn-primary btn-lg btn-platform" rel="noopener noreferrer">
           <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
           Download for macOS
         </a>
-        <a href="https://nucleora.org/download" class="btn-primary btn-lg btn-platform">
+        <a href="https://nucleora.org/download" class="btn-primary btn-lg btn-platform" rel="noopener noreferrer">
           <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M3 12V6.75l6-1.32v6.57H3zm17 0v7.5l-10.5 1.44V12H20zM3 13.25H9V19.8l-6-1.04v-5.51zm17-.25h-7.5v7.5L20 19V13z"/></svg>
           Download for Windows
         </a>
@@ -397,7 +429,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <img src="assets/img/logo.png" alt="Nucleora" class="footer-logo">
+        <img src="assets/img/logo.png" alt="Nucleora" class="footer-logo" loading="lazy">
         <p class="mono">CAD for DNA and mRNA.<br>nucleora.org</p>
       </div>
       <div class="footer-links">
@@ -425,6 +457,7 @@
   </div>
 </footer>
 
+</main>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

@@ -5,7 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>How it works — Nucleora</title>
   <meta name="description" content="How Nucleora works: the five-layer CAD stack for DNA and mRNA — Canvas, Library, Constraint Engine, Simulator, and Release Path.">
+  <meta property="og:title" content="How it works — Nucleora">
+  <meta property="og:description" content="The five-layer CAD stack for DNA and mRNA: Canvas, Library, Constraint Engine, Simulator, Release Path.">
+  <meta property="og:image" content="assets/img/screen-dashboard.jpg">
+  <meta name="theme-color" content="#080c12">
   <link rel="icon" href="assets/img/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/favicon.png">
+  <link rel="canonical" href="https://nucleoragene.github.io/nucleora-site/how-it-works.html">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -87,25 +93,27 @@
   </style>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to content</a>
 
-<nav class="site-nav" id="site-nav">
+<nav class="site-nav" id="site-nav" role="navigation" aria-label="Site navigation">
   <div class="nav-inner">
-    <a href="/" class="nav-logo">
+    <a href="./" class="nav-logo" aria-label="Nucleora home">
       <img src="assets/img/logo.png" alt="Nucleora" class="nav-logo-img">
       <span class="nav-logo-text">Nucleora</span>
     </a>
-    <ul class="nav-links">
-      <li><a href="/#features">Features</a></li>
-      <li><a href="/#drc">Design Rules</a></li>
-      <li><a href="/#local">Local-first</a></li>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#drc">Design Rules</a></li>
+      <li><a href="index.html#local">Local-first</a></li>
       <li><a href="codon-usage/index.html">Codon Data</a></li>
-      <li><a href="how-it-works.html" style="color:var(--accent)">How it works</a></li>
+      <li><a href="how-it-works.html" aria-current="page" style="color:var(--accent)">How it works</a></li>
     </ul>
-    <a href="/#download" class="nav-cta btn-primary">Download free</a>
-    <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <a href="index.html#download" class="nav-cta btn-primary">Download free</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
+<main id="main-content">
 <!-- PAGE HERO -->
 <section class="page-hero">
   <div class="container">
@@ -364,23 +372,25 @@
   </div>
 </section>
 
+</main>
 <footer class="site-footer">
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <img src="assets/img/logo.png" alt="Nucleora" class="footer-logo">
+        <img src="assets/img/logo.png" alt="Nucleora" class="footer-logo" loading="lazy">
         <p class="mono">CAD for DNA and mRNA.<br>nucleora.org</p>
       </div>
       <div class="footer-links">
         <h4 class="mono">Tool</h4>
-        <a href="/#features">Features</a>
-        <a href="/#drc">Design rules</a>
-        <a href="how-it-works.html">How it works</a>
-        <a href="/#download">Download</a>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#drc">Design rules</a>
+        <a href="how-it-works.html" aria-current="page">How it works</a>
+        <a href="index.html#download">Download</a>
       </div>
       <div class="footer-links">
         <h4 class="mono">Data</h4>
         <a href="codon-usage/index.html">Codon usage tables</a>
+        <a href="codon-usage/methods.html">Methods</a>
       </div>
       <div class="footer-links">
         <h4 class="mono">Contact</h4>
