@@ -1,8 +1,13 @@
 /**
  * Nucleora Cloudflare Worker
- * Handles: security headers, form submissions (KV + rate limiting),
+ * Handles: security headers, form submissions (KV + rate limiting + email notifications),
  *          SEO redirects, performance caching, spam protection
  */
+
+import { EmailMessage } from 'cloudflare:email';
+
+const NOTIFICATION_TO = 'nucleora.admin@proton.me';
+const NOTIFICATION_FROM = 'notifications@nucleora.org';
 
 const SECURITY_HEADERS = {
   'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
@@ -13,12 +18,12 @@ const SECURITY_HEADERS = {
   'X-XSS-Protection': '1; mode=block',
   'Content-Security-Policy': [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://static.cloudflareinsights.com",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: blob:",
     "media-src 'self'",
-    "connect-src 'self'",
+    "connect-src 'self' https://cloudflareinsights.com",
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'"
@@ -94,6 +99,28 @@ async function checkRateLimit(ip, env) {
   return false;
 }
 
+// --- Email notification helper ---
+async function sendNotification(env, subject, body) {
+  if (!env.SEND_EMAIL) return; // binding not configured — skip silently
+  try {
+    const rawEmail = [
+      `From: ${NOTIFICATION_FROM}`,
+      `To: ${NOTIFICATION_TO}`,
+      `Subject: ${subject}`,
+      'MIME-Version: 1.0',
+      'Content-Type: text/plain; charset=utf-8',
+      '',
+      body
+    ].join('\r\n');
+
+    const msg = new EmailMessage(NOTIFICATION_FROM, NOTIFICATION_TO, new Response(rawEmail).body);
+    await env.SEND_EMAIL.send(msg);
+  } catch (e) {
+    // Email send failed — don't break form submission
+    console.error('Email notification failed:', e.message);
+  }
+}
+
 // --- Waitlist handler ---
 async function handleWaitlist(request, env) {
   try {
@@ -134,6 +161,23 @@ async function handleWaitlist(request, env) {
         { metadata: { name: entry.name, timestamp: entry.timestamp } }
       );
     }
+
+    // Send email notification
+    await sendNotification(env,
+      `[Nucleora] New waitlist signup: ${entry.name}`,
+      [
+        '--- New Waitlist Signup ---',
+        '',
+        `Name:     ${entry.name}`,
+        `Email:    ${entry.email}`,
+        `Org:      ${entry.org || '(not provided)'}`,
+        `Sector:   ${entry.sector || '(not provided)'}`,
+        `Use case: ${entry.use || '(not provided)'}`,
+        '',
+        `Country:  ${entry.country}`,
+        `Time:     ${entry.timestamp}`,
+      ].join('\n')
+    );
 
     return jsonResponse({ ok: true, message: "You are on the list" });
   } catch (e) {
@@ -184,6 +228,27 @@ async function handleContact(request, env) {
         metadata: { name: entry.name, subject: entry.subject, timestamp: entry.timestamp }
       });
     }
+
+    // Send email notification
+    await sendNotification(env,
+      `[Nucleora] Contact form: ${entry.subject || 'No subject'} (from ${entry.name})`,
+      [
+        '--- New Contact Form Submission ---',
+        '',
+        `From:     ${entry.name} <${entry.email}>`,
+        `Org:      ${entry.org || '(not provided)'}`,
+        `Type:     ${entry.type}`,
+        `Subject:  ${entry.subject || '(none)'}`,
+        '',
+        'Message:',
+        '─'.repeat(40),
+        entry.message,
+        '─'.repeat(40),
+        '',
+        `Country:  ${entry.country}`,
+        `Time:     ${entry.timestamp}`,
+      ].join('\n')
+    );
 
     return jsonResponse({ ok: true, message: 'Message sent' });
   } catch (e) {
