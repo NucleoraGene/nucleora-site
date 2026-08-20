@@ -351,6 +351,7 @@
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="display:inline;vertical-align:middle;margin-right:5px;opacity:0.6"><circle cx="6" cy="6" r="5.5" stroke="currentColor"/><path d="M6 4v3M6 8.5v.5" stroke="currentColor" stroke-linecap="round"/></svg>
             Clicking "Send" will open your email client with this message pre-filled.
           </p>
+          <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
           <button type="submit" class="btn-primary btn-lg form-submit">Send message</button>
           <p class="form-direct-email mono">Prefer to write directly? <a href="mailto:hello@nucleora.org">hello@nucleora.org</a></p>
         </form>
@@ -495,7 +496,7 @@
         const res = await fetch('/api/contact', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, org, type, subject, message })
+          body: JSON.stringify({ name, email, org, type, subject, message, website: (form.querySelector('[name="website"]') || {}).value || '' })
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Failed to send');

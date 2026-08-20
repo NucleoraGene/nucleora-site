@@ -649,12 +649,11 @@
         const res = await fetch('/api/waitlist', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: name.trim(), email: email.trim(), org: org.trim(), sector, use })
+          body: JSON.stringify({ name: name.trim(), email: email.trim(), org: org.trim(), sector, use, website: (waitlistForm.querySelector('[name="website"]') || {}).value || '' })
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Submission failed');
       } catch (err) {
-        // Silently continue — show success even if backend is down (graceful degradation)
         console.warn('Waitlist submit error:', err);
       }
       waitlistForm.style.display = 'none';

@@ -1,6 +1,7 @@
 /**
  * Nucleora Cloudflare Worker
- * Handles: security headers, form submissions, SEO redirects, performance
+ * Handles: security headers, form submissions (KV + rate limiting),
+ *          SEO redirects, performance caching, spam protection
  */
 
 const SECURITY_HEADERS = {
@@ -31,6 +32,9 @@ const CORS_HEADERS = {
   'Access-Control-Max-Age': '86400'
 };
 
+const RATE_LIMIT_WINDOW = 3600; // 1 hour
+const RATE_LIMIT_MAX = 10;      // max submissions per IP per window
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -53,6 +57,9 @@ export default {
     if (url.pathname === '/api/contact' && request.method === 'POST') {
       return handleContact(request, env);
     }
+    if (url.pathname.startsWith('/api/')) {
+      return jsonResponse({ error: 'Not found' }, 404);
+    }
 
     // --- Pass through to origin (GitHub Pages) and add headers ---
     const response = await fetch(request);
@@ -65,11 +72,10 @@ export default {
 
     // Performance: cache static assets at the edge
     const ext = url.pathname.split('.').pop();
-    const staticExts = ['css', 'js', 'jpg', 'jpeg', 'png', 'svg', 'woff2', 'woff', 'mp4', 'webp', 'ico'];
+    const staticExts = ['css', 'js', 'jpg', 'jpeg', 'png', 'svg', 'woff2', 'woff', 'mp4', 'webp', 'ico', 'webmanifest'];
     if (staticExts.includes(ext)) {
       newResponse.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
     } else if (url.pathname.endsWith('.html') || url.pathname === '/' || !url.pathname.includes('.')) {
-      // HTML pages: short cache, revalidate
       newResponse.headers.set('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
     }
 
@@ -77,54 +83,82 @@ export default {
   }
 };
 
+// --- Rate limiting ---
+async function checkRateLimit(ip, env) {
+  if (!env.NUCLEORA_FORMS) return false;
+  const key = 'ratelimit:' + ip;
+  const val = await env.NUCLEORA_FORMS.get(key);
+  const count = val ? parseInt(val, 10) : 0;
+  if (count >= RATE_LIMIT_MAX) return true;
+  await env.NUCLEORA_FORMS.put(key, String(count + 1), { expirationTtl: RATE_LIMIT_WINDOW });
+  return false;
+}
+
+// --- Waitlist handler ---
 async function handleWaitlist(request, env) {
   try {
-    const data = await request.json();
-    const { name, email, org, sector, use } = data;
+    const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+    if (await checkRateLimit(ip, env)) {
+      return jsonResponse({ error: 'Too many requests. Please try again later.' }, 429);
+    }
 
-    if (!name || !email || !email.includes('@')) {
+    const data = await request.json();
+
+    // Honeypot — bots fill hidden fields
+    if (data.website || data.url || data.honeypot) {
+      return jsonResponse({ ok: true, message: "You are on the list" });
+    }
+
+    const { name, email, org, sector } = data;
+    const useCase = data.use;
+
+    if (!name || !email || !email.includes('@') || email.length > 254) {
       return jsonResponse({ error: 'Name and valid email required' }, 400);
     }
 
     const entry = {
-      name: sanitize(name),
-      email: sanitize(email),
-      org: sanitize(org || ''),
-      sector: sanitize(sector || ''),
-      use: sanitize(use || ''),
+      name: sanitize(name, 200),
+      email: sanitize(email, 254),
+      org: sanitize(org || '', 200),
+      sector: sanitize(sector || '', 100),
+      use: sanitize(useCase || '', 100),
       timestamp: new Date().toISOString(),
-      ip: request.headers.get('CF-Connecting-IP') || 'unknown',
+      ip,
       country: request.headers.get('CF-IPCountry') || 'unknown'
     };
 
-    // Store in KV with email as key (deduplicates)
     if (env.NUCLEORA_FORMS) {
       await env.NUCLEORA_FORMS.put(
-        `waitlist:${entry.email}`,
+        'waitlist:' + entry.email,
         JSON.stringify(entry),
         { metadata: { name: entry.name, timestamp: entry.timestamp } }
       );
     }
 
-    // Also forward to email via MailChannels (free for Workers)
-    await sendEmail(env, {
-      to: 'hello@nucleora.org',
-      subject: `[Nucleora Waitlist] ${entry.name} — ${entry.org || 'No org'}`,
-      body: `New waitlist signup:\n\nName: ${entry.name}\nEmail: ${entry.email}\nOrg: ${entry.org}\nSector: ${entry.sector}\nUse: ${entry.use}\nCountry: ${entry.country}\nTime: ${entry.timestamp}`
-    });
-
-    return jsonResponse({ ok: true, message: 'You\'re on the list' });
+    return jsonResponse({ ok: true, message: "You are on the list" });
   } catch (e) {
     return jsonResponse({ error: 'Invalid request' }, 400);
   }
 }
 
+// --- Contact handler ---
 async function handleContact(request, env) {
   try {
+    const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+    if (await checkRateLimit(ip, env)) {
+      return jsonResponse({ error: 'Too many requests. Please try again later.' }, 429);
+    }
+
     const data = await request.json();
+
+    // Honeypot
+    if (data.website || data.url || data.honeypot) {
+      return jsonResponse({ ok: true, message: 'Message sent' });
+    }
+
     const { name, email, org, type, subject, message } = data;
 
-    if (!name || !email || !email.includes('@') || !message) {
+    if (!name || !email || !email.includes('@') || email.length > 254 || !message) {
       return jsonResponse({ error: 'Name, email, and message required' }, 400);
     }
 
@@ -133,32 +167,23 @@ async function handleContact(request, env) {
     }
 
     const entry = {
-      name: sanitize(name),
-      email: sanitize(email),
-      org: sanitize(org || ''),
-      type: sanitize(type || 'general'),
-      subject: sanitize(subject || ''),
-      message: sanitize(message),
+      name: sanitize(name, 200),
+      email: sanitize(email, 254),
+      org: sanitize(org || '', 200),
+      type: sanitize(type || 'general', 50),
+      subject: sanitize(subject || '', 200),
+      message: sanitize(message, 2000),
       timestamp: new Date().toISOString(),
-      ip: request.headers.get('CF-Connecting-IP') || 'unknown',
+      ip,
       country: request.headers.get('CF-IPCountry') || 'unknown'
     };
 
-    // Store in KV
     if (env.NUCLEORA_FORMS) {
-      const key = `contact:${Date.now()}:${entry.email}`;
+      const key = 'contact:' + Date.now() + ':' + entry.email;
       await env.NUCLEORA_FORMS.put(key, JSON.stringify(entry), {
         metadata: { name: entry.name, subject: entry.subject, timestamp: entry.timestamp }
       });
     }
-
-    // Forward via email
-    await sendEmail(env, {
-      to: 'hello@nucleora.org',
-      subject: `[Nucleora Contact] ${entry.type}: ${entry.subject || 'No subject'} — ${entry.name}`,
-      body: `Contact form submission:\n\nName: ${entry.name}\nEmail: ${entry.email}\nOrg: ${entry.org}\nCategory: ${entry.type}\nSubject: ${entry.subject}\n\nMessage:\n${entry.message}\n\nCountry: ${entry.country}\nTime: ${entry.timestamp}`,
-      replyTo: entry.email
-    });
 
     return jsonResponse({ ok: true, message: 'Message sent' });
   } catch (e) {
@@ -166,30 +191,9 @@ async function handleContact(request, env) {
   }
 }
 
-async function sendEmail(env, { to, subject, body, replyTo }) {
-  try {
-    const msg = {
-      personalizations: [{ to: [{ email: to }] }],
-      from: { email: 'noreply@nucleora.org', name: 'Nucleora' },
-      subject,
-      content: [{ type: 'text/plain', value: body }]
-    };
-    if (replyTo) {
-      msg.reply_to = { email: replyTo };
-    }
-    await fetch('https://api.mailchannels.net/tx/v1/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(msg)
-    });
-  } catch (e) {
-    // Email is best-effort; don't fail the form
-    console.error('Email send failed:', e);
-  }
-}
-
-function sanitize(str) {
-  return String(str).trim().slice(0, 2000);
+// --- Helpers ---
+function sanitize(str, maxLen) {
+  return String(str).replace(/[<>]/g, '').trim().slice(0, maxLen || 2000);
 }
 
 function jsonResponse(data, status = 200) {
