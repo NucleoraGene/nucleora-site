@@ -1,31 +1,52 @@
 {
   "name": "Nucleora",
   "short_name": "Nucleora",
-  "description": "A local-first workbench for designing DNA and mRNA sequences.",
+  "description": "CAD for DNA and mRNA \u2014 design, constrain, simulate, and release nucleic acid constructs.",
   "display": "standalone",
-  "background_color": "#060a14",
-  "theme_color": "#060a14",
+  "background_color": "#080c12",
+  "theme_color": "#00c9a7",
   "start_url": "./",
   "scope": "./",
-  "lang": "en",
+  "lang": "en-US",
+  "dir": "ltr",
+  "categories": [
+    "science",
+    "productivity"
+  ],
   "icons": [
     {
       "src": "assets/img/favicon.png",
-      "sizes": "256x256",
+      "sizes": "any",
       "type": "image/png",
       "purpose": "any maskable"
     }
   ],
   "shortcuts": [
     {
-      "name": "Contact",
-      "short_name": "Contact",
-      "url": "./contact.html"
+      "name": "Download Nucleora",
+      "short_name": "Download",
+      "description": "Download the free Nucleora app",
+      "url": "./#download"
     },
     {
       "name": "Codon Usage Data",
       "short_name": "Codon Data",
+      "description": "Browse codon usage tables",
       "url": "./codon-usage/index.html"
+    },
+    {
+      "name": "How it works",
+      "short_name": "How it works",
+      "description": "Learn how Nucleora works",
+      "url": "./how-it-works.html"
+    },
+    {
+      "name": "Contact",
+      "short_name": "Contact",
+      "description": "Contact the Nucleora team",
+      "url": "./contact.html"
     }
-  ]
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How it works — Nucleora</title>
+  <meta name="description" content="How Nucleora works: the five-layer CAD stack for DNA and mRNA — Canvas, Library, Constraint Engine, Simulator, and Release Path.">
+  <meta property="og:title" content="How it works — Nucleora">
+  <meta property="og:description" content="The five-layer CAD stack for DNA and mRNA: Canvas, Library, Constraint Engine, Simulator, Release Path.">
+  <meta property="og:image" content="https://nucleora.org/assets/img/screen-dashboard.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://nucleora.org/assets/img/screen-dashboard.jpg">
+  <meta name="author" content="Nucleora">
+  <meta name="application-name" content="Nucleora">
+  <meta name="theme-color" content="#080c12">
+  <link rel="icon" href="assets/img/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/favicon.png">
+  <link rel="canonical" href="https://nucleora.org/how-it-works.html">
+  <meta name="robots" content="index, follow">
+  <meta name="color-scheme" content="dark">
+  <link rel="manifest" href="manifest.json">
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    .page-hero { padding: 160px 0 80px; }
+    .page-hero .section-label { margin-bottom: 16px; }
+    .page-hero h1 { font-size: clamp(36px, 6vw, 72px); font-weight: 300; color: var(--text-bright); line-height: 1.1; letter-spacing: -0.03em; max-width: 16ch; margin-bottom: 24px; }
+    .page-hero p { font-size: 18px; color: var(--text-dim); max-width: 54ch; line-height: 1.7; }
+
+    .workflow-section { padding: 80px 0; border-top: 1px solid var(--border-dim); }
+    .workflow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .workflow-grid.reverse { direction: rtl; }
+    .workflow-grid.reverse > * { direction: ltr; }
+
+    .workflow-num { font-size: 64px; font-weight: 300; color: var(--border); line-height: 1; margin-bottom: 8px; font-family: var(--ff-mono); }
+    .workflow-title { font-size: 32px; font-weight: 300; color: var(--text-bright); letter-spacing: -0.02em; margin-bottom: 8px; }
+    .workflow-sub { font-size: 11px; letter-spacing: 0.14em; color: var(--accent); text-transform: uppercase; margin-bottom: 24px; }
+    .workflow-body { font-size: 16px; color: var(--text-dim); line-height: 1.8; margin-bottom: 20px; }
+    .workflow-callout { background: var(--bg-card); border: 1px solid var(--border); border-left: 2px solid var(--accent); padding: 20px 24px; border-radius: 0 var(--radius) var(--radius) 0; font-size: 14px; color: var(--text); line-height: 1.6; }
+
+    .workflow-visual { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+    .workflow-visual-bar { background: var(--bg-card-2); border-bottom: 1px solid var(--border); padding: 10px 20px; font-size: 9px; letter-spacing: 0.12em; color: var(--text-dim); text-transform: uppercase; font-family: var(--ff-mono); }
+    .workflow-visual-body { padding: 24px; }
+
+    .parts-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .part { padding: 8px 16px; border-radius: var(--radius); font-size: 12px; font-family: var(--ff-mono); border: 1px solid; }
+    .part.p-utr5 { color: #7dd3fc; border-color: rgba(125,211,252,0.3); background: rgba(125,211,252,0.05); }
+    .part.p-kozak { color: #86efac; border-color: rgba(134,239,172,0.3); background: rgba(134,239,172,0.05); }
+    .part.p-cds { color: var(--accent); border-color: rgba(0,201,167,0.3); background: rgba(0,201,167,0.05); }
+    .part.p-utr3 { color: #c4b5fd; border-color: rgba(196,181,253,0.3); background: rgba(196,181,253,0.05); }
+    .part.p-polya { color: #fca5a5; border-color: rgba(252,165,165,0.3); background: rgba(252,165,165,0.05); }
+    .part-arrow { color: var(--text-dim); align-self: center; font-size: 14px; }
+
+    .seq-preview { font-family: var(--ff-mono); font-size: 11px; color: var(--text-dim); line-height: 1.7; word-break: break-all; padding: 12px; background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border-dim); }
+    .seq-note { font-size: 10px; color: var(--text-dim); margin-top: 8px; opacity: 0.6; }
+
+    .library-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-dim); font-size: 12px; font-family: var(--ff-mono); }
+    .library-row:last-child { border-bottom: none; }
+    .lib-name { color: var(--text); }
+    .lib-source { color: var(--text-dim); }
+    .lib-cai { color: var(--accent); }
+
+    .check-list { display: flex; flex-direction: column; gap: 4px; }
+    .check-row { display: flex; gap: 10px; align-items: center; padding: 8px 12px; border-radius: var(--radius); border: 1px solid transparent; font-size: 11px; font-family: var(--ff-mono); }
+    .check-row.pass { border-color: var(--border-dim); }
+    .check-row.fail { border-color: rgba(245,158,11,0.25); background: rgba(245,158,11,0.05); }
+    .check-id { color: var(--text-dim); width: 60px; flex-shrink: 0; }
+    .check-name { color: var(--text); flex: 1; }
+    .check-status.pass { color: var(--accent); }
+    .check-status.fail { color: var(--amber); }
+
+    .fold-display { text-align: center; padding: 20px 0; }
+    .fold-dg { font-size: 42px; color: var(--accent); font-family: var(--ff-mono); line-height: 1; }
+    .fold-label { font-size: 9px; letter-spacing: 0.14em; color: var(--text-dim); margin-top: 6px; text-transform: uppercase; font-family: var(--ff-mono); }
+    .fold-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-top: 20px; }
+    .fold-metric { background: var(--bg-card); padding: 16px; }
+    .fold-metric-val { font-size: 24px; color: var(--text-bright); font-family: var(--ff-mono); }
+    .fold-metric-lbl { font-size: 9px; letter-spacing: 0.1em; color: var(--text-dim); text-transform: uppercase; }
+
+    .release-block { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; font-family: var(--ff-mono); font-size: 11px; }
+    .release-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .release-title { color: var(--text-bright); font-size: 13px; }
+    .release-badge { color: var(--accent); border: 1px solid rgba(0,201,167,0.3); padding: 2px 10px; border-radius: 2px; font-size: 9px; letter-spacing: 0.1em; }
+    .release-row { display: flex; gap: 12px; padding: 6px 0; border-top: 1px solid var(--border-dim); }
+    .release-key { color: var(--text-dim); width: 120px; flex-shrink: 0; }
+    .release-val { color: var(--text); }
+
+    .faq-section { padding: 80px 0; border-top: 1px solid var(--border-dim); }
+    .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 48px; }
+    .faq-item { padding: 28px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+    .faq-q { font-size: 16px; font-weight: 400; color: var(--text-bright); margin-bottom: 12px; }
+    .faq-a { font-size: 14px; color: var(--text-dim); line-height: 1.7; }
+
+    @media (max-width: 900px) {
+      .workflow-grid { grid-template-columns: 1fr; gap: 40px; }
+      .workflow-grid.reverse { direction: ltr; }
+      .faq-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Nucleora","item":"https://nucleora.org/"},
+    {"@type":"ListItem","position":2,"name":"How it works","item":"https://nucleora.org/how-it-works.html"}
+  ]}
+  </script>
+</head>
+<body>
+<div class="scroll-progress" id="scrollProgress" role="progressbar" aria-label="Page scroll progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<nav class="site-nav" id="site-nav" role="navigation" aria-label="Site navigation">
+  <div class="nav-inner">
+    <a href="./" class="nav-logo" aria-label="Nucleora home">
+      <img src="assets/img/logo.png" alt="Nucleora" class="nav-logo-img">
+      <span class="nav-logo-text">Nucleora</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#drc">Design Rules</a></li>
+      <li><a href="index.html#local">Local-first</a></li>
+      <li><a href="codon-usage/index.html">Codon Data</a></li>
+      <li><a href="how-it-works.html" aria-current="page" style="color:var(--accent)">How it works</a></li>
+    </ul>
+    <a href="index.html#newsletter" class="nav-cta btn-primary">Get early access</a>
+    <button type="button" class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main id="main-content">
+<!-- PAGE HERO -->
+<nav class="container" aria-label="Breadcrumb">
+    <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="./" itemprop="item"><span itemprop="name">Nucleora</span></a>
+        <meta itemprop="position" content="1">
+      </li>
+      <span class="breadcrumb-sep">›</span>
+      <li class="breadcrumb-current" aria-current="page" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name">How it works</span>
+        <meta itemprop="position" content="2">
+      </li>
+    </ol>
+  </nav>
+  <section class="page-hero">
+  <div class="container">
+    <p class="section-label mono">HOW IT WORKS</p>
+    <h1>Five layers. One pipeline.</h1>
+    <p>Nucleora is a five-layer CAD stack built entirely for nucleic acid design. Each layer has a clear job. Together they produce a verifiable, releasable artifact — not just a sequence.</p>
+  </div>
+</section>
+
+<!-- LAYER 01 — CANVAS -->
+<section class="workflow-section">
+  <div class="container">
+    <div class="workflow-grid">
+      <div class="workflow-text" data-reveal>
+        <div class="workflow-num mono">01</div>
+        <h2 class="workflow-title">Canvas</h2>
+        <p class="workflow-sub mono">Schematic capture — parametric assembly</p>
+        <p class="workflow-body">You assemble a construct from parametric parts — 5′ UTR, Kozak, CDS, 3′ UTR, poly(A) — not by typing characters. Change poly(A) from 80 to 120 nt and the full sequence regenerates underneath you.</p>
+        <p class="workflow-body">The sequence is a rendering of the design. It is never its source of truth. This is how every other mature engineering discipline works, and it is how Nucleora works.</p>
+        <div class="workflow-callout">
+          When you change a codon table or a poly(A) length, every downstream layer — DRC, fold, yield — reruns automatically. The construct is always coherent.
+        </div>
+      </div>
+      <div class="workflow-visual" data-reveal>
+        <div class="workflow-visual-bar mono">CANVAS — mRNA (LINEAR) — REV 4</div>
+        <div class="workflow-visual-body">
+          <p style="font-size:10px;letter-spacing:0.1em;color:var(--text-dim);text-transform:uppercase;margin-bottom:12px;font-family:var(--ff-mono);">CONSTRUCT ASSEMBLY</p>
+          <div class="parts-row">
+            <span class="part p-utr5">5′ UTR</span>
+            <span class="part-arrow">→</span>
+            <span class="part p-kozak">Kozak</span>
+            <span class="part-arrow">→</span>
+            <span class="part p-cds">CDS (spike, human-opt)</span>
+            <span class="part-arrow">→</span>
+            <span class="part p-utr3">3′ UTR</span>
+            <span class="part-arrow">→</span>
+            <span class="part p-polya">poly(A) ×120</span>
+          </div>
+          <p style="font-size:10px;letter-spacing:0.1em;color:var(--text-dim);text-transform:uppercase;margin:16px 0 8px;font-family:var(--ff-mono);">RENDERED SEQUENCE (3,897 nt)</p>
+          <div class="seq-preview">
+            GGGAAAUAAGAGAGAAAAGAAGAGUAAGAAGAAAUAUAAGACC<span style="color:var(--accent)">AUGAGAGCCGACAAUCCUGGACCUG</span>CAGCUGCCACCG...
+          </div>
+          <p class="seq-note mono">Sequence is a rendering. Editing the parts rerenders it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LAYER 02 — LIBRARY -->
+<section class="workflow-section">
+  <div class="container">
+    <div class="workflow-grid reverse">
+      <div class="workflow-text" data-reveal>
+        <div class="workflow-num mono">02</div>
+        <h2 class="workflow-title">Library</h2>
+        <p class="workflow-sub mono">Versioned, provenanced parts</p>
+        <p class="workflow-body">Every part carries its provenance — the database it came from, the accession number, the date it was fetched. Codon usage tables are tallied from real RefSeq CDS sequences.</p>
+        <p class="workflow-body">When a species doesn't have its own table — an okapi, a bongo, a white rhino — Nucleora names the proxy it used and the distance metric. It never approximates silently.</p>
+        <div class="workflow-callout">
+          Method-transparency is a design requirement, not a feature. Every number in Nucleora traces to the paper or database it came from.
+        </div>
+      </div>
+      <div class="workflow-visual" data-reveal>
+        <div class="workflow-visual-bar mono">LIBRARY — CODON TABLES</div>
+        <div class="workflow-visual-body">
+          <div class="library-row">
+            <span class="lib-name">Human (H. sapiens)</span>
+            <span class="lib-source">RefSeq CDS · 42,188 seqs</span>
+            <span class="lib-cai">CAI 1.0</span>
+          </div>
+          <div class="library-row">
+            <span class="lib-name">Mouse (M. musculus)</span>
+            <span class="lib-source">RefSeq CDS · 39,417 seqs</span>
+            <span class="lib-cai">CAI 0.97</span>
+          </div>
+          <div class="library-row">
+            <span class="lib-name">Tiger (P. tigris)</span>
+            <span class="lib-source">RefSeq CDS · 8,204 seqs</span>
+            <span class="lib-cai">CAI 0.94</span>
+          </div>
+          <div class="library-row">
+            <span class="lib-name">Chimpanzee (P. troglodytes)</span>
+            <span class="lib-source">RefSeq CDS · 17,281 seqs</span>
+            <span class="lib-cai">CAI 0.98</span>
+          </div>
+          <div class="library-row" style="opacity:0.5">
+            <span class="lib-name">White Rhino (C. simum)</span>
+            <span class="lib-source mono" style="color:var(--amber)">proxy → D. bicornis</span>
+            <span class="lib-cai">CAI 0.89</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LAYER 03 — CONSTRAINT ENGINE -->
+<section class="workflow-section">
+  <div class="container">
+    <div class="workflow-grid">
+      <div class="workflow-text" data-reveal>
+        <div class="workflow-num mono">03</div>
+        <h2 class="workflow-title">Constraint Engine</h2>
+        <p class="workflow-sub mono">Design rules — continuous, real-time</p>
+        <p class="workflow-body">Design rules run continuously as you design. They check GC content, homopolymer runs, secondary structure at the 5′ UTR, restriction site conflicts, synthesis feasibility, and more.</p>
+        <p class="workflow-body">When a rule fails, Nucleora explains why in plain language and — for many rules — offers a synonymous substitution that resolves the problem without changing the protein.</p>
+        <div class="workflow-callout">
+          A homopolymer A×9 costs $4,000 and three weeks at the bench. On screen, it costs ten seconds — a few synonymous substitutions and the rule passes.
+        </div>
+      </div>
+      <div class="workflow-visual" data-reveal>
+        <div class="workflow-visual-bar mono">DRC — CONTINUOUS · LIVE</div>
+        <div class="workflow-visual-body">
+          <div class="check-list">
+            <div class="check-row pass"><span class="check-id mono">DRC-001</span><span class="check-name">GC content 40–70%</span><span class="check-status pass mono">PASS</span></div>
+            <div class="check-row pass"><span class="check-id mono">DRC-008</span><span class="check-name">No internal Kozak conflicts</span><span class="check-status pass mono">PASS</span></div>
+            <div class="check-row pass"><span class="check-id mono">DRC-011</span><span class="check-name">5′ UTR ΔG ≥ −15 kcal/mol</span><span class="check-status pass mono">PASS</span></div>
+            <div class="check-row fail"><span class="check-id mono">DRC-014</span><span class="check-name">Homopolymer A×9 at pos 847</span><span class="check-status fail mono">ERROR</span></div>
+            <div class="check-row pass"><span class="check-id mono">DRC-015</span><span class="check-name">No restriction site conflicts</span><span class="check-status pass mono">PASS</span></div>
+            <div class="check-row pass"><span class="check-id mono">DRC-031</span><span class="check-name">No internal stop codons in CDS</span><span class="check-status pass mono">PASS</span></div>
+            <div class="check-row pass"><span class="check-id mono">DRC-052</span><span class="check-name">Synthesis vendor feasibility</span><span class="check-status pass mono">PASS</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LAYER 04 — SIMULATOR -->
+<section class="workflow-section">
+  <div class="container">
+    <div class="workflow-grid reverse">
+      <div class="workflow-text" data-reveal>
+        <div class="workflow-num mono">04</div>
+        <h2 class="workflow-title">Simulator</h2>
+        <p class="workflow-sub mono">Physics in the loop — local, private</p>
+        <p class="workflow-body">ViennaRNA runs locally. Watch the secondary structure change as you edit. The 5′ UTR fold ΔG updates in real-time with every nucleotide change.</p>
+        <p class="workflow-body">Walk the template through the IVT run before it costs anything: predicted yield, cap incorporation efficiency, manufacturability grade, and an itemized order form — all computed on your machine, nothing sent anywhere.</p>
+        <div class="workflow-callout">
+          Nucleora publishes the benchmarks it loses. If ViennaRNA is wrong for a particular structure class, that's in the documentation — not hidden.
+        </div>
+      </div>
+      <div class="workflow-visual" data-reveal>
+        <div class="workflow-visual-bar mono">SIMULATOR — FOLD + IVT RUN</div>
+        <div class="workflow-visual-body">
+          <div class="fold-display">
+            <div class="fold-dg mono">−42.8</div>
+            <div class="fold-label mono">ΔG kcal/mol · MFE fold · ViennaRNA 2.6.4</div>
+          </div>
+          <div class="fold-metrics">
+            <div class="fold-metric">
+              <div class="fold-metric-val mono">A</div>
+              <div class="fold-metric-lbl mono">Manufacturability grade</div>
+            </div>
+            <div class="fold-metric">
+              <div class="fold-metric-val mono">94%</div>
+              <div class="fold-metric-lbl mono">Predicted cap efficiency</div>
+            </div>
+            <div class="fold-metric">
+              <div class="fold-metric-val mono">3.8 mg/ml</div>
+              <div class="fold-metric-lbl mono">Estimated IVT yield</div>
+            </div>
+            <div class="fold-metric">
+              <div class="fold-metric-val mono">3,897 nt</div>
+              <div class="fold-metric-lbl mono">Transcript length</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LAYER 05 — RELEASE PATH -->
+<section class="workflow-section">
+  <div class="container">
+    <div class="workflow-grid">
+      <div class="workflow-text" data-reveal>
+        <div class="workflow-num mono">05</div>
+        <h2 class="workflow-title">Release Path</h2>
+        <p class="workflow-sub mono">From intent to auditable artifact</p>
+        <p class="workflow-body">When you're satisfied with the design, you cut a release. Nucleora generates one signed, immutable artifact: the design revision, every check result, every waiver, every simulation output, and the bill of materials.</p>
+        <p class="workflow-body">SBOL export. 21 CFR 11 signatures. The full audit trail — in a format another person can verify without running Nucleora at all.</p>
+        <div class="workflow-callout">
+          "Here's the release record" is a sentence you can say to your CRO, your biosafety committee, your QA team. The record contains everything they need to verify the design independently.
+        </div>
+      </div>
+      <div class="workflow-visual" data-reveal>
+        <div class="workflow-visual-bar mono">RELEASE RECORD — SIGNED · IMMUTABLE</div>
+        <div class="workflow-visual-body">
+          <div class="release-block">
+            <div class="release-header">
+              <span class="release-title mono">cn_spike_v4.release</span>
+              <span class="release-badge mono">SIGNED</span>
+            </div>
+            <div class="release-row"><span class="release-key mono">Design rev</span><span class="release-val mono">4 · 2026-08-16 14:22 UTC</span></div>
+            <div class="release-row"><span class="release-key mono">Construct</span><span class="release-val mono">Construct_spike · 3897 nt</span></div>
+            <div class="release-row"><span class="release-key mono">DRC result</span><span class="release-val mono" style="color:var(--accent)">ALL PASS · 0 WAIVED</span></div>
+            <div class="release-row"><span class="release-key mono">Fold ΔG</span><span class="release-val mono">−42.8 kcal/mol (ViennaRNA 2.6.4)</span></div>
+            <div class="release-row"><span class="release-key mono">Mfg grade</span><span class="release-val mono" style="color:var(--accent)">A</span></div>
+            <div class="release-row"><span class="release-key mono">SBOL export</span><span class="release-val mono">cn_spike_v4.xml</span></div>
+            <div class="release-row"><span class="release-key mono">Signature</span><span class="release-val mono" style="color:var(--text-dim)">sha256:a3f7...c912</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="container">
+    <p class="section-label mono">QUESTIONS — FAQ</p>
+    <h2 class="section-heading">Common questions.</h2>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <p class="faq-q">Does it require an internet connection?</p>
+        <p class="faq-a">No. ViennaRNA fold, codon tables, DRC, and all 41 design tools run entirely on your machine. An internet connection is needed only for RefSeq lookups and the initial download. After that, Nucleora works air-gapped.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Can I use it in a BSL-3 or regulated environment?</p>
+        <p class="faq-a">Yes. Local-first means no sequence leaves your infrastructure. Nucleora makes no outbound connections during normal operation. The 21 CFR 11 audit trail and signed release records are designed for regulated workflows.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">What if a species doesn't have a codon table?</p>
+        <p class="faq-a">Nucleora names the closest proxy it found, the distance metric used, and the n-count of the proxy table. It never approximates silently. You always know exactly what data is backing your design.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">How do I get access?</p>
+        <p class="faq-a">Nucleora is in active development. Join the early access list at nucleora.org and we'll reach out when your spot is ready. No account required to request access.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">What CAD operations does the Canvas support?</p>
+        <p class="faq-a">Drag-and-drop part assembly, bidirectional sequence sync, mRNA linear view, IVT plasmid circular view, parametric poly(A) tails, golden-gate and Gibson cloning site design, and automatic re-annotation on sequence change.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">What's in the Design Studio?</p>
+        <p class="faq-a">41 tools across categories: Cloning (Golden Gate, Gibson, restriction), Codon tools (optimization, tester, lab), Mutagenesis (site-directed, HDR donor designer, prime/base editing, multi-site), Parametric Design, and Parts registry with SBOL2/3 export and SynBioHub sync.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EARLY ACCESS CTA -->
+<section class="download-section section-pad-sm">
+  <div class="container">
+    <div class="download-inner">
+      <p class="section-label mono center">EARLY ACCESS</p>
+      <h2 class="download-heading center" style="font-size:clamp(24px,4vw,40px)">Join the list. Be first to build.</h2>
+      <div class="download-buttons" style="margin-top:32px">
+        <a href="index.html#newsletter" class="btn-primary btn-lg">Request early access</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="assets/img/logo.png" alt="Nucleora" class="footer-logo" loading="lazy">
+        <p class="mono">CAD for DNA and mRNA.<br>nucleora.org</p>
+      </div>
+      <div class="footer-links">
+        <h4 class="mono">Tool</h4>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#drc">Design rules</a>
+        <a href="how-it-works.html" aria-current="page">How it works</a>
+        <a href="index.html#newsletter">Early access</a>
+      </div>
+      <div class="footer-links">
+        <h4 class="mono">Data</h4>
+        <a href="codon-usage/index.html">Codon usage tables</a>
+        <a href="codon-usage/methods.html">Methods</a>
+      </div>
+      <div class="footer-links">
+        <h4 class="mono">Contact</h4>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom mono">
+      <span>© 2026 Nucleora</span>
+      <span class="sep">·</span>
+      <span>Local-first · Method-transparent · Honest about limits</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js?v=2" defer></script>
+<button class="back-to-top" id="backToTop" aria-label="Back to top" type="button">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <path d="M3 10L8 5l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+</body>
+</html>

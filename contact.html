@@ -1,125 +1,523 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Request Early Access — Nucleora</title>
-<meta name="description" content="Request early access to Nucleora, or reach out with questions. We don't sell or share your information.">
-<meta name="theme-color" content="#060a14">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://nucleora.org/contact.html">
-<link rel="icon" href="assets/img/favicon.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/img/favicon.png">
-<link rel="stylesheet" href="assets/css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Nucleora</title>
+  <meta name="description" content="Get in touch with the Nucleora team — questions about the tool, bug reports, feature requests, and research collaborations.">
+  <meta property="og:title" content="Contact — Nucleora">
+  <meta property="og:description" content="Reach the Nucleora team directly.">
+  <meta property="og:image" content="https://nucleora.org/assets/img/screen-dashboard.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://nucleora.org/assets/img/screen-dashboard.jpg">
+  <meta name="author" content="Nucleora">
+  <meta name="application-name" content="Nucleora">
+  <meta name="theme-color" content="#080c12">
+  <link rel="icon" href="assets/img/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/favicon.png">
+  <link rel="canonical" href="https://nucleora.org/contact.html">
+  <meta name="robots" content="index, follow">
+  <meta name="color-scheme" content="dark">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    .contact-page { min-height: 100svh; padding: 140px 0 100px; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .contact-info h1 {
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 300;
+      color: var(--text-bright);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .contact-info .lead {
+      font-size: 17px;
+      color: var(--text-dim);
+      line-height: 1.75;
+      margin-bottom: 40px;
+    }
+    .contact-methods { display: flex; flex-direction: column; gap: 16px; margin-bottom: 48px; }
+    .contact-method {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: border-color 0.15s;
+    }
+    .contact-method:hover { border-color: var(--accent); }
+    .contact-method-icon {
+      width: 36px; height: 36px;
+      color: var(--accent);
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+    .contact-method-icon svg { width: 100%; height: 100%; }
+    .contact-method-label {
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      text-transform: uppercase;
+      font-family: var(--ff-mono);
+      margin-bottom: 4px;
+    }
+    .contact-method-value {
+      font-size: 15px;
+      color: var(--text-bright);
+    }
+    .contact-method-value a { color: inherit; }
+    .contact-method-value a:hover { color: var(--accent); }
+    .contact-method-desc { font-size: 12px; color: var(--text-dim); margin-top: 4px; line-height: 1.5; }
+
+    .biosafety-note {
+      padding: 16px 20px;
+      background: var(--amber-dim);
+      border: 1px solid rgba(245,158,11,0.2);
+      border-left: 2px solid var(--amber);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* Form */
+    .contact-form-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+    }
+    .form-title {
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--text-bright);
+      margin-bottom: 8px;
+    }
+    .form-subtitle { font-size: 13px; color: var(--text-dim); margin-bottom: 32px; }
+
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      text-transform: uppercase;
+      font-family: var(--ff-mono);
+      margin-bottom: 8px;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-bright);
+      font-family: var(--ff-sans);
+      font-size: 14px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-dim); }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); }
+    .form-select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%236b7f96' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+    }
+    .form-select option { background: var(--bg-card); color: var(--text); }
+    .form-textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .form-submit {
+      width: 100%;
+      margin-top: 8px;
+      justify-content: center;
+    }
+
+    /* Inline validation */
+    .form-input.invalid, .form-textarea.invalid, .form-select.invalid {
+      border-color: #ff6b6b !important;
+    }
+    .form-error {
+      display: none;
+      font-size: 11px;
+      color: #ff6b6b;
+      font-family: var(--ff-mono);
+      margin-top: 5px;
+      letter-spacing: 0.04em;
+    }
+    .form-error.visible { display: block; }
+
+    /* Email client note */
+    .form-email-note {
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.03em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Direct email fallback */
+    .form-direct-email {
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.03em;
+      text-align: center;
+      margin-top: 12px;
+    }
+    .form-direct-email a { color: var(--accent); text-decoration: none; }
+    .form-direct-email a:hover { text-decoration: underline; }
+
+    /* Success state */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .form-success.visible { display: block; }
+
+    .form-success-helix {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+      color: var(--accent);
+      animation: helix-pop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes helix-pop {
+      from { transform: scale(0.5) rotate(-20deg); opacity: 0; }
+      to { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    .form-success-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      opacity: 0.75;
+    }
+    .form-success h3 { font-size: 20px; color: var(--text-bright); margin-bottom: 8px; font-weight: 300; }
+    .form-success p { font-size: 14px; color: var(--text-dim); line-height: 1.7; }
+
+    @media (max-width: 900px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .form-row { grid-template-columns: 1fr; }
+      .contact-form-wrap { padding: 28px 24px; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Nucleora","item":"https://nucleora.org/"},
+    {"@type":"ListItem","position":2,"name":"Contact","item":"https://nucleora.org/contact.html"}
+  ]}
+  </script>
 </head>
 <body>
+<div class="scroll-progress" id="scrollProgress" role="progressbar" aria-label="Page scroll progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+<a class="skip-link" href="#main-content">Skip to content</a>
 
-<nav class="site-nav">
-  <div class="wrap">
-    <a href="index.html" class="brand">
-      <img src="assets/img/logo.png" alt="Nucleora" width="28" height="28">
-      Nucleora
+<nav class="site-nav" id="site-nav" role="navigation" aria-label="Site navigation">
+  <div class="nav-inner">
+    <a href="./" class="nav-logo" aria-label="Nucleora home">
+      <img src="assets/img/logo.png" alt="Nucleora" class="nav-logo-img">
+      <span class="nav-logo-text">Nucleora</span>
     </a>
-    <button class="nav-toggle" id="navToggle" aria-label="Menu">&#9776;</button>
-    <div class="nav-links" id="navLinks">
-      <a href="index.html">Home</a>
-      <a href="index.html#features">Features</a>
-      <a href="index.html#species">Species</a>
-      <a href="index.html#how-it-works">How it works</a>
-      <a href="contact.html" class="active">Contact</a>
-      <a href="#signup" class="nav-cta">Request access</a>
-    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#drc">Design Rules</a></li>
+      <li><a href="index.html#local">Local-first</a></li>
+      <li><a href="codon-usage/index.html">Codon Data</a></li>
+      <li><a href="how-it-works.html">How it works</a></li>
+    </ul>
+    <a href="index.html#newsletter" class="nav-cta btn-primary">Get early access</a>
+    <button type="button" class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
-<header style="padding:76px 0 20px;">
-  <div class="wrap" style="max-width:760px;">
-    <span class="eyebrow">CONTACT</span>
-    <h1 style="font-size:44px;">Request access, or just say hello</h1>
-    <p class="lede">Nucleora is free while in development. Tell us a little about who you are and we'll reach out as builds become available &mdash; no spam, no mailing-list resale, ever.</p>
-  </div>
-</header>
+<main id="main-content">
+<nav class="container" aria-label="Breadcrumb">
+  <ol class="breadcrumb">
+    <li><a href="./">Nucleora</a></li>
+    <span class="breadcrumb-sep">›</span>
+    <li class="breadcrumb-current" aria-current="page">Contact</li>
+  </ol>
+</nav>
+<section class="contact-page">
+  <div class="container">
+    <div class="contact-grid">
 
-<section class="section-sm" id="signup">
-  <div class="wrap">
-    <div class="grid grid-2" style="align-items:flex-start;gap:40px;">
+      <!-- Left: info -->
+      <div class="contact-info">
+        <p class="section-label mono">CONTACT</p>
+        <h1>Get in touch.</h1>
+        <p class="lead">We read every message. If you've found a bug, have a question about a design rule, or want to talk about a collaboration — write us directly.</p>
 
-      <div class="card">
-        <h3 style="font-size:24px;margin-bottom:6px;">Request early access</h3>
-        <p class="muted" style="margin-bottom:24px;">Fill this in and we'll follow up by email. We're not using this to build a mailing list for anything else.</p>
-
-        <form id="signupForm" onsubmit="return submitForm(event)">
-          <div class="form-field">
-            <label for="name">Full name *</label>
-            <input type="text" id="name" name="name" required autocomplete="name">
-          </div>
-          <div class="form-row-2">
-            <div class="form-field">
-              <label for="institution">Institution / organization</label>
-              <input type="text" id="institution" name="institution" placeholder="If applicable" autocomplete="organization">
+        <div class="contact-methods">
+          <div class="contact-method">
+            <div class="contact-method-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             </div>
-            <div class="form-field">
-              <label for="role">Role / position</label>
-              <input type="text" id="role" name="role" placeholder="e.g. researcher, veterinarian, student">
+            <div>
+              <div class="contact-method-label">Email</div>
+              <div class="contact-method-value"><a href="mailto:hello@nucleora.org">hello@nucleora.org</a></div>
+              <div class="contact-method-desc">General questions, bugs, feedback</div>
             </div>
           </div>
-          <div class="form-field">
-            <label for="email">Email *</label>
-            <input type="email" id="email" name="email" required autocomplete="email">
+          <div class="contact-method">
+            <div class="contact-method-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            </div>
+            <div>
+              <div class="contact-method-label">Response time</div>
+              <div class="contact-method-value">Within 2 business days</div>
+              <div class="contact-method-desc">We're a small team — we'll get back to you</div>
+            </div>
           </div>
-          <div class="form-field">
-            <label for="notes">What are you hoping to design? (optional)</label>
-            <textarea id="notes" name="notes" rows="3" placeholder="e.g. a conservation vaccine for an endangered species, a teaching lab exercise, cloning workflows..."></textarea>
-          </div>
+        </div>
 
-          <div class="privacy-note">
-            <span>&#128274;</span>
-            <span>We only use this information to reach out about early access and product updates. We do not sell it, share it with third parties, or use it for anything else.</span>
-          </div>
-
-          <button type="submit" class="btn btn-primary" style="margin-top:20px;width:100%;justify-content:center;">Request early access</button>
-        </form>
-        <script>
-        function submitForm(e){
-          e.preventDefault();
-          var n=document.getElementById('name').value;
-          var inst=document.getElementById('institution').value;
-          var r=document.getElementById('role').value;
-          var em=document.getElementById('email').value;
-          var notes=document.getElementById('notes').value;
-          var body='Name: '+n+'\nEmail: '+em+'\nInstitution: '+(inst||'N/A')+'\nRole: '+(r||'N/A')+'\nNotes: '+(notes||'None');
-          var sub='Early Access Request — '+n;
-          window.location.href='mailto:nucleora.admin@proton.me?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body);
-          return false;
-        }
-        </script>
+        <div class="biosafety-note">
+          <strong style="color:var(--amber);font-family:var(--ff-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;">Biosafety & regulatory questions</strong><br>
+          For questions about constructs designed with Nucleora that involve biosafety review or regulatory submissions, please consult your institution's biosafety officer. Nucleora is a design tool and does not provide regulatory or legal advice.
+        </div>
       </div>
 
-      <div>
-        <div class="card" style="margin-bottom:20px;">
-          <h3>Questions?</h3>
-          <p class="muted">For support, partnership, or anything else that isn't an access request, email us directly:</p>
-          <a href="mailto:nucleora.admin@proton.me" class="btn btn-ghost" style="margin-top:14px;">nucleora.admin@proton.me</a>
-        </div>
-        <div class="card">
-          <h3>Status</h3>
-          <p class="muted" style="margin-bottom:14px;">In active development &middot; macOS &amp; Windows &middot; free while in development.</p>
-          <p class="muted" style="font-size:13.5px;">Nucleora is a research and education tool. It is not a medical device and does not provide clinical, diagnostic, or regulatory advice. Any construct intended for cells, animals, or humans requires your institution's biosafety (IBC) review.</p>
+      <!-- Right: form -->
+      <div class="contact-form-wrap">
+        <h2 class="form-title">Send us a message</h2>
+        <p class="form-subtitle mono" style="font-family:var(--ff-mono);font-size:11px;letter-spacing:0.04em;">We'll reply to your email directly.</p>
+
+        <form id="contactForm" novalidate aria-label="Contact form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="contact-name">Name</label>
+              <input class="form-input" type="text" id="contact-name" name="name" placeholder="Your name" required autocomplete="name" aria-describedby="name-error">
+              <span class="form-error" id="name-error">Name is required.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contact-email">Email</label>
+              <input class="form-input" type="email" id="contact-email" name="email" placeholder="you@example.com" required autocomplete="email" aria-describedby="email-error">
+              <span class="form-error" id="email-error">A valid email address is required.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contact-org">Organization / Institution</label>
+            <input class="form-input" type="text" id="contact-org" name="org" placeholder="University, company, or lab (optional)" autocomplete="organization">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contact-type">Category</label>
+            <select class="form-select" id="contact-type" name="type">
+              <option value="general">General question</option>
+              <option value="bug">Bug report</option>
+              <option value="feature">Feature request</option>
+              <option value="collaboration">Research collaboration</option>
+              <option value="download">Download / install issue</option>
+              <option value="design-rule">Design rule question</option>
+              <option value="data">Codon data question</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contact-subject">What do you want to discuss?</label>
+            <input class="form-input" type="text" id="contact-subject" name="subject" placeholder="Brief description of your topic (optional)">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contact-message">Message</label>
+            <textarea class="form-textarea" id="contact-message" name="message" placeholder="Tell us what's on your mind..." required maxlength="2000" aria-describedby="msg-count msg-error"></textarea>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+              <span class="form-error" id="msg-error" style="margin-top:0;">A message is required.</span>
+              <div class="char-count" id="msg-count" aria-live="polite" aria-atomic="true" style="margin-left:auto;">0 / 2000</div>
+            </div>
+          </div>
+          <p class="form-email-note mono" id="emailClientNote" aria-live="polite">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="display:inline;vertical-align:middle;margin-right:5px;opacity:0.6"><circle cx="6" cy="6" r="5.5" stroke="currentColor"/><path d="M6 4v3M6 8.5v.5" stroke="currentColor" stroke-linecap="round"/></svg>
+            Clicking "Send" will open your email client with this message pre-filled.
+          </p>
+          <button type="submit" class="btn-primary btn-lg form-submit">Send message</button>
+          <p class="form-direct-email mono">Prefer to write directly? <a href="mailto:hello@nucleora.org">hello@nucleora.org</a></p>
+        </form>
+
+        <div class="form-success" id="formSuccess">
+          <div class="form-success-helix" aria-hidden="true">
+            <svg viewBox="0 0 80 80" width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- DNA double-ring with check -->
+              <circle cx="40" cy="40" r="36" stroke="var(--accent,#00d4aa)" stroke-width="1.5" opacity="0.25"/>
+              <circle cx="40" cy="40" r="28" stroke="var(--accent,#00d4aa)" stroke-width="1.5" opacity="0.45"/>
+              <!-- A-T base pair dots -->
+              <circle cx="40" cy="12" r="4" fill="#ff6b6b" opacity="0.8"/>
+              <circle cx="40" cy="68" r="4" fill="#4ecdc4" opacity="0.8"/>
+              <circle cx="12" cy="40" r="4" fill="#45b7d1" opacity="0.8"/>
+              <circle cx="68" cy="40" r="4" fill="#f7dc6f" opacity="0.8"/>
+              <!-- Checkmark -->
+              <path d="M26 40l9 9 19-19" stroke="var(--accent,#00d4aa)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="form-success-label mono">SEQUENCE TRANSMITTED</div>
+          <h3>Message sent.</h3>
+          <p>Your email client opened with the message pre-filled. We'll reply within 2 business days.<br>
+          <span class="mono" style="font-size:0.78rem;opacity:0.5;">Or write directly: <a href="mailto:hello@nucleora.org" style="color:var(--accent)">hello@nucleora.org</a></span></p>
         </div>
       </div>
 
     </div>
   </div>
 </section>
+</main>
 
-<footer>
-  <div class="wrap">
-    <div class="footer-legal">
-      <p>&copy; 2026 Nucleora &mdash; by Leo Rojas. All rights reserved.</p>
-      <p>Nucleora does not provide medical, veterinary, or regulatory advice.</p>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="assets/img/logo.png" alt="Nucleora" class="footer-logo" loading="lazy">
+        <p class="mono">CAD for DNA and mRNA.<br>nucleora.org</p>
+      </div>
+      <div class="footer-links">
+        <h4 class="mono">Tool</h4>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#drc">Design rules</a>
+        <a href="how-it-works.html">How it works</a>
+        <a href="index.html#newsletter">Early access</a>
+      </div>
+      <div class="footer-links">
+        <h4 class="mono">Data</h4>
+        <a href="codon-usage/index.html">Codon usage tables</a>
+        <a href="codon-usage/methods.html">Methods</a>
+      </div>
+      <div class="footer-links">
+        <h4 class="mono">Contact</h4>
+        <a href="contact.html" aria-current="page">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom mono">
+      <span>© 2026 Nucleora</span>
+      <span class="sep">·</span>
+      <span>Local-first · Method-transparent · Honest about limits</span>
     </div>
   </div>
 </footer>
-<script src="assets/js/main.js"></script>
+
+<script src="assets/js/main.js?v=2" defer></script>
+<script>
+  // ── Inline validation helpers ──
+  function showError(fieldId, errorId) {
+    const field = document.getElementById(fieldId);
+    const error = document.getElementById(errorId);
+    if (!field || !error) return;
+    field.classList.add('invalid');
+    error.classList.add('visible');
+    field.setAttribute('aria-invalid', 'true');
+  }
+  function clearError(fieldId, errorId) {
+    const field = document.getElementById(fieldId);
+    const error = document.getElementById(errorId);
+    if (!field || !error) return;
+    field.classList.remove('invalid');
+    error.classList.remove('visible');
+    field.removeAttribute('aria-invalid');
+  }
+  function validateEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+  // Blur validation
+  const nameField = document.getElementById('contact-name');
+  if (nameField) {
+    nameField.addEventListener('blur', () => {
+      nameField.value.trim() ? clearError('contact-name','name-error') : showError('contact-name','name-error');
+    });
+    nameField.addEventListener('input', () => { if (nameField.value.trim()) clearError('contact-name','name-error'); });
+  }
+
+  const emailField = document.getElementById('contact-email');
+  if (emailField) {
+    emailField.addEventListener('blur', () => {
+      validateEmail(emailField.value.trim()) ? clearError('contact-email','email-error') : showError('contact-email','email-error');
+    });
+    emailField.addEventListener('input', () => { if (validateEmail(emailField.value.trim())) clearError('contact-email','email-error'); });
+  }
+
+  const msgArea = document.getElementById('contact-message');
+  const msgCount = document.getElementById('msg-count');
+  if (msgArea) {
+    if (msgCount) {
+      msgArea.addEventListener('input', () => {
+        const len = msgArea.value.length;
+        const max = msgArea.maxLength || 2000;
+        msgCount.textContent = len + ' / ' + max;
+        msgCount.classList.toggle('over', len > max * 0.9);
+      });
+    }
+    msgArea.addEventListener('blur', () => {
+      msgArea.value.trim() ? clearError('contact-message','msg-error') : showError('contact-message','msg-error');
+    });
+    msgArea.addEventListener('input', () => { if (msgArea.value.trim()) clearError('contact-message','msg-error'); });
+  }
+
+  const form = document.getElementById('contactForm');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name    = document.getElementById('contact-name').value.trim();
+      const email   = document.getElementById('contact-email').value.trim();
+      const org     = document.getElementById('contact-org').value.trim();
+      const type    = document.getElementById('contact-type').value;
+      const subject = document.getElementById('contact-subject').value.trim();
+      const message = document.getElementById('contact-message').value.trim();
+
+      // Show all errors on submit attempt
+      let valid = true;
+      if (!name) { showError('contact-name','name-error'); valid = false; }
+      if (!validateEmail(email)) { showError('contact-email','email-error'); valid = false; }
+      if (!message) { showError('contact-message','msg-error'); valid = false; }
+      if (!valid) return;
+
+      const categoryLabel = document.getElementById('contact-type').selectedOptions[0].text;
+      const subjectLine   = subject
+        ? encodeURIComponent('[Nucleora] ' + subject)
+        : encodeURIComponent('[Nucleora] ' + categoryLabel + ' — from ' + name);
+
+      const lines = [];
+      lines.push('Name: ' + name);
+      lines.push('Email: ' + email);
+      if (org) lines.push('Organization: ' + org);
+      lines.push('Category: ' + categoryLabel);
+      if (subject) lines.push('Topic: ' + subject);
+      lines.push('');
+      lines.push(message);
+
+      const body = encodeURIComponent(lines.join('\n'));
+      const mailtoUrl = 'mailto:hello@nucleora.org?subject=' + subjectLine + '&body=' + body;
+
+      window.location.href = mailtoUrl;
+
+      setTimeout(() => {
+        form.style.display = 'none';
+        document.getElementById('formSuccess').classList.add('visible');
+      }, 400);
+    });
+  }
+</script>
+<button class="back-to-top" id="backToTop" aria-label="Back to top" type="button">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <path d="M3 10L8 5l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
 </body>
 </html>
