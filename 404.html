@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 · Sequence Unresolved — Nucleora</title>
+  <meta name="description" content="Page not found — Nucleora CAD for DNA and mRNA.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#080c12">
+  <link rel="icon" href="assets/img/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/favicon.png">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080c12;
+      --surface: #0d1520;
+      --accent: #00d4aa;
+      --accent2: #00a8ff;
+      --text: #e8edf5;
+      --text-muted: #6b7a8d;
+      --border: rgba(255,255,255,0.07);
+      --nt-a: #ff6b6b;
+      --nt-t: #4ecdc4;
+      --nt-g: #45b7d1;
+      --nt-c: #f7dc6f;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page-404 {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle grid background */
+    .page-404::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,170,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,170,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    /* Floating codon decorations in background */
+    .codon-bg {
+      position: absolute;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      opacity: 0.06;
+      pointer-events: none;
+      color: var(--accent);
+      user-select: none;
+    }
+
+    .content-wrap {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* ── DNA HELIX SVG ── */
+    .helix-wrap {
+      width: 140px;
+      height: 260px;
+      margin-bottom: 2.5rem;
+      animation: float 4s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes ghost-flicker {
+      0%, 100% { opacity: 0.18; }
+      45% { opacity: 0.08; }
+      50% { opacity: 0.22; }
+      55% { opacity: 0.07; }
+      80% { opacity: 0.18; }
+    }
+
+    .ghost-strand {
+      animation: ghost-flicker 3.2s ease-in-out infinite;
+    }
+
+    /* ── LABEL ── */
+    .error-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      opacity: 0.9;
+    }
+
+    .error-label span {
+      display: inline-block;
+      background: rgba(0,212,170,0.1);
+      border: 1px solid rgba(0,212,170,0.25);
+      border-radius: 4px;
+      padding: 0.3em 0.8em;
+    }
+
+    /* ── HEADING ── */
+    .error-heading {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 500;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── SUB ── */
+    .error-sub {
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+      max-width: 440px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* ── BUTTONS ── */
+    .error-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary-404 {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5em;
+      background: var(--accent);
+      color: #080c12;
+      font-weight: 500;
+      font-size: 0.88rem;
+      padding: 0.75em 1.5em;
+      border-radius: 6px;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .btn-primary-404:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-ghost-404 {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5em;
+      border: 1px solid rgba(255,255,255,0.18);
+      color: var(--text);
+      font-size: 0.88rem;
+      padding: 0.75em 1.5em;
+      border-radius: 6px;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .btn-ghost-404:hover { border-color: rgba(255,255,255,0.4); transform: translateY(-1px); }
+
+    /* ── NAV BACK ── */
+    .nav-back {
+      position: fixed;
+      top: 1.5rem;
+      left: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.06em;
+      transition: color 0.15s;
+      z-index: 10;
+    }
+    .nav-back:hover { color: var(--text); }
+    .nav-back svg { opacity: 0.6; }
+
+    @media (max-width: 480px) {
+      .helix-wrap { width: 110px; height: 210px; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="/" class="nav-back" aria-label="Return home">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
+    <path d="M9 1L3 7l6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  nucleora.org
+</a>
+
+<!-- Floating codon decorations -->
+<div class="codon-bg" style="top:8%;left:4%">ATG·GAC·CGT·AAA<br>TGC·ACC·GGA·CTT<br>CAT·GGT·ATC·CCG</div>
+<div class="codon-bg" style="top:12%;right:3%">GCT·AGC·TAA·GGA<br>CCT·AAT·GGC·TTC<br>ACG·TGA·CAA·GGT</div>
+<div class="codon-bg" style="bottom:10%;left:5%">CAG·GTC·ATA·GCT<br>TTG·CAC·GAA·TGG<br>AGC·TAC·CGT·GGG</div>
+<div class="codon-bg" style="bottom:8%;right:4%">GGA·TCC·ATG·CAA<br>TCG·ACC·TTG·CAT<br>GCA·TTA·CGG·ACT</div>
+
+<div class="page-404">
+  <div class="content-wrap">
+
+    <!-- DNA Helix with break -->
+    <div class="helix-wrap" aria-hidden="true">
+      <svg viewBox="0 0 120 260" xmlns="http://www.w3.org/2000/svg" width="120" height="260">
+        <defs>
+          <linearGradient id="lbg1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#00d4aa"/>
+            <stop offset="100%" stop-color="#00a8ff"/>
+          </linearGradient>
+          <linearGradient id="rbg1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#00a8ff"/>
+            <stop offset="100%" stop-color="#00d4aa"/>
+          </linearGradient>
+          <!-- Break gradient: fade to orange/red at break point -->
+          <linearGradient id="lbg-break" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#00d4aa"/>
+            <stop offset="100%" stop-color="#ff6b6b"/>
+          </linearGradient>
+          <linearGradient id="rbg-break" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#00a8ff"/>
+            <stop offset="100%" stop-color="#ff6b6b"/>
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- ── INTACT UPPER HELIX (y 0–120) ── -->
+
+        <!-- Base pair rungs -->
+        <!-- y=0: A-T (red) -->
+        <line x1="35" y1="0" x2="85" y2="0" stroke="#ff6b6b" stroke-width="2" opacity="0.7"/>
+        <circle cx="35" cy="0" r="4" fill="#ff6b6b" filter="url(#glow)"/>
+        <circle cx="85" cy="0" r="4" fill="#ff6b6b" filter="url(#glow)"/>
+        <text x="60" y="-6" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#ff6b6b" opacity="0.6">A·T</text>
+
+        <!-- y=30: T-A (teal) -->
+        <line x1="35" y1="30" x2="85" y2="30" stroke="#4ecdc4" stroke-width="2" opacity="0.7"/>
+        <circle cx="85" cy="30" r="4" fill="#4ecdc4" filter="url(#glow)"/>
+        <circle cx="35" cy="30" r="4" fill="#4ecdc4" filter="url(#glow)"/>
+        <text x="60" y="24" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#4ecdc4" opacity="0.6">T·A</text>
+
+        <!-- y=60: G-C (blue) -->
+        <line x1="85" y1="60" x2="35" y2="60" stroke="#45b7d1" stroke-width="2" opacity="0.7"/>
+        <circle cx="85" cy="60" r="4" fill="#45b7d1" filter="url(#glow)"/>
+        <circle cx="35" cy="60" r="4" fill="#45b7d1" filter="url(#glow)"/>
+        <text x="60" y="54" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#45b7d1" opacity="0.6">G·C</text>
+
+        <!-- y=90: C-G (yellow) -->
+        <line x1="35" y1="90" x2="85" y2="90" stroke="#f7dc6f" stroke-width="2" opacity="0.7"/>
+        <circle cx="35" cy="90" r="4" fill="#f7dc6f" filter="url(#glow)"/>
+        <circle cx="85" cy="90" r="4" fill="#f7dc6f" filter="url(#glow)"/>
+        <text x="60" y="84" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#f7dc6f" opacity="0.6">C·G</text>
+
+        <!-- y=120: faded A-T (break approaching) -->
+        <line x1="35" y1="120" x2="85" y2="120" stroke="#ff6b6b" stroke-width="2" opacity="0.3"/>
+        <circle cx="35" cy="120" r="3.5" fill="#ff6b6b" opacity="0.3"/>
+        <circle cx="85" cy="120" r="3.5" fill="#ff6b6b" opacity="0.3"/>
+
+        <!-- Left backbone (intact) -->
+        <path d="M 85,0 C 85,7 60,7 60,15 C 60,23 35,23 35,30 C 35,37 60,37 60,45 C 60,53 85,53 85,60 C 85,67 60,67 60,75 C 60,83 35,83 35,90 C 35,97 60,97 60,105 C 60,113 85,113 85,120"
+              fill="none" stroke="url(#lbg1)" stroke-width="3" stroke-linecap="round"/>
+
+        <!-- Right backbone (intact) -->
+        <path d="M 35,0 C 35,7 60,7 60,15 C 60,23 85,23 85,30 C 85,37 60,37 60,45 C 60,53 35,53 35,60 C 35,67 60,67 60,75 C 60,83 85,83 85,90 C 85,97 60,97 60,105 C 60,113 35,113 35,120"
+              fill="none" stroke="url(#rbg1)" stroke-width="3" stroke-linecap="round"/>
+
+        <!-- ── BREAK ZONE (y 120–180) ── -->
+
+        <!-- Break left strand: diverges left -->
+        <path d="M 85,120 C 85,132 72,140 60,150 C 50,158 40,165 28,178"
+              fill="none" stroke="url(#lbg-break)" stroke-width="3" stroke-linecap="round"
+              stroke-dasharray="4 3" opacity="0.8"/>
+
+        <!-- Break right strand: diverges right -->
+        <path d="M 35,120 C 35,132 48,140 60,150 C 70,158 80,165 92,178"
+              fill="none" stroke="url(#rbg-break)" stroke-width="3" stroke-linecap="round"
+              stroke-dasharray="4 3" opacity="0.8"/>
+
+        <!-- Break zone indicator: jagged/missing rungs -->
+        <line x1="50" y1="138" x2="62" y2="135" stroke="#ff6b6b" stroke-width="1.5" opacity="0.4" stroke-dasharray="2 2"/>
+        <line x1="52" y1="152" x2="68" y2="148" stroke="#ff6b6b" stroke-width="1.5" opacity="0.25" stroke-dasharray="2 2"/>
+
+        <!-- Error dot at break center -->
+        <circle cx="60" cy="150" r="5" fill="#ff6b6b" opacity="0.85" filter="url(#glow)"/>
+        <text x="60" y="154" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6" fill="#080c12" font-weight="bold">✕</text>
+
+        <!-- ── GHOST BOTTOM STRANDS (y 180–260) ── -->
+        <g class="ghost-strand">
+          <!-- Continuation below break: ghosted, very faint -->
+          <path d="M 28,178 C 20,195 35,200 35,210 C 35,220 60,220 60,230 C 60,240 85,240 85,250"
+                fill="none" stroke="#00d4aa" stroke-width="2.5" stroke-linecap="round" opacity="0.2"/>
+          <path d="M 92,178 C 100,195 85,200 85,210 C 85,220 60,220 60,230 C 60,240 35,240 35,250"
+                fill="none" stroke="#00a8ff" stroke-width="2.5" stroke-linecap="round" opacity="0.2"/>
+
+          <!-- Ghost rungs -->
+          <line x1="35" y1="210" x2="85" y2="210" stroke="#4ecdc4" stroke-width="1.5" opacity="0.15"/>
+          <circle cx="35" cy="210" r="3" fill="#4ecdc4" opacity="0.15"/>
+          <circle cx="85" cy="210" r="3" fill="#4ecdc4" opacity="0.15"/>
+
+          <line x1="35" y1="240" x2="85" y2="240" stroke="#45b7d1" stroke-width="1.5" opacity="0.1"/>
+          <circle cx="35" cy="240" r="3" fill="#45b7d1" opacity="0.1"/>
+          <circle cx="85" cy="240" r="3" fill="#45b7d1" opacity="0.1"/>
+        </g>
+
+      </svg>
+    </div>
+
+    <p class="error-label"><span>404 · SEQUENCE UNRESOLVED</span></p>
+    <h1 class="error-heading">This sequence couldn't be found.</h1>
+    <p class="error-sub">
+      The page you're looking for isn't in our genome. It may have been spliced out, degraded, or never synthesized.<br>
+      Your constructs are safe.
+    </p>
+
+    <div class="error-actions">
+      <a href="/" class="btn-primary-404">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M7 1L1 7l6 6M1 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Return home
+      </a>
+      <a href="/contact.html" class="btn-ghost-404">
+        Contact us
+      </a>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,4 +1,8 @@
 User-agent: *
+Disallow: /404.html
 Allow: /
+Allow: /contact.html
+Allow: /how-it-works.html
+Allow: /codon-usage/
 
-Sitemap: https://nucleoragene.github.io/nucleora-site/sitemap.xml
+Sitemap: https://nucleora.org/sitemap.xml

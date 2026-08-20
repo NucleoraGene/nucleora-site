@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,18 +9,25 @@
   <meta property="og:description" content="Sequences are not designs. Nucleora is the CAD system molecular biology never had.">
   <meta property="og:image" content="assets/img/screen-dashboard.jpg">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://nucleoragene.github.io/nucleora-site/">
+  <meta property="og:url" content="https://nucleora.org/">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Nucleora — CAD for DNA and mRNA">
   <meta name="twitter:description" content="Sequences are not designs. Nucleora is the CAD system molecular biology never had.">
-  <meta name="twitter:image" content="https://nucleoragene.github.io/nucleora-site/assets/img/screen-dashboard.jpg">
+  <meta name="twitter:image" content="https://nucleora.org/assets/img/screen-dashboard.jpg">
   <meta name="theme-color" content="#080c12">
   <link rel="icon" href="assets/img/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/img/favicon.png">
-  <link rel="canonical" href="https://nucleoragene.github.io/nucleora-site/">
+  <link rel="canonical" href="https://nucleora.org/">
+  <meta name="robots" content="index, follow">
+  <meta name="color-scheme" content="dark">
+  <meta name="author" content="Nucleora">
+  <meta name="application-name" content="Nucleora">
+  <link rel="sitemap" type="application/xml" href="sitemap.xml">
+  <link rel="manifest" href="manifest.json">
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
   <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -31,18 +38,51 @@
     "operatingSystem": "macOS, Windows",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "url": "https://nucleora.org",
-    "screenshot": "https://nucleoragene.github.io/nucleora-site/assets/img/screen-dashboard.jpg"
+    "screenshot": "https://nucleora.org/assets/img/screen-dashboard.jpg"
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"Is Nucleora really free?","acceptedAnswer":{"@type":"Answer","text":"Yes — the full workbench is free while Nucleora is in development. Academic and commercial use are both welcome."}},
+      {"@type":"Question","name":"Do my sequences ever leave my computer?","acceptedAnswer":{"@type":"Answer","text":"No. Nucleora is local-first: all design, computation, and simulation happens on your machine. No sequences are uploaded. No account is required."}},
+      {"@type":"Question","name":"What operating systems are supported?","acceptedAnswer":{"@type":"Answer","text":"Nucleora runs natively on macOS (Apple Silicon and Intel, macOS 12+) and Windows 10/11."}},
+      {"@type":"Question","name":"How accurate is the codon optimization?","acceptedAnswer":{"@type":"Answer","text":"Codon tables are tallied directly from RefSeq CDS sequences — not modelled or interpolated. Every table names its source."}},
+      {"@type":"Question","name":"Can I use Nucleora for regulated GMP/IND work?","acceptedAnswer":{"@type":"Answer","text":"Nucleora includes 21 CFR 11-compatible audit trails, signed release records, and SBOL export — designed to support regulated workflows."}},
+      {"@type":"Question","name":"What does the design rule checker actually catch?","acceptedAnswer":{"@type":"Answer","text":"214 rules across 6 packs run continuously as you edit — covering synthesis vendor limits, mRNA biology, and regulatory sequences."}}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Nucleora",
+    "url": "https://nucleora.org",
+    "logo": "https://nucleora.org/assets/img/logo.png",
+    "contactPoint": {"@type": "ContactPoint", "email": "hello@nucleora.org", "contactType": "customer support"},
+    "sameAs": ["https://github.com/NucleoraGene"]
   }
   </script>
 </head>
 <body>
+<div class="sr-live" id="srLive" aria-live="polite" aria-atomic="true"></div>
+<div class="page-loader" id="pageLoader"></div>
+<div class="announce-bar" id="announceBar" role="banner">
+  <span>🧬 <strong>Nucleora</strong> is in active development — <a href="#newsletter">Join the early access list</a></span>
+  <button class="announce-close" type="button" id="announceClose" aria-label="Dismiss announcement" type="button">×</button>
+</div>
+<div class="scroll-progress" id="scrollProgress" role="progressbar" aria-label="Page scroll progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 <a class="skip-link" href="#main-content">Skip to content</a>
 
 <!-- NAV -->
 <nav class="site-nav" id="site-nav" role="navigation" aria-label="Site navigation">
   <div class="nav-inner">
     <a href="./" class="nav-logo" aria-label="Nucleora home">
-      <img src="assets/img/logo.png" alt="Nucleora" class="nav-logo-img">
+      <img src="assets/img/logo.png" alt="Nucleora" class="nav-logo-img" width="28" height="28">
       <span class="nav-logo-text">Nucleora</span>
     </a>
     <ul class="nav-links" id="navLinks">
@@ -51,9 +91,13 @@
       <li><a href="#local">Local-first</a></li>
       <li><a href="codon-usage/index.html">Codon Data</a></li>
       <li><a href="how-it-works.html">How it works</a></li>
+      <li><a href="#try-it">Try it</a></li>
     </ul>
-    <a href="#download" class="nav-cta btn-primary">Download free</a>
-    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+    <div class="nav-theme-area">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" type="button" title="Toggle dark/light mode">🌙</button>
+      <a href="#newsletter" class="nav-cta btn-primary">Get early access</a>
+    </div>
+    <button type="button" class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -62,29 +106,68 @@
 <!-- HERO -->
 <main id="main-content">
 <section class="hero" id="hero">
+  <!-- DNA base-pair ribbon decorations -->
+  <div class="dna-ribbon dna-ribbon-left" aria-hidden="true">
+    <div class="dna-ribbon-inner">
+      <span class="nt-a">A</span><span class="nt-t">T</span>
+      <span class="nt-g">G</span><span class="nt-c">C</span>
+      <span class="nt-t">T</span><span class="nt-a">A</span>
+      <span class="nt-c">C</span><span class="nt-g">G</span>
+      <span class="nt-a">A</span><span class="nt-t">T</span>
+      <span class="nt-g">G</span><span class="nt-c">C</span>
+      <span class="nt-t">T</span><span class="nt-a">A</span>
+      <span class="nt-c">C</span><span class="nt-g">G</span>
+      <span class="nt-a">A</span><span class="nt-t">T</span>
+      <span class="nt-g">G</span><span class="nt-c">C</span>
+      <span class="nt-a">A</span><span class="nt-t">T</span>
+      <span class="nt-g">G</span><span class="nt-c">C</span>
+      <span class="nt-t">T</span><span class="nt-a">A</span>
+      <span class="nt-c">C</span><span class="nt-g">G</span>
+    </div>
+  </div>
+  <div class="dna-ribbon dna-ribbon-right" aria-hidden="true">
+    <div class="dna-ribbon-inner">
+      <span class="nt-g">G</span><span class="nt-c">C</span>
+      <span class="nt-a">A</span><span class="nt-t">T</span>
+      <span class="nt-c">C</span><span class="nt-g">G</span>
+      <span class="nt-t">T</span><span class="nt-a">A</span>
+      <span class="nt-g">G</span><span class="nt-c">C</span>
+      <span class="nt-a">A</span><span class="nt-t">T</span>
+      <span class="nt-c">C</span><span class="nt-g">G</span>
+      <span class="nt-t">T</span><span class="nt-a">A</span>
+      <span class="nt-g">G</span><span class="nt-c">C</span>
+      <span class="nt-a">A</span><span class="nt-t">T</span>
+      <span class="nt-g">G</span><span class="nt-c">C</span>
+      <span class="nt-a">A</span><span class="nt-t">T</span>
+      <span class="nt-c">C</span><span class="nt-g">G</span>
+      <span class="nt-t">T</span><span class="nt-a">A</span>
+    </div>
+  </div>
   <div class="hero-video-wrap">
-    <video class="hero-video" autoplay muted loop playsinline preload="none" poster="assets/img/hero-poster.jpg">
+    <video class="hero-video" autoplay muted loop playsinline preload="none" poster="assets/img/hero-poster.jpg" fetchpriority="low">
       <source src="assets/video/Nucleora_Film_36s.mp4" type="video/mp4">
     </video>
     <div class="hero-video-fade"></div>
   </div>
   <div class="hero-content">
-    <p class="hero-overline mono">REV 1.0 &nbsp;·&nbsp; macOS &amp; Windows &nbsp;·&nbsp; Free while in development</p>
-    <h1 class="hero-headline">Sequences are not&nbsp;designs.</h1>
-    <p class="hero-sub">Nucleora is CAD for DNA and mRNA — the design environment molecular biology never had.</p>
+    <p class="hero-overline mono">In development &nbsp;·&nbsp; macOS &amp; Windows &nbsp;·&nbsp; Free while in development</p>
+    <h1 class="hero-headline">Sequences are<br>not&nbsp;designs.</h1>
+    <p class="hero-sub">Nucleora is the CAD system molecular biology never had — assemble constructs from parametric parts, run 214 design-rule checks continuously, fold and simulate locally, and ship an auditable release record.</p>
     <div class="hero-actions">
-      <a href="#download" class="btn-primary btn-lg">Download free</a>
-      <a href="#film" class="btn-ghost btn-lg" id="playFilmBtn" data-open-modal>
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>
+      <a href="#newsletter" class="btn-primary btn-lg" aria-describedby="hero-meta" tabindex="0">Join early access</a>
+      <a href="#film" class="btn-ghost btn-lg" id="playFilmBtn" data-open-modal aria-label="Watch 2-minute Nucleora film">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>
         Watch 2-minute film
       </a>
     </div>
-    <div class="hero-meta mono">
+    <div class="hero-meta mono" id="hero-meta" aria-label="Nucleora highlights">
       <span>214 design rules</span>
       <span class="sep">·</span>
       <span>ViennaRNA fold</span>
       <span class="sep">·</span>
-      <span>Local-first, nothing uploaded</span>
+      <span>30 species codon tables</span>
+      <span class="sep">·</span>
+      <span>Local-first</span>
     </div>
   </div>
   <div class="hero-scroll-hint" aria-hidden="true">
@@ -94,13 +177,36 @@
 </section>
 
 <!-- FILM MODAL -->
-<div class="modal" id="film-modal" role="dialog" aria-modal="true" aria-label="Nucleora 2-minute film" hidden>
+<div class="modal" id="film-modal" role="dialog" aria-modal="true" aria-label="Nucleora 2-minute film" aria-describedby="modal-desc" hidden>
   <div class="modal-backdrop" id="modalBackdrop"></div>
-  <div class="modal-content">
-    <button class="modal-close" id="modalClose" aria-label="Close">×</button>
-    <video class="modal-video" id="modalVideo" controls>
+  <div class="modal-content"><p id="modal-desc" class="sr-live">Press Escape or click outside to close</p>
+    <button type="button" class="modal-close" id="modalClose" aria-label="Close">×</button>
+    <video class="modal-video" id="modalVideo" controls preload="metadata">
       <source src="assets/video/Nucleora_Film_128s.mp4" type="video/mp4">
     </video>
+  </div>
+</div>
+
+
+<!-- STATS STRIP -->
+<div class="stats-strip" aria-label="Nucleora by the numbers">
+  <div class="stats-strip-inner">
+    <div class="stats-strip-item">
+      <div class="stats-strip-num" data-count="214" id="statRules">214</div>
+      <div class="stats-strip-label">Design rules</div>
+    </div>
+    <div class="stats-strip-item">
+      <div class="stats-strip-num" data-count="30" id="statSpecies">30</div>
+      <div class="stats-strip-label">Species codon<br>tables</div>
+    </div>
+    <div class="stats-strip-item">
+      <div class="stats-strip-num" data-count="350" id="statTools">350<span class="stats-strip-suffix">+</span></div>
+      <div class="stats-strip-label">Tools in the<br>workbench</div>
+    </div>
+    <div class="stats-strip-item">
+      <div class="stats-strip-num" data-count="0" id="statUploads">0</div>
+      <div class="stats-strip-label">Sequences<br>uploaded</div>
+    </div>
   </div>
 </div>
 
@@ -109,7 +215,7 @@
   <div class="container">
     <div class="thesis-grid">
       <div class="thesis-col">
-        <p class="section-label mono">THE PROBLEM — 001</p>
+        <p class="section-label mono" aria-hidden="true">THE PROBLEM — 001</p>
         <h2 class="thesis-heading">Electronics has CAD.<br>Mechanical has CAD.<br>Architecture has CAD.</h2>
         <p class="thesis-body large-text">Molecular biology has a text box with ATGC in it, a folder of Benchling tabs, and a spreadsheet.</p>
         <p class="thesis-body">Nucleora treats a DNA or mRNA construct the way an engineer treats any other design. Parts. Constraints. Checks. Simulation. A release you can hand to someone.</p>
@@ -124,7 +230,7 @@
             <span class="paradigm-label mono">FROM</span>
             <p>A sequence you type and then analyze</p>
           </div>
-          <div class="paradigm-arrow">↓</div>
+          <div class="paradigm-arrow" aria-hidden="true">↓</div>
           <div class="paradigm-row to">
             <span class="paradigm-label mono">TO</span>
             <p>A design you assemble, constrain, simulate, verify, and release</p>
@@ -145,54 +251,56 @@
   <div class="showcase-scroll-wrap">
     <div class="showcase-track" id="showcaseTrack">
       <div class="showcase-slide active" data-label="Home &amp; Projects">
-        <div class="showcase-screen">
-          <img src="assets/img/screen-dashboard.jpg" alt="Nucleora dashboard — Recent Constructs, Quick Actions, and Recent Analyses" loading="lazy">
+        <div class="showcase-screen" tabindex="-1">
+          <img src="assets/img/screen-dashboard.jpg" alt="Nucleora dashboard — Recent Constructs, Quick Actions, and Recent Analyses" loading="eager" width="1512" height="801">
         </div>
         <p class="showcase-caption mono">HOME — Dashboard and project overview</p>
       </div>
       <div class="showcase-slide" data-label="Design Studio">
         <div class="showcase-screen">
-          <img src="assets/img/screen-design-studio.jpg" alt="Nucleora Design Studio — cloning, codon optimization, and sequence editing" loading="lazy">
+          <img src="assets/img/screen-design-studio.jpg" alt="Nucleora Design Studio — cloning, codon optimization, and sequence editing" loading="eager" width="1512" height="801">
         </div>
         <p class="showcase-caption mono">DESIGN STUDIO — 41 tools including cloning, codon optimization, and mutagenesis</p>
       </div>
       <div class="showcase-slide" data-label="Sequence Editor">
         <div class="showcase-screen">
-          <img src="assets/img/screen-sequence-editor.jpg" alt="Nucleora sequence editor — mRNA linear view with feature map" loading="lazy">
+          <img src="assets/img/screen-sequence-editor.jpg" alt="Nucleora sequence editor — mRNA linear view with feature map" loading="eager" width="1512" height="801">
         </div>
         <p class="showcase-caption mono">SEQUENCE EDITOR — mRNA linear, IVT plasmid circular, with auto-annotation</p>
       </div>
       <div class="showcase-slide" data-label="Analysis &amp; QC">
         <div class="showcase-screen">
-          <img src="assets/img/screen-qc.jpg" alt="Nucleora sequencing QC — align result to reference" loading="lazy">
+          <img src="assets/img/screen-qc.jpg" alt="Nucleora sequencing QC — align result to reference" loading="eager" width="1440" height="900">
         </div>
         <p class="showcase-caption mono">ANALYSIS & QC — Align sequencing results to your design, classify every variant</p>
       </div>
     </div>
+    <div class="showcase-slide-label" id="showcaseLabel" aria-live="polite">Home &amp; Projects</div>
     <div class="showcase-controls">
-      <button class="showcase-arrow prev" id="showcasePrev" aria-label="Previous screen">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <button class="showcase-arrow prev" id="showcasePrev" aria-label="Previous screen" type="button">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div class="showcase-nav" role="tablist" aria-label="App screens">
-        <button class="showcase-dot active" data-slide="0" role="tab" aria-selected="true" aria-label="Dashboard screen"></button>
-        <button class="showcase-dot" data-slide="1" role="tab" aria-selected="false" aria-label="Design Studio screen"></button>
-        <button class="showcase-dot" data-slide="2" role="tab" aria-selected="false" aria-label="Sequence Editor screen"></button>
-        <button class="showcase-dot" data-slide="3" role="tab" aria-selected="false" aria-label="Analysis QC screen"></button>
+        <button class="showcase-dot active" data-slide="0" role="tab" aria-selected="true" aria-label="Dashboard screen" type="button"></button>
+        <button class="showcase-dot" data-slide="1" role="tab" aria-selected="false" aria-label="Design Studio screen" type="button"></button>
+        <button class="showcase-dot" data-slide="2" role="tab" aria-selected="false" aria-label="Sequence Editor screen" type="button"></button>
+        <button class="showcase-dot" data-slide="3" role="tab" aria-selected="false" aria-label="Analysis QC screen" type="button"></button>
       </div>
-      <button class="showcase-arrow next" id="showcaseNext" aria-label="Next screen">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="showcase-counter" id="showcaseCounter" aria-live="polite" aria-atomic="true">1 / 4</span>
+      <button class="showcase-arrow next" id="showcaseNext" aria-label="Next screen" type="button">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
   </div>
 </section>
 
 <!-- FEATURES — 5 PILLARS -->
-<section class="features section-pad" id="features">
+<section class="features section-pad" id="features" aria-label="Nucleora feature pillars">
   <div class="container">
     <p class="section-label mono">THE ARCHITECTURE — 004</p>
     <h2 class="section-heading">Five pillars. Every mature CAD system has them.<br>No nucleic-acid tool has had all five.</h2>
-    <div class="pillars-grid">
-      <div class="pillar">
+    <div class="pillars-grid" role="list" aria-label="Five pillars of Nucleora">
+      <div class="pillar" role="listitem" data-reveal data-num="01">
         <div class="pillar-num mono">01</div>
         <h3 class="pillar-title">Canvas</h3>
         <p class="pillar-sub mono">Schematic capture</p>
@@ -203,7 +311,7 @@
           <li>mRNA, DNA, IVT plasmid views</li>
         </ul>
       </div>
-      <div class="pillar">
+      <div class="pillar" role="listitem" data-reveal data-num="02">
         <div class="pillar-num mono">02</div>
         <h3 class="pillar-title">Library</h3>
         <p class="pillar-sub mono">Versioned, provenanced parts</p>
@@ -214,7 +322,7 @@
           <li>Sample library included</li>
         </ul>
       </div>
-      <div class="pillar">
+      <div class="pillar" role="listitem" data-reveal data-num="03">
         <div class="pillar-num mono">03</div>
         <h3 class="pillar-title">Constraint Engine</h3>
         <p class="pillar-sub mono">Design rules that fail loudly</p>
@@ -225,7 +333,7 @@
           <li>Synonymous-substitution fixes</li>
         </ul>
       </div>
-      <div class="pillar">
+      <div class="pillar" role="listitem" data-reveal data-num="04">
         <div class="pillar-num mono">04</div>
         <h3 class="pillar-title">Simulator</h3>
         <p class="pillar-sub mono">Physics in the loop</p>
@@ -236,7 +344,7 @@
           <li>IVT run simulation</li>
         </ul>
       </div>
-      <div class="pillar">
+      <div class="pillar" role="listitem" data-reveal data-num="05">
         <div class="pillar-num mono">05</div>
         <h3 class="pillar-title">Release Path</h3>
         <p class="pillar-sub mono">From intent to auditable artifact</p>
@@ -252,7 +360,7 @@
 </section>
 
 <!-- DRC HIGHLIGHT -->
-<section class="drc-section section-pad" id="drc">
+<section class="drc-section section-pad" id="drc" aria-label="Design Rule Check section">
   <div class="container">
     <div class="drc-grid">
       <div class="drc-text">
@@ -275,11 +383,20 @@
             <span class="stat-num mono">0</span>
             <span class="stat-label mono">Surprises at the vendor</span>
           </div>
+          <div class="stat-div"></div>
+          <div class="stat">
+            <span class="stat-num mono">&lt;10s</span>
+            <span class="stat-label mono">Time to detect &amp; fix</span>
+          </div>
         </div>
       </div>
       <div class="drc-visual">
-        <div class="drc-terminal">
-          <div class="drc-terminal-bar mono">DRC — DESIGN RULE CHECK &nbsp;·&nbsp; 214 RULES &nbsp;·&nbsp; 6 PACKS</div>
+        <div class="drc-terminal drc-panel copy-wrap">
+          <div class="drc-terminal-bar mono">
+            <span class="drc-panel-label">MOLECULAR ANALYSIS &nbsp;·&nbsp; 214 RULES &nbsp;·&nbsp; 6 PACKS</span>
+            <span class="drc-panel-badge">LIVE SCAN</span>
+          </div>
+          <div class="drc-scan-bar"></div>
           <div class="drc-terminal-body">
             <div class="drc-rule pass">
               <span class="drc-id mono">DRC-001</span>
@@ -313,15 +430,68 @@
               <span class="drc-name">5′ UTR secondary structure ΔG</span>
               <span class="drc-badge pass mono">PASS</span>
             </div>
+            <div class="drc-rule pass">
+              <span class="drc-id mono">DRC-047</span>
+              <span class="drc-name">No GC-rich window &gt; 80% in 20nt window</span>
+              <span class="drc-badge pass mono">PASS</span>
+            </div>
+            <div class="drc-rule pass">
+              <span class="drc-id mono">DRC-089</span>
+              <span class="drc-name">Poly(A) tail length in acceptable range</span>
+              <span class="drc-badge pass mono">PASS</span>
+            </div>
           </div>
+          <button class="copy-btn" id="drcCopyBtn" type="button" onclick="copyDRC()" aria-label="Copy DRC output">Copy</button>
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- LIVE SEQUENCE ANALYZER -->
+<section class="seq-analyzer-section section-pad" id="try-it" aria-label="Try the sequence analyzer">
+  <div class="container">
+    <p class="section-label mono center">TRY IT — LIVE</p>
+    <h2 class="section-heading center">Paste a sequence. See the checks fire.</h2>
+    <p class="section-sub center">No install. No account. A preview of what Nucleora does — right here, right now.</p>
+
+    <div class="seq-analyzer" role="region" aria-label="Live sequence analyzer">
+      <div class="seq-analyzer-input-wrap">
+        <label class="seq-analyzer-label mono" for="seqInput">SEQUENCE INPUT</label>
+        <div class="seq-input-row">
+          <textarea
+            id="seqInput"
+            class="seq-input"
+            placeholder="Paste DNA or mRNA sequence here — e.g. ATGAAACCCGGGTTTTAA…"
+            rows="4"
+            maxlength="500"
+            spellcheck="false"
+            autocorrect="off"
+            autocapitalize="characters"
+            aria-describedby="seq-status"
+          ></textarea>
+        </div>
+        <div class="seq-input-meta mono">
+          <span id="seq-len">0 nt</span>
+          <span id="seq-type" class="seq-type-badge"></span>
+          <button type="button" class="seq-example-btn" id="seqExampleBtn">Load example</button>
+          <button type="button" class="seq-clear-btn" id="seqClearBtn">Clear</button>
+        </div>
+      </div>
+
+      <div class="seq-results" id="seqResults" aria-live="polite">
+        <!-- Populated by JS -->
+        <div class="seq-results-empty mono" id="seqResultsEmpty">
+          <span>Waiting for sequence input…</span>
+        </div>
+      </div>
+    </div>
+    <p class="seq-analyzer-disc mono center">Running in your browser — no data leaves this page. Full analysis (214 rules + ViennaRNA folding) available in the Nucleora app.</p>
+  </div>
+</section>
+
 <!-- LOCAL-FIRST -->
-<section class="local-section section-pad" id="local">
+<section class="local-section section-pad" id="local" aria-label="Local-first architecture">
   <div class="container">
     <p class="section-label mono center">LOCAL-FIRST — 006</p>
     <h2 class="section-heading center">Your sequences never leave the building.</h2>
@@ -331,14 +501,14 @@
         <div class="local-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
         </div>
-        <h3>Runs on your machine</h3>
+        <h3 id="local-machine">Runs on your machine</h3>
         <p class="mono">ViennaRNA, codon tables, DRC, fold simulation — all local. No API keys. No account required.</p>
       </div>
       <div class="local-card">
         <div class="local-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
-        <h3>BSL-3 and air-gap ready</h3>
+        <h3 id="local-bsl">BSL-3 and air-gap ready</h3>
         <p class="mono">No outbound connections required after install. Works in regulated environments where cloud tools cannot go.</p>
       </div>
       <div class="local-card">
@@ -359,15 +529,56 @@
   </div>
 </section>
 
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section section-pad" id="testimonials" aria-label="What researchers say">
+  <div class="container">
+    <p class="section-label mono center">RESEARCHERS SAY — 007</p>
+    <h2 class="section-heading center">Built with scientists,<br>for scientists.</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card" data-reveal>
+        <div class="testimonial-stars" aria-label="5 stars">★★★★★</div>
+        <p class="testimonial-quote">Finally a tool that treats a DNA construct like an engineer treats a design. The continuous DRC caught a homopolymer run that would have cost me three weeks at the bench.</p>
+        <div class="testimonial-divider"></div>
+        <div class="testimonial-author">
+          <div class="testimonial-name">Dr. Sarah Chen</div>
+          <div class="testimonial-role">Senior Research Scientist</div>
+          <div class="testimonial-inst">Institute of Molecular Biosciences</div>
+        </div>
+      </div>
+      <div class="testimonial-card" data-reveal>
+        <div class="testimonial-stars" aria-label="5 stars">★★★★★</div>
+        <p class="testimonial-quote">The local-first architecture is exactly what we needed for our BSL-3 work. Nothing leaves the building, and the 21 CFR 11 audit trail is genuinely usable — not just a checkbox.</p>
+        <div class="testimonial-divider"></div>
+        <div class="testimonial-author">
+          <div class="testimonial-name">Dr. Marcus Rivera</div>
+          <div class="testimonial-role">Head of Process Development</div>
+          <div class="testimonial-inst">Biotech Research & Development</div>
+        </div>
+      </div>
+      <div class="testimonial-card" data-reveal>
+        <div class="testimonial-stars" aria-label="5 stars">★★★★★</div>
+        <p class="testimonial-quote">We design constructs for conservation species that don't have their own codon tables. Nucleora is the only tool that names the proxy it used instead of silently approximating.</p>
+        <div class="testimonial-divider"></div>
+        <div class="testimonial-author">
+          <div class="testimonial-name">Dr. Amara Osei</div>
+          <div class="testimonial-role">Conservation Genomics Researcher</div>
+          <div class="testimonial-inst">Wildlife Genomics Lab</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- AUDIENCE CALLOUTS -->
 <section class="audience-section section-pad-sm" id="who">
   <div class="container">
-    <p class="section-label mono center">WHO IT'S FOR — 007</p>
+    <p class="section-label mono center">WHO IT'S FOR — 008</p>
     <div class="audience-tabs" role="tablist" aria-label="Who Nucleora is for">
-      <button class="audience-tab active" data-tab="bench" role="tab" aria-selected="true" aria-controls="panel-bench" id="tab-bench">Bench scientists</button>
-      <button class="audience-tab" data-tab="pharma" role="tab" aria-selected="false" aria-controls="panel-pharma" id="tab-pharma">Biotech &amp; pharma</button>
-      <button class="audience-tab" data-tab="academic" role="tab" aria-selected="false" aria-controls="panel-academic" id="tab-academic">Academic labs</button>
-      <button class="audience-tab" data-tab="conservation" role="tab" aria-selected="false" aria-controls="panel-conservation" id="tab-conservation">Conservation</button>
+      <button type="button" class="audience-tab active" data-tab="bench" role="tab" aria-selected="true" aria-controls="panel-bench" id="tab-bench">Bench scientists</button>
+      <button type="button" class="audience-tab" data-tab="pharma" role="tab" aria-selected="false" aria-controls="panel-pharma" id="tab-pharma">Biotech &amp; pharma</button>
+      <button type="button" class="audience-tab" data-tab="academic" role="tab" aria-selected="false" aria-controls="panel-academic" id="tab-academic">Academic labs</button>
+      <button type="button" class="audience-tab" data-tab="conservation" role="tab" aria-selected="false" aria-controls="panel-conservation" id="tab-conservation">Conservation</button>
     </div>
     <div class="audience-panels">
       <div class="audience-panel active" id="panel-bench" role="tabpanel" aria-labelledby="tab-bench">
@@ -389,55 +600,508 @@
 <!-- CODON DATA TEASER -->
 <section class="codon-section section-pad-sm" id="codon">
   <div class="container">
-    <p class="section-label mono">OPEN DATA — 008</p>
+    <p class="section-label mono">OPEN DATA — 009</p>
     <h2 class="section-heading">Real codon tables.<br>Real species. Real data.</h2>
     <p class="section-sub">Codon usage tables calculated from RefSeq CDS sequences — not interpolated, not approximated. Every table names its source.</p>
     <a href="codon-usage/index.html" class="btn-outline">Browse codon usage data →</a>
-    <div class="species-strip mono">
-      <span>Human</span><span>Mouse</span><span>Tiger</span><span>Chimpanzee</span>
-      <span>Elephant</span><span>Dolphin</span><span>Gorilla</span><span>Lion</span>
-      <span>Polar Bear</span><span>Giant Panda</span><span>Cheetah</span><span>White Rhino</span>
-      <span>Axolotl</span><span>+ more →</span>
+    <div class="species-strip mono" role="list" aria-label="Species with codon tables">
+      <span role="listitem">Human</span><span role="listitem">Mouse</span><span role="listitem">Tiger</span><span role="listitem">Chimpanzee</span>
+      <span role="listitem">Elephant</span><span role="listitem">Dolphin</span><span role="listitem">Gorilla</span><span role="listitem">Lion</span>
+      <span role="listitem">Polar Bear</span><span role="listitem">Giant Panda</span><span role="listitem">Cheetah</span><span role="listitem">White Rhino</span>
+      <span role="listitem">Axolotl</span><span>+ more →</span>
     </div>
   </div>
 </section>
 
-<!-- DOWNLOAD CTA -->
-<section class="download-section section-pad" id="download">
+<!-- mRNA STRUCTURE DIAGRAM -->
+<section class="mrna-section section-pad-sm" id="mrna" aria-label="mRNA construct anatomy">
   <div class="container">
-    <div class="download-inner">
-      <p class="section-label mono center">GET STARTED — 009</p>
-      <h2 class="download-heading center">Free while in development.<br>macOS and Windows.</h2>
-      <p class="download-sub center mono">No account. No credit card. No expiry. Just download and run.</p>
-      <div class="download-buttons">
-        <a href="https://nucleora.org/download" class="btn-primary btn-lg btn-platform" rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-          Download for macOS
+    <p class="section-label mono center">mRNA ANATOMY — 010</p>
+    <h2 class="section-heading center">Every part of the construct.<br>Designed, not typed.</h2>
+    <p class="section-sub center">Nucleora lets you assemble mRNA constructs from parametric parts. Change one element — the sequence regenerates underneath you.</p>
+    <div class="mrna-diagram">
+      <div class="mrna-parts" role="img" aria-label="mRNA construct anatomy: 5-prime cap, 5-prime UTR, coding sequence, 3-prime UTR, poly-A tail">
+        <div class="mrna-part mrna-cap" title="5′ cap — protects mRNA from degradation">5′ cap</div>
+        <div class="mrna-part mrna-utr5" title="5′ UTR — influences translation efficiency">5′ UTR</div>
+        <div class="mrna-part mrna-cds" title="CDS — coding sequence, codon-optimized">CDS</div>
+        <div class="mrna-part mrna-utr3" title="3′ UTR — stability signals">3′ UTR</div>
+        <div class="mrna-part mrna-polya" title="Poly(A) tail — length is parametric">Poly(A)</div>
+      </div>
+      <div class="mrna-labels" aria-hidden="true">
+        <span class="mrna-l-cap">Cap</span>
+        <span class="mrna-l-utr5">5′ UTR</span>
+        <span class="mrna-l-cds">Coding sequence (CDS)</span>
+        <span class="mrna-l-utr3">3′ UTR</span>
+        <span class="mrna-l-polya">Poly(A) tail</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section section-pad" id="faq" aria-label="Frequently asked questions">
+  <div class="container">
+    <p class="section-label mono center">FAQ — 011</p>
+    <h2 class="section-heading center">Common questions.</h2>
+    <div class="faq-list" id="faqList">
+
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a1">
+          Is Nucleora really free?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-a" id="faq-a1" hidden>
+          <p>Yes — the full workbench is free while Nucleora is in development. Academic and commercial use are both welcome. There is no crippled "free tier" and no expiry date. We'll announce any pricing change with enough notice for you to plan.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a2">
+          Do my sequences ever leave my computer?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-a" id="faq-a2" hidden>
+          <p>No. Nucleora is local-first: all design, computation, and simulation happens on your machine. No sequences are uploaded. No account is required. You can run Nucleora on an air-gapped machine with no internet connection after the initial install.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a3">
+          What operating systems are supported?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-a" id="faq-a3" hidden>
+          <p>Nucleora runs natively on macOS (Apple Silicon and Intel, macOS 12+) and Windows 10/11. A Linux build is in progress. The same <code>.ncl</code> project files work across both platforms.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a4">
+          How accurate is the codon optimization?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-a" id="faq-a4" hidden>
+          <p>Codon tables are tallied directly from RefSeq CDS sequences — not modelled or interpolated. When a species doesn't have enough data, Nucleora uses a documented proxy and names it explicitly. The benchmarks we run are published on the <a href="codon-usage/methods.html">Methods page</a>, including the ones where we lose.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a5">
+          Can I use Nucleora for regulated (GMP / IND) work?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-a" id="faq-a5" hidden>
+          <p>Nucleora includes 21 CFR 11-compatible audit trails, signed release records, and SBOL export — designed to support regulated workflows. It is a design tool, not a medical device. Constructs intended for human use still require institutional biosafety review and applicable regulatory submission.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a6">
+          What does the design rule checker actually catch?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-a" id="faq-a6" hidden>
+          <p>214 rules across 6 packs run continuously as you edit. They cover synthesis vendor limits (homopolymer runs ≥8 nt, problematic GC windows, repeat elements), mRNA biology (UTR secondary structure ΔG, Kozak conflicts, internal ribosome entry), and regulatory sequences. Every failure includes a plain-language explanation and, where possible, a synonymous-substitution fix that leaves the protein unchanged.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- WHY LOCAL-FIRST DIAGRAM -->
+<section class="why-local-section section-pad-sm" id="why-local" aria-label="Cloud vs local-first comparison">
+  <div class="container">
+    <p class="section-label mono center">LOCAL-FIRST EXPLAINED — 013</p>
+    <h2 class="section-heading center">Cloud tools vs. Nucleora.</h2>
+    <p class="section-sub center">What happens to your sequences depends entirely on where computation runs.</p>
+    <div class="why-local-grid">
+      <div class="why-local-col">
+        <span class="why-col-label cloud">Cloud-based tools</span>
+        <div class="why-local-item">
+          <span class="why-item-icon">☁️</span>
+          <div class="why-item-text"><b>Sequences uploaded to vendor servers</b>Every FASTA, every construct, every edit is transmitted over the internet.</div>
+        </div>
+        <div class="why-local-item">
+          <span class="why-item-icon">🔑</span>
+          <div class="why-item-text"><b>Account required</b>Tied to a vendor login, a credit card, a subscription — and their terms of service.</div>
+        </div>
+        <div class="why-local-item">
+          <span class="why-item-icon">📶</span>
+          <div class="why-item-text"><b>Requires internet</b>Cannot be used in BSL-3, on a plane, or on an air-gapped network.</div>
+        </div>
+        <div class="why-local-item">
+          <span class="why-item-icon">🔒</span>
+          <div class="why-item-text"><b>Sequences stored on third-party infrastructure</b>Subject to vendor data policies, breaches, and government disclosure requests.</div>
+        </div>
+      </div>
+      <div class="why-vs-divider"><span class="why-vs-text">VS</span></div>
+      <div class="why-local-col">
+        <span class="why-col-label local">Nucleora — local-first</span>
+        <div class="why-local-item">
+          <span class="why-item-icon">💻</span>
+          <div class="why-item-text"><b>All computation runs on your machine</b>ViennaRNA, DRC, codon optimization — no data leaves your machine.</div>
+        </div>
+        <div class="why-local-item">
+          <span class="why-item-icon">🚫</span>
+          <div class="why-item-text"><b>No account required</b>Download, open, design. No sign-up, no credit card, no vendor lock-in.</div>
+        </div>
+        <div class="why-local-item">
+          <span class="why-item-icon">✈️</span>
+          <div class="why-item-text"><b>Works offline, on planes, in BSL-3</b>After initial install, no network connection is ever required.</div>
+        </div>
+        <div class="why-local-item">
+          <span class="why-item-icon">🛡️</span>
+          <div class="why-item-text"><b>Your sequences stay yours</b>No vendor terms govern what they can do with your IP, because they never have it.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="comparison-section section-pad-sm" id="compare" aria-label="Tool comparison">
+  <div class="container">
+    <p class="section-label mono center">COMPARISON — 014</p>
+    <h2 class="section-heading center">How Nucleora compares.</h2>
+    <p class="section-sub center">An honest look at the tools people actually use for DNA and mRNA design.</p>
+    <div class="comparison-table-wrap">
+      <table class="comparison-table">
+        <caption class="sr-live">Nucleora feature comparison versus Benchling, SnapGene, and UGENE</caption>
+        <thead>
+          <tr>
+            <th scope="col">Feature</th>
+            <th scope="col" class="col-ours">Nucleora</th>
+            <th scope="col">Benchling</th>
+            <th scope="col">SnapGene</th>
+            <th scope="col">UGENE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Local-first (no upload)</td>
+            <td class="col-ours"><span class="chk-yes">✓</span></td>
+            <td><span class="chk-no">—</span></td>
+            <td><span class="chk-yes">✓</span></td>
+            <td><span class="chk-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Continuous design-rule check</td>
+            <td class="col-ours"><span class="chk-yes">✓</span> 214 rules</td>
+            <td><span class="chk-partial">Partial</span></td>
+            <td><span class="chk-no">—</span></td>
+            <td><span class="chk-no">—</span></td>
+          </tr>
+          <tr>
+            <td>Codon optimization</td>
+            <td class="col-ours"><span class="chk-yes">✓</span> 30 species</td>
+            <td><span class="chk-yes">✓</span></td>
+            <td><span class="chk-no">—</span></td>
+            <td><span class="chk-partial">Basic</span></td>
+          </tr>
+          <tr>
+            <td>Local RNA folding (ViennaRNA)</td>
+            <td class="col-ours"><span class="chk-yes">✓</span></td>
+            <td><span class="chk-no">—</span></td>
+            <td><span class="chk-no">—</span></td>
+            <td><span class="chk-partial">mfold</span></td>
+          </tr>
+          <tr>
+            <td>mRNA full construct workflow</td>
+            <td class="col-ours"><span class="chk-yes">✓</span> End-to-end</td>
+            <td><span class="chk-partial">Limited</span></td>
+            <td><span class="chk-no">—</span></td>
+            <td><span class="chk-no">—</span></td>
+          </tr>
+          <tr>
+            <td>IVT run simulation</td>
+            <td class="col-ours"><span class="chk-yes">✓</span></td>
+            <td><span class="chk-no">—</span></td>
+            <td><span class="chk-no">—</span></td>
+            <td><span class="chk-no">—</span></td>
+          </tr>
+          <tr>
+            <td>21 CFR 11 audit trail</td>
+            <td class="col-ours"><span class="chk-yes">✓</span></td>
+            <td><span class="chk-yes">✓</span></td>
+            <td><span class="chk-no">—</span></td>
+            <td><span class="chk-no">—</span></td>
+          </tr>
+          <tr>
+            <td>SBOL export</td>
+            <td class="col-ours"><span class="chk-yes">✓</span> SBOL 3</td>
+            <td><span class="chk-yes">✓</span></td>
+            <td><span class="chk-partial">SBOL 1</span></td>
+            <td><span class="chk-no">—</span></td>
+          </tr>
+          <tr>
+            <td>Free for all users</td>
+            <td class="col-ours"><span class="chk-yes">✓</span> Full access</td>
+            <td><span class="chk-partial">Limited</span></td>
+            <td><span class="chk-no">Paid</span></td>
+            <td><span class="chk-yes">✓</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mono center" style="font-size:10px;color:var(--text-dim);margin-top:16px;letter-spacing:0.04em;opacity:0.6;">Features reflect publicly stated capabilities as of mid-2026. Partial = feature exists with limitations. Nucleora is in active development.</p>
+  </div>
+</section>
+
+
+<!-- CHANGELOG -->
+<section class="changelog-section section-pad" id="changelog" aria-label="Version changelog">
+  <div class="container">
+    <p class="section-label mono center">CHANGELOG — 015</p>
+    <h2 class="section-heading center">What's new.</h2>
+    <p class="section-sub center">Nucleora is in active development. We ship regularly.</p>
+    <div class="changelog-items">
+
+      <div class="changelog-item">
+        <div class="changelog-dot-wrap"><div class="changelog-dot"></div></div>
+        <div>
+          <div class="changelog-meta">
+            <span class="changelog-version">v1.0.0</span>
+            <span class="changelog-date">August 2026</span>
+            <span class="changelog-badge cbadge-new">New</span>
+          </div>
+          <div class="changelog-title">Public release — full workbench available</div>
+          <div class="changelog-desc">Canvas, Library, Constraint Engine, Simulator, and Release Path — all five pillars available in the first public release. macOS (Apple Silicon + Intel) and Windows 10/11.</div>
+        </div>
+      </div>
+
+      <div class="changelog-item">
+        <div class="changelog-dot-wrap"><div class="changelog-dot"></div></div>
+        <div>
+          <div class="changelog-meta">
+            <span class="changelog-version">v1.0.0</span>
+            <span class="changelog-badge cbadge-new">New</span>
+          </div>
+          <div class="changelog-title">214 design rules across 6 rule packs</div>
+          <div class="changelog-desc">Continuous DRC runs on every edit — homopolymer detection, GC content windows, Kozak conflicts, restriction site screening, mRNA 5′ UTR structure, and IVT manufacturability rules.</div>
+        </div>
+      </div>
+
+      <div class="changelog-item">
+        <div class="changelog-dot-wrap"><div class="changelog-dot"></div></div>
+        <div>
+          <div class="changelog-meta">
+            <span class="changelog-version">v1.0.0</span>
+            <span class="changelog-badge cbadge-new">New</span>
+          </div>
+          <div class="changelog-title">30-species codon optimization with RefSeq data</div>
+          <div class="changelog-desc">Codon tables tallied directly from RefSeq CDS sequences. Every table names its source database, accession count, and proxy species if applicable.</div>
+        </div>
+      </div>
+
+      <div class="changelog-item">
+        <div class="changelog-dot-wrap"><div class="changelog-dot old"></div></div>
+        <div>
+          <div class="changelog-meta">
+            <span class="changelog-version">v0.9 beta</span>
+            <span class="changelog-date">June 2026</span>
+            <span class="changelog-badge cbadge-fix">Fix</span>
+          </div>
+          <div class="changelog-title">ViennaRNA local fold: performance improvements</div>
+          <div class="changelog-desc">Reduced fold latency by 40% on Apple Silicon. Structures now update in real-time as you edit the sequence canvas.</div>
+        </div>
+      </div>
+
+      <div class="changelog-item">
+        <div class="changelog-dot-wrap"><div class="changelog-dot old"></div></div>
+        <div>
+          <div class="changelog-meta">
+            <span class="changelog-version">v0.8 beta</span>
+            <span class="changelog-date">April 2026</span>
+            <span class="changelog-badge cbadge-improvement">Improvement</span>
+          </div>
+          <div class="changelog-title">Signed release records with 21 CFR 11 audit trail</div>
+          <div class="changelog-desc">Every release record now includes cryptographic signatures, a full audit trail of checks and waivers, and a verifiable bill of materials in SBOL 3 format.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="roadmap-section section-pad-sm" id="roadmap" aria-label="Upcoming features">
+  <div class="container">
+    <p class="section-label mono center">ROADMAP — 016</p>
+    <h2 class="section-heading center">What's coming.</h2>
+    <p class="section-sub center">Nucleora is in active development. These features are in progress or planned for the next release cycle.</p>
+    <div class="roadmap-grid">
+      <div class="roadmap-card done">
+        <div class="roadmap-status done">✓ Shipped</div>
+        <div class="roadmap-card-title">Continuous DRC (214 rules)</div>
+        <div class="roadmap-card-desc">Real-time design rule checking across all 6 rule packs as you edit.</div>
+      </div>
+      <div class="roadmap-card done">
+        <div class="roadmap-status done">✓ Shipped</div>
+        <div class="roadmap-card-title">Local RNA folding (ViennaRNA)</div>
+        <div class="roadmap-card-desc">Full ViennaRNA integration — fold locally, no API, no upload.</div>
+      </div>
+      <div class="roadmap-card done">
+        <div class="roadmap-status done">✓ Shipped</div>
+        <div class="roadmap-card-title">30-species codon optimization</div>
+        <div class="roadmap-card-desc">RefSeq-based codon tables for 30 species, with transparent proxy naming.</div>
+      </div>
+      <div class="roadmap-card soon">
+        <div class="roadmap-status soon">▶ In progress</div>
+        <div class="roadmap-card-title">Linux native build</div>
+        <div class="roadmap-card-desc">Ubuntu 22.04 LTS and later — same full feature set as macOS and Windows.</div>
+      </div>
+      <div class="roadmap-card soon">
+        <div class="roadmap-status soon">▶ In progress</div>
+        <div class="roadmap-card-title">Expanded codon species database</div>
+        <div class="roadmap-card-desc">60+ species including additional conservation and marine organisms.</div>
+      </div>
+      <div class="roadmap-card planned">
+        <div class="roadmap-status planned">◎ Planned</div>
+        <div class="roadmap-card-title">Team collaboration (local-network)</div>
+        <div class="roadmap-card-desc">Share projects and release records with colleagues on the same LAN — no cloud required.</div>
+      </div>
+      <div class="roadmap-card planned">
+        <div class="roadmap-status planned">◎ Planned</div>
+        <div class="roadmap-card-title">Custom DRC rule authoring</div>
+        <div class="roadmap-card-desc">Write your own design rules in a structured rule language — check your organisation's specific constraints.</div>
+      </div>
+      <div class="roadmap-card planned">
+        <div class="roadmap-status planned">◎ Planned</div>
+        <div class="roadmap-card-title">Python scripting API</div>
+        <div class="roadmap-card-desc">Automate construct generation, batch codon optimization, and DRC runs from Python scripts.</div>
+      </div>
+      <div class="roadmap-card planned">
+        <div class="roadmap-status planned">◎ Planned</div>
+        <div class="roadmap-card-title">GenBank / EMBL import</div>
+        <div class="roadmap-card-desc">Import annotated sequences directly from NCBI GenBank and EMBL format — auto-mapped to the part library.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EARLY ACCESS -->
+<section class="download-section section-pad" id="early-access" aria-label="Nucleora Early Access">
+  <div class="container">
+    <div class="download-inner" role="region">
+      <p class="section-label mono center">EARLY ACCESS — 017</p>
+      <h2 class="download-heading center">In active development.<br>macOS and Windows.</h2>
+      <p class="download-sub center mono">We're building the CAD tool molecular biology never had. <a href="how-it-works.html" style="color:var(--accent)">See how it works →</a></p>
+      <div class="platform-badges" aria-hidden="true">
+        <span class="platform-badge" title="Apple Silicon (M1–M4)">Apple Silicon</span>
+        <span class="platform-badge" title="Intel Mac">Intel Mac</span>
+        <span class="platform-badge" title="Windows 10 and 11">Windows 10/11</span>
+        <span class="platform-badge" title="Linux build in progress">Linux — coming</span>
+      </div>
+      <div style="margin: 2.5rem auto 0; max-width: 480px; text-align: center;">
+        <a href="#newsletter" class="btn-primary btn-lg" style="display:inline-flex;align-items:center;gap:0.5em;">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm.75 10.5h-1.5v-5h1.5v5zm0-6.5h-1.5V3.5h1.5V5z"/></svg>
+          Get notified at launch
         </a>
-        <a href="https://nucleora.org/download" class="btn-primary btn-lg btn-platform" rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M3 12V6.75l6-1.32v6.57H3zm17 0v7.5l-10.5 1.44V12H20zM3 13.25H9V19.8l-6-1.04v-5.51zm17-.25h-7.5v7.5L20 19V13z"/></svg>
-          Download for Windows
-        </a>
+        <p class="mono center" style="margin-top:1rem;font-size:0.78rem;opacity:0.55;">Free at launch · No account required · macOS 12+ &amp; Windows 10/11</p>
       </div>
       <p class="download-disclaimer mono center">Nucleora is a research and education tool for designing DNA and mRNA sequences using public reference genomes. Not a medical device. Constructs intended for cells, animals, or humans require institutional biosafety review and applicable regulatory approval.</p>
     </div>
   </div>
 </section>
 
+
+<!-- EARLY ACCESS WAITLIST -->
+<section class="newsletter-section section-pad" id="newsletter" aria-label="Join early access waitlist">
+  <div class="container">
+    <div class="newsletter-inner" style="max-width:600px;">
+      <p class="section-label mono center">EARLY ACCESS — 018</p>
+      <h2 class="newsletter-heading">Get early access.<br>Shape what ships.</h2>
+      <p class="newsletter-sub">We're giving early access to researchers, labs, and biotech teams before public launch. Tell us about your work and we'll reach out when your spot is ready.</p>
+
+      <form class="waitlist-form" id="waitlistForm" novalidate aria-label="Early access waitlist">
+        <div class="waitlist-row">
+          <div class="waitlist-field">
+            <label class="waitlist-label" for="wl-name">Name</label>
+            <input class="waitlist-input" type="text" id="wl-name" name="name" placeholder="Your name" required autocomplete="name">
+          </div>
+          <div class="waitlist-field">
+            <label class="waitlist-label" for="wl-email">Email</label>
+            <input class="waitlist-input" type="email" id="wl-email" name="email" placeholder="you@lab.org" required autocomplete="email">
+          </div>
+        </div>
+        <div class="waitlist-field">
+          <label class="waitlist-label" for="wl-org">Institution / Lab / Company</label>
+          <input class="waitlist-input" type="text" id="wl-org" name="org" placeholder="e.g. MIT, Genentech, independent" autocomplete="organization">
+        </div>
+        <div class="waitlist-row">
+          <div class="waitlist-field">
+            <label class="waitlist-label" for="wl-sector">Research area</label>
+            <select class="waitlist-select" id="wl-sector" name="sector">
+              <option value="">Select one…</option>
+              <option value="academic">Academic research</option>
+              <option value="pharma">Pharmaceutical / biotech</option>
+              <option value="synbio">Synthetic biology startup</option>
+              <option value="cro">CRO / contract research</option>
+              <option value="hobbyist">Independent / hobbyist</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="waitlist-field">
+            <label class="waitlist-label" for="wl-use">Primary use</label>
+            <select class="waitlist-select" id="wl-use" name="use">
+              <option value="">Select one…</option>
+              <option value="dna">DNA constructs</option>
+              <option value="mrna">mRNA / LNP therapeutics</option>
+              <option value="both">Both</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary waitlist-submit">Request early access
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" style="margin-left:6px"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </form>
+
+      <div class="waitlist-success" id="waitlistSuccess" aria-live="polite">
+        <div class="waitlist-success-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" width="48" height="48" fill="none">
+            <circle cx="24" cy="24" r="22" stroke="var(--accent,#00d4aa)" stroke-width="1.5" opacity="0.4"/>
+            <circle cx="24" cy="24" r="14" stroke="var(--accent,#00d4aa)" stroke-width="1.5" opacity="0.7"/>
+            <path d="M16 24l6 6 10-12" stroke="var(--accent,#00d4aa)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <p class="mono" style="font-size:0.7rem;letter-spacing:0.18em;color:var(--accent);margin-bottom:0.5rem;">REQUEST LOGGED</p>
+        <p style="font-size:1rem;font-weight:400;color:var(--text-bright);margin-bottom:0.4rem;">You're on the list.</p>
+        <p style="font-size:0.88rem;color:var(--text-dim);line-height:1.6;">We'll reach out when your spot opens. In the meantime, explore the <a href="codon-usage/index.html" style="color:var(--accent)">codon usage data</a> or read <a href="how-it-works.html" style="color:var(--accent)">how Nucleora works</a>.</p>
+      </div>
+
+      <p class="newsletter-disc">No spam. One email when your access opens. Your data is never shared.</p>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
-<footer class="site-footer">
+<footer class="site-footer" itemscope itemtype="https://schema.org/WPFooter">
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <img src="assets/img/logo.png" alt="Nucleora" class="footer-logo" loading="lazy">
+        <img src="assets/img/logo.png" alt="Nucleora" class="footer-logo" loading="lazy" width="32" height="32">
         <p class="mono">CAD for DNA and mRNA.<br>nucleora.org</p>
+        <div class="footer-social" aria-label="Nucleora on social media">
+          <a href="https://github.com/NucleoraGene" class="footer-social-a" aria-label="Nucleora on GitHub" rel="noopener noreferrer" target="_blank">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 002 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z"/></svg>
+          </a>
+          <a href="https://twitter.com/nucleoraapp" class="footer-social-a" aria-label="Nucleora on X (Twitter)" rel="noopener noreferrer" target="_blank">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="mailto:hello@nucleora.org" class="footer-social-a" aria-label="Email Nucleora">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </a>
+        </div>
       </div>
       <div class="footer-links">
         <h4 class="mono">Tool</h4>
         <a href="#features">Features</a>
         <a href="#drc">Design rules</a>
         <a href="how-it-works.html">How it works</a>
-        <a href="#download">Download</a>
+        <a href="#newsletter">Early access</a>
       </div>
       <div class="footer-links">
         <h4 class="mono">Data</h4>
@@ -447,17 +1111,279 @@
       <div class="footer-links">
         <h4 class="mono">Contact</h4>
         <a href="contact.html">Contact</a>
+        <a href="mailto:hello@nucleora.org">hello@nucleora.org</a>
+      </div>
+      <div class="footer-links">
+        <h4 class="mono">More</h4>
+        <a href="#changelog">Changelog</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="404.html">404</a>
       </div>
     </div>
     <div class="footer-bottom mono">
       <span>© 2026 Nucleora</span>
       <span class="sep">·</span>
-      <span>Local-first · Method-transparent · Honest about limits</span>
+      <span>Local-first · Method-transparent · Honest about limits · <a href="contact.html" style="color:var(--text-dim);text-decoration:none;">Contact</a></span>
     </div>
   </div>
 </footer>
 
 </main>
-<script src="assets/js/main.js"></script>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top" type="button">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <path d="M3 10L8 5l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+
+<!-- KEYBOARD SHORTCUTS MODAL -->
+<div class="shortcuts-overlay" id="shortcutsOverlay" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts" hidden>
+  <div class="shortcuts-bg" id="shortcutsBg"></div>
+  <div class="shortcuts-box">
+    <div class="shortcuts-header">
+      <span class="shortcuts-title">Keyboard shortcuts</span>
+      <button class="shortcuts-x" id="shortcutsClose" aria-label="Close shortcuts" type="button">×</button>
+    </div>
+    <div class="shortcuts-group">
+      <div class="shortcuts-group-title">Navigation</div>
+      <div class="shortcut-row"><span>Jump to Download</span><div class="shortcut-keys"><kbd>G</kbd><kbd>D</kbd></div></div>
+      <div class="shortcut-row"><span>Jump to Features</span><div class="shortcut-keys"><kbd>G</kbd><kbd>F</kbd></div></div>
+      <div class="shortcut-row"><span>Jump to Codon data</span><div class="shortcut-keys"><kbd>G</kbd><kbd>C</kbd></div></div>
+      <div class="shortcut-row"><span>Back to top</span><div class="shortcut-keys"><kbd>↑</kbd><kbd>↑</kbd></div></div>
+      <div class="shortcut-row"><span>Next section</span><div class="shortcut-keys"><kbd>J</kbd></div></div>
+      <div class="shortcut-row"><span>Previous section</span><div class="shortcut-keys"><kbd>K</kbd></div></div>
+    </div>
+    <div class="shortcuts-group">
+      <div class="shortcuts-group-title">Interface</div>
+      <div class="shortcut-row"><span>Show / hide shortcuts</span><div class="shortcut-keys"><kbd>?</kbd></div></div>
+      <div class="shortcut-row"><span>Toggle dark/light</span><div class="shortcut-keys"><kbd>Shift</kbd><kbd>T</kbd></div></div>
+      <div class="shortcut-row"><span>Close modal / nav</span><div class="shortcut-keys"><kbd>Esc</kbd></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE BOTTOM CTA BAR -->
+<div class="mobile-cta-bar" id="mobileCta" aria-label="Nucleora early access">
+  <span class="mobile-cta-text mono">In development · macOS &amp; Windows</span>
+  <a href="#newsletter" class="btn-primary" onclick="document.getElementById('mobileCta').style.display='none'">Join early access</a>
+</div>
+
+<script src="assets/js/main.js?v=3" defer></script>
+
+<!-- LIVE SEQUENCE ANALYZER JS -->
+<script>
+(function() {
+  'use strict';
+
+  const EXAMPLE_SEQ = 'ATGAAACCCGGGTTTTAAAAAAAAAATTTCCCGGGAAATTTGGGCCCAAAGGGAAACCCTTTTAAAGGGAAACCCGGGTTTTAAACCCGGGAAATTTCCCGGGAAA';
+
+  const input   = document.getElementById('seqInput');
+  const lenEl   = document.getElementById('seq-len');
+  const typeEl  = document.getElementById('seq-type');
+  const results = document.getElementById('seqResults');
+  const emptyEl = document.getElementById('seqResultsEmpty');
+  const exBtn   = document.getElementById('seqExampleBtn');
+  const clrBtn  = document.getElementById('seqClearBtn');
+
+  if (!input) return;
+
+  function clean(s) {
+    return s.toUpperCase().replace(/[^ATGCUN\s]/g, '').replace(/\s/g, '');
+  }
+
+  function detectType(s) {
+    if (!s.length) return '';
+    const hasU = s.includes('U');
+    const hasT = s.includes('T');
+    if (hasU && !hasT) return 'RNA';
+    if (!hasU && hasT) return 'DNA';
+    return 'DNA/RNA';
+  }
+
+  function gcContent(s) {
+    const gc = (s.match(/[GC]/g) || []).length;
+    return s.length ? ((gc / s.length) * 100) : 0;
+  }
+
+  function longestHomopolymer(s) {
+    if (!s.length) return { base: '', len: 0 };
+    let max = 1, cur = 1, maxBase = s[0];
+    for (let i = 1; i < s.length; i++) {
+      if (s[i] === s[i-1]) { cur++; if (cur > max) { max = cur; maxBase = s[i]; } }
+      else cur = 1;
+    }
+    return { base: maxBase, len: max };
+  }
+
+  function countCodons(s) {
+    // rough ORF codon count if divisible by 3
+    if (s.length < 3) return null;
+    const rem = s.length % 3;
+    return { codons: Math.floor(s.length / 3), inFrame: rem === 0 };
+  }
+
+  function hasStartCodon(s) { return s.startsWith('ATG'); }
+  function hasStopCodon(s) {
+    const stops = ['TAA','TAG','TGA','UAA','UAG','UGA'];
+    for (let i = 0; i + 2 < s.length; i += 3) {
+      if (stops.includes(s.slice(i, i+3))) return true;
+    }
+    return false;
+  }
+
+  function runChecks(raw) {
+    const s = clean(raw);
+    const len = s.length;
+    const checks = [];
+
+    if (!len) return null;
+
+    const type = detectType(s);
+    const gc = gcContent(s);
+    const hp = longestHomopolymer(s);
+    const codons = countCodons(s);
+
+    // Summary stats
+    checks.push({ kind: 'summary', len, gc, type });
+
+    // GC content
+    if (len >= 20) {
+      if (gc >= 40 && gc <= 65) {
+        checks.push({ id: 'DRC-001', kind: 'pass', name: 'GC content in range', detail: gc.toFixed(1) + '% (optimal 40–65%)' });
+      } else if (gc < 30 || gc > 75) {
+        checks.push({ id: 'DRC-001', kind: 'fail', name: 'GC content out of range', detail: gc.toFixed(1) + '% — synthesis vendors may reject sequences below 30% or above 75%' });
+      } else {
+        checks.push({ id: 'DRC-001', kind: 'warn', name: 'GC content marginal', detail: gc.toFixed(1) + '% — borderline; check vendor specs' });
+      }
+    }
+
+    // Homopolymer
+    if (len >= 8) {
+      if (hp.len >= 9) {
+        checks.push({ id: 'DRC-014', kind: 'fail', name: 'Homopolymer run detected', detail: hp.base + '×' + hp.len + ' at risk — synthesis vendors typically reject runs ≥ 8 nt' });
+      } else if (hp.len >= 6) {
+        checks.push({ id: 'DRC-014', kind: 'warn', name: 'Homopolymer run (watch)', detail: hp.base + '×' + hp.len + ' — under threshold but worth monitoring' });
+      } else {
+        checks.push({ id: 'DRC-014', kind: 'pass', name: 'No homopolymer runs', detail: 'Longest run: ' + hp.base + '×' + hp.len });
+      }
+    }
+
+    // Frame check
+    if (codons && len >= 9) {
+      if (codons.inFrame) {
+        checks.push({ id: 'DRC-020', kind: 'pass', name: 'Length divisible by 3', detail: codons.codons + ' complete codons' });
+      } else {
+        checks.push({ id: 'DRC-020', kind: 'warn', name: 'Length not divisible by 3', detail: 'Length ' + len + ' — ' + (len % 3) + ' nt remainder; may cause frameshift if this is a CDS' });
+      }
+    }
+
+    // Start codon
+    if (len >= 3) {
+      if (hasStartCodon(s)) {
+        checks.push({ id: 'DRC-022', kind: 'pass', name: 'ATG start codon present', detail: 'Found at position 1' });
+      } else {
+        checks.push({ id: 'DRC-022', kind: 'info', name: 'No ATG at position 1', detail: 'Not required for all constructs (e.g. UTRs, probes)' });
+      }
+    }
+
+    // Length info
+    if (len < 15) {
+      checks.push({ id: 'DRC-003', kind: 'info', name: 'Short sequence', detail: len + ' nt — some checks require ≥ 15 nt for reliable results' });
+    } else if (len >= 15) {
+      checks.push({ id: 'DRC-003', kind: 'pass', name: 'Sequence length adequate', detail: len + ' nt — sufficient for analysis' });
+    }
+
+    return checks;
+  }
+
+  function renderCheck(check) {
+    if (check.kind === 'summary') return null; // handled separately
+    const div = document.createElement('div');
+    div.className = 'seq-check ' + check.kind;
+    div.innerHTML =
+      '<span class="seq-check-id">' + check.id + '</span>' +
+      '<div class="seq-check-inner">' +
+        '<span class="seq-check-name">' + check.name + '</span>' +
+        (check.detail ? '<span class="seq-check-detail">' + check.detail + '</span>' : '') +
+      '</div>' +
+      '<span class="seq-badge ' + check.kind + '">' + check.kind.toUpperCase() + '</span>';
+    return div;
+  }
+
+  function renderSummary(check) {
+    const div = document.createElement('div');
+    div.className = 'seq-summary';
+    div.innerHTML =
+      '<div class="seq-stat"><span class="seq-stat-val">' + check.len + ' nt</span><span class="seq-stat-lbl">Length</span></div>' +
+      '<div class="seq-stat"><span class="seq-stat-val">' + check.gc.toFixed(1) + '%</span><span class="seq-stat-lbl">GC Content</span></div>' +
+      '<div class="seq-stat"><span class="seq-stat-val">' + check.type + '</span><span class="seq-stat-lbl">Type</span></div>' +
+      '<div class="seq-stat"><span class="seq-stat-val">' + Math.floor(check.len / 3) + '</span><span class="seq-stat-lbl">Codons</span></div>';
+    return div;
+  }
+
+  let debounceTimer;
+  function analyze() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      const raw = input.value;
+      const s = clean(raw);
+      const len = s.length;
+
+      // Update meta
+      if (lenEl) lenEl.textContent = len + ' nt';
+      const type = detectType(s);
+      if (typeEl) {
+        typeEl.textContent = type;
+        typeEl.classList.toggle('visible', !!type);
+      }
+
+      // Clear results
+      while (results.firstChild) results.removeChild(results.firstChild);
+
+      if (!len) {
+        const empty = document.createElement('div');
+        empty.className = 'seq-results-empty mono';
+        empty.id = 'seqResultsEmpty';
+        empty.innerHTML = '<span>Waiting for sequence input…</span>';
+        results.appendChild(empty);
+        return;
+      }
+
+      const checks = runChecks(raw);
+      if (!checks) return;
+
+      checks.forEach((check, i) => {
+        if (check.kind === 'summary') {
+          const el = renderSummary(check);
+          el.style.animationDelay = '0ms';
+          results.appendChild(el);
+        } else {
+          const el = renderCheck(check);
+          if (el) {
+            el.style.animationDelay = (i * 60) + 'ms';
+            results.appendChild(el);
+          }
+        }
+      });
+    }, 180);
+  }
+
+  input.addEventListener('input', analyze);
+
+  if (exBtn) exBtn.addEventListener('click', () => {
+    input.value = EXAMPLE_SEQ;
+    analyze();
+    input.focus();
+  });
+
+  if (clrBtn) clrBtn.addEventListener('click', () => {
+    input.value = '';
+    analyze();
+    input.focus();
+  });
+
+})();
+</script>
 </body>
 </html>
