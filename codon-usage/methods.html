@@ -4,7 +4,7 @@
   <meta name="robots" content="noindex, nofollow">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Codon Usage Methods — Nucleora</title>
+  <title>Codon Usage Methods - Nucleora</title>
   <meta name="description" content="How Nucleora's codon usage tables are calculated: RefSeq source, filtering criteria, tally method, and proxy selection for species with limited data.">
   <meta name="theme-color" content="#080c12">
   <link rel="icon" href="../assets/img/favicon.png" type="image/png">
@@ -22,7 +22,7 @@
     .method-section p, .method-section li { font-size:15px; color:var(--text-dim); line-height:1.8; margin-bottom:12px; }
     .method-section ul { padding-left: 0; }
     .method-section li { list-style: none; padding-left: 20px; position: relative; }
-    .method-section li::before { content: '—'; position:absolute; left:0; color:var(--accent); }
+    .method-section li::before { content: '-'; position:absolute; left:0; color:var(--accent); }
     .method-callout {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -95,7 +95,7 @@
   <div class="method-section">
     <h2>Tally method</h2>
     <p>For each sequence that passes filtering, every codon position is counted (excluding the start ATG and stop codon). Counts are summed across all sequences. Relative synonymous codon usage (RSCU) and per-1000 frequencies are calculated from the raw counts.</p>
-    <p>The tally is unweighted — each CDS sequence contributes equally regardless of expression level. This is the standard approach for codon optimization context. Expression-weighted tables (using RNA-seq TPM data) are planned for a future release; that document will note the distinction explicitly.</p>
+    <p>The tally is unweighted - each CDS sequence contributes equally regardless of expression level. This is the standard approach for codon optimization context. Expression-weighted tables (using RNA-seq TPM data) are planned for a future release; that document will note the distinction explicitly.</p>
   </div>
 
   <div class="method-section">

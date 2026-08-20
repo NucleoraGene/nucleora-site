@@ -4,9 +4,9 @@
   <meta name="robots" content="noindex, nofollow">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How it works — Nucleora</title>
-  <meta name="description" content="How Nucleora works: the five-layer CAD stack for DNA and mRNA — Canvas, Library, Constraint Engine, Simulator, and Release Path.">
-  <meta property="og:title" content="How it works — Nucleora">
+  <title>How it works - Nucleora</title>
+  <meta name="description" content="How Nucleora works: the five-layer CAD stack for DNA and mRNA - Canvas, Library, Constraint Engine, Simulator, and Release Path.">
+  <meta property="og:title" content="How it works - Nucleora">
   <meta property="og:description" content="The five-layer CAD stack for DNA and mRNA: Canvas, Library, Constraint Engine, Simulator, Release Path.">
   <meta property="og:image" content="https://nucleora.org/assets/img/og-social-card.jpg">
   <meta property="og:type" content="website">
@@ -149,26 +149,26 @@
   <div class="container">
     <p class="section-label mono">HOW IT WORKS</p>
     <h1>Five layers. One pipeline.</h1>
-    <p>Nucleora is a five-layer CAD stack built entirely for nucleic acid design. Each layer has a clear job. Together they produce a verifiable, releasable artifact — not just a sequence.</p>
+    <p>Nucleora is a five-layer CAD stack built entirely for nucleic acid design. Each layer has a clear job. Together they produce a verifiable, releasable artifact - not just a sequence.</p>
   </div>
 </section>
 
-<!-- LAYER 01 — CANVAS -->
+<!-- LAYER 01 - CANVAS -->
 <section class="workflow-section">
   <div class="container">
     <div class="workflow-grid">
       <div class="workflow-text" data-reveal>
         <div class="workflow-num mono">01</div>
         <h2 class="workflow-title">Canvas</h2>
-        <p class="workflow-sub mono">Schematic capture — parametric assembly</p>
-        <p class="workflow-body">You assemble a construct from parametric parts — 5′ UTR, Kozak, CDS, 3′ UTR, poly(A) — not by typing characters. Change poly(A) from 80 to 120 nt and the full sequence regenerates underneath you.</p>
+        <p class="workflow-sub mono">Schematic capture - parametric assembly</p>
+        <p class="workflow-body">You assemble a construct from parametric parts - 5′ UTR, Kozak, CDS, 3′ UTR, poly(A) - not by typing characters. Change poly(A) from 80 to 120 nt and the full sequence regenerates underneath you.</p>
         <p class="workflow-body">The sequence is a rendering of the design. It is never its source of truth. This is how every other mature engineering discipline works, and it is how Nucleora works.</p>
         <div class="workflow-callout">
-          When you change a codon table or a poly(A) length, every downstream layer — DRC, fold, yield — reruns automatically. The construct is always coherent.
+          When you change a codon table or a poly(A) length, every downstream layer - DRC, fold, yield - reruns automatically. The construct is always coherent.
         </div>
       </div>
       <div class="workflow-visual" data-reveal>
-        <div class="workflow-visual-bar mono">CANVAS — mRNA (LINEAR) — REV 4</div>
+        <div class="workflow-visual-bar mono">CANVAS - mRNA (LINEAR) - REV 4</div>
         <div class="workflow-visual-body">
           <p style="font-size:10px;letter-spacing:0.1em;color:var(--text-dim);text-transform:uppercase;margin-bottom:12px;font-family:var(--ff-mono);">CONSTRUCT ASSEMBLY</p>
           <div class="parts-row">
@@ -193,7 +193,7 @@
   </div>
 </section>
 
-<!-- LAYER 02 — LIBRARY -->
+<!-- LAYER 02 - LIBRARY -->
 <section class="workflow-section">
   <div class="container">
     <div class="workflow-grid reverse">
@@ -201,14 +201,14 @@
         <div class="workflow-num mono">02</div>
         <h2 class="workflow-title">Library</h2>
         <p class="workflow-sub mono">Versioned, provenanced parts</p>
-        <p class="workflow-body">Every part carries its provenance — the database it came from, the accession number, the date it was fetched. Codon usage tables are tallied from real RefSeq CDS sequences.</p>
-        <p class="workflow-body">When a species doesn't have its own table — an okapi, a bongo, a white rhino — Nucleora names the proxy it used and the distance metric. It never approximates silently.</p>
+        <p class="workflow-body">Every part carries its provenance - the database it came from, the accession number, the date it was fetched. Codon usage tables are tallied from real RefSeq CDS sequences.</p>
+        <p class="workflow-body">When a species doesn't have its own table - an okapi, a bongo, a white rhino - Nucleora names the proxy it used and the distance metric. It never approximates silently.</p>
         <div class="workflow-callout">
           Method-transparency is a design requirement, not a feature. Every number in Nucleora traces to the paper or database it came from.
         </div>
       </div>
       <div class="workflow-visual" data-reveal>
-        <div class="workflow-visual-bar mono">LIBRARY — CODON TABLES</div>
+        <div class="workflow-visual-bar mono">LIBRARY - CODON TABLES</div>
         <div class="workflow-visual-body">
           <div class="library-row">
             <span class="lib-name">Human (H. sapiens)</span>
@@ -241,25 +241,25 @@
   </div>
 </section>
 
-<!-- LAYER 03 — CONSTRAINT ENGINE -->
+<!-- LAYER 03 - CONSTRAINT ENGINE -->
 <section class="workflow-section">
   <div class="container">
     <div class="workflow-grid">
       <div class="workflow-text" data-reveal>
         <div class="workflow-num mono">03</div>
         <h2 class="workflow-title">Constraint Engine</h2>
-        <p class="workflow-sub mono">Design rules — continuous, real-time</p>
+        <p class="workflow-sub mono">Design rules - continuous, real-time</p>
         <p class="workflow-body">Design rules run continuously as you design. They check GC content, homopolymer runs, secondary structure at the 5′ UTR, restriction site conflicts, synthesis feasibility, and more.</p>
-        <p class="workflow-body">When a rule fails, Nucleora explains why in plain language and — for many rules — offers a synonymous substitution that resolves the problem without changing the protein.</p>
+        <p class="workflow-body">When a rule fails, Nucleora explains why in plain language and - for many rules - offers a synonymous substitution that resolves the problem without changing the protein.</p>
         <div class="workflow-callout">
-          A homopolymer A×9 costs $4,000 and three weeks at the bench. On screen, it costs ten seconds — a few synonymous substitutions and the rule passes.
+          A homopolymer A×9 costs $4,000 and three weeks at the bench. On screen, it costs ten seconds - a few synonymous substitutions and the rule passes.
         </div>
       </div>
       <div class="workflow-visual" data-reveal>
-        <div class="workflow-visual-bar mono">DRC — CONTINUOUS · LIVE</div>
+        <div class="workflow-visual-bar mono">DRC - CONTINUOUS · LIVE</div>
         <div class="workflow-visual-body">
           <div class="check-list">
-            <div class="check-row pass"><span class="check-id mono">DRC-001</span><span class="check-name">GC content 40–70%</span><span class="check-status pass mono">PASS</span></div>
+            <div class="check-row pass"><span class="check-id mono">DRC-001</span><span class="check-name">GC content 40-70%</span><span class="check-status pass mono">PASS</span></div>
             <div class="check-row pass"><span class="check-id mono">DRC-008</span><span class="check-name">No internal Kozak conflicts</span><span class="check-status pass mono">PASS</span></div>
             <div class="check-row pass"><span class="check-id mono">DRC-011</span><span class="check-name">5′ UTR ΔG ≥ −15 kcal/mol</span><span class="check-status pass mono">PASS</span></div>
             <div class="check-row fail"><span class="check-id mono">DRC-014</span><span class="check-name">Homopolymer A×9 at pos 847</span><span class="check-status fail mono">ERROR</span></div>
@@ -273,22 +273,22 @@
   </div>
 </section>
 
-<!-- LAYER 04 — SIMULATOR -->
+<!-- LAYER 04 - SIMULATOR -->
 <section class="workflow-section">
   <div class="container">
     <div class="workflow-grid reverse">
       <div class="workflow-text" data-reveal>
         <div class="workflow-num mono">04</div>
         <h2 class="workflow-title">Simulator</h2>
-        <p class="workflow-sub mono">Physics in the loop — local, private</p>
+        <p class="workflow-sub mono">Physics in the loop - local, private</p>
         <p class="workflow-body">ViennaRNA runs locally. Watch the secondary structure change as you edit. The 5′ UTR fold ΔG updates in real-time with every nucleotide change.</p>
-        <p class="workflow-body">Walk the template through the IVT run before it costs anything: predicted yield, cap incorporation efficiency, manufacturability grade, and an itemized order form — all computed on your machine, nothing sent anywhere.</p>
+        <p class="workflow-body">Walk the template through the IVT run before it costs anything: predicted yield, cap incorporation efficiency, manufacturability grade, and an itemized order form - all computed on your machine, nothing sent anywhere.</p>
         <div class="workflow-callout">
-          Nucleora publishes the benchmarks it loses. If ViennaRNA is wrong for a particular structure class, that's in the documentation — not hidden.
+          Nucleora publishes the benchmarks it loses. If ViennaRNA is wrong for a particular structure class, that's in the documentation - not hidden.
         </div>
       </div>
       <div class="workflow-visual" data-reveal>
-        <div class="workflow-visual-bar mono">SIMULATOR — FOLD + IVT RUN</div>
+        <div class="workflow-visual-bar mono">SIMULATOR - FOLD + IVT RUN</div>
         <div class="workflow-visual-body">
           <div class="fold-display">
             <div class="fold-dg mono">−42.8</div>
@@ -318,7 +318,7 @@
   </div>
 </section>
 
-<!-- LAYER 05 — RELEASE PATH -->
+<!-- LAYER 05 - RELEASE PATH -->
 <section class="workflow-section">
   <div class="container">
     <div class="workflow-grid">
@@ -327,13 +327,13 @@
         <h2 class="workflow-title">Release Path</h2>
         <p class="workflow-sub mono">From intent to auditable artifact</p>
         <p class="workflow-body">When you're satisfied with the design, you cut a release. Nucleora generates one signed, immutable artifact: the design revision, every check result, every waiver, every simulation output, and the bill of materials.</p>
-        <p class="workflow-body">SBOL export. 21 CFR 11 signatures. The full audit trail — in a format another person can verify without running Nucleora at all.</p>
+        <p class="workflow-body">SBOL export. 21 CFR 11 signatures. The full audit trail - in a format another person can verify without running Nucleora at all.</p>
         <div class="workflow-callout">
           "Here's the release record" is a sentence you can say to your CRO, your biosafety committee, your QA team. The record contains everything they need to verify the design independently.
         </div>
       </div>
       <div class="workflow-visual" data-reveal>
-        <div class="workflow-visual-bar mono">RELEASE RECORD — SIGNED · IMMUTABLE</div>
+        <div class="workflow-visual-bar mono">RELEASE RECORD - SIGNED · IMMUTABLE</div>
         <div class="workflow-visual-body">
           <div class="release-block">
             <div class="release-header">
@@ -357,7 +357,7 @@
 <!-- FAQ -->
 <section class="faq-section">
   <div class="container">
-    <p class="section-label mono">QUESTIONS — FAQ</p>
+    <p class="section-label mono">QUESTIONS - FAQ</p>
     <h2 class="section-heading">Common questions.</h2>
     <div class="faq-grid">
       <div class="faq-item">
