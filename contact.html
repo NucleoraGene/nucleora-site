@@ -6,6 +6,10 @@
 <title>Request Early Access — Nucleora</title>
 <meta name="description" content="Request early access to Nucleora, or reach out with questions. We don't sell or share your information.">
 <meta name="theme-color" content="#060a14">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://nucleora.org/contact.html">
+<link rel="icon" href="assets/img/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/favicon.png">
 <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
@@ -44,10 +48,7 @@
         <h3 style="font-size:24px;margin-bottom:6px;">Request early access</h3>
         <p class="muted" style="margin-bottom:24px;">Fill this in and we'll follow up by email. We're not using this to build a mailing list for anything else.</p>
 
-        <!-- NOTE: Replace YOUR_FORM_ID with your actual Formspree form ID.
-             Create a free account at https://formspree.io, make a new form,
-             and paste the ID here. Until then, submissions show a Formspree error. -->
-        <form id="signupForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <form id="signupForm" onsubmit="return submitForm(event)">
           <div class="form-field">
             <label for="name">Full name *</label>
             <input type="text" id="name" name="name" required autocomplete="name">
@@ -78,6 +79,20 @@
 
           <button type="submit" class="btn btn-primary" style="margin-top:20px;width:100%;justify-content:center;">Request early access</button>
         </form>
+        <script>
+        function submitForm(e){
+          e.preventDefault();
+          var n=document.getElementById('name').value;
+          var inst=document.getElementById('institution').value;
+          var r=document.getElementById('role').value;
+          var em=document.getElementById('email').value;
+          var notes=document.getElementById('notes').value;
+          var body='Name: '+n+'\nEmail: '+em+'\nInstitution: '+(inst||'N/A')+'\nRole: '+(r||'N/A')+'\nNotes: '+(notes||'None');
+          var sub='Early Access Request — '+n;
+          window.location.href='mailto:nucleora.admin@proton.me?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body);
+          return false;
+        }
+        </script>
       </div>
 
       <div>
