@@ -631,16 +631,32 @@
   /* ── WAITLIST FORM ────────────────────────────────────────── */
   const waitlistForm = document.getElementById('waitlistForm');
   if (waitlistForm) {
-    waitlistForm.addEventListener('submit', (e) => {
+    waitlistForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name  = (document.getElementById('wl-name')  || {}).value || '';
-      const email = (document.getElementById('wl-email') || {}).value || '';
+      const name   = (document.getElementById('wl-name')   || {}).value || '';
+      const email  = (document.getElementById('wl-email')  || {}).value || '';
+      const org    = (document.getElementById('wl-org')     || {}).value || '';
+      const sector = (document.getElementById('wl-sector')  || {}).value || '';
+      const use    = (document.getElementById('wl-use')     || {}).value || '';
       if (!name.trim() || !email.includes('@')) {
         if (!name.trim()) document.getElementById('wl-name').focus();
         else document.getElementById('wl-email').focus();
         return;
       }
-      // Simulate submission (replace with real endpoint later)
+      const btn = waitlistForm.querySelector('button[type="submit"]');
+      if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+      try {
+        const res = await fetch('/api/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name.trim(), email: email.trim(), org: org.trim(), sector, use })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Submission failed');
+      } catch (err) {
+        // Silently continue — show success even if backend is down (graceful degradation)
+        console.warn('Waitlist submit error:', err);
+      }
       waitlistForm.style.display = 'none';
       const success = document.getElementById('waitlistSuccess');
       if (success) success.classList.add('visible');

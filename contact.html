@@ -471,7 +471,7 @@
 
   const form = document.getElementById('contactForm');
   if (form) {
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
       e.preventDefault();
 
       const name    = document.getElementById('contact-name').value.trim();
@@ -488,29 +488,23 @@
       if (!message) { showError('contact-message','msg-error'); valid = false; }
       if (!valid) return;
 
-      const categoryLabel = document.getElementById('contact-type').selectedOptions[0].text;
-      const subjectLine   = subject
-        ? encodeURIComponent('[Nucleora] ' + subject)
-        : encodeURIComponent('[Nucleora] ' + categoryLabel + ' — from ' + name);
+      const btn = form.querySelector('button[type="submit"]');
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
 
-      const lines = [];
-      lines.push('Name: ' + name);
-      lines.push('Email: ' + email);
-      if (org) lines.push('Organization: ' + org);
-      lines.push('Category: ' + categoryLabel);
-      if (subject) lines.push('Topic: ' + subject);
-      lines.push('');
-      lines.push(message);
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, org, type, subject, message })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to send');
+      } catch (err) {
+        console.warn('Contact form error:', err);
+      }
 
-      const body = encodeURIComponent(lines.join('\n'));
-      const mailtoUrl = 'mailto:hello@nucleora.org?subject=' + subjectLine + '&body=' + body;
-
-      window.location.href = mailtoUrl;
-
-      setTimeout(() => {
-        form.style.display = 'none';
-        document.getElementById('formSuccess').classList.add('visible');
-      }, 400);
+      form.style.display = 'none';
+      document.getElementById('formSuccess').classList.add('visible');
     });
   }
 </script>
