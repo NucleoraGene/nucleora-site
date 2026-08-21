@@ -456,19 +456,7 @@
     });
   }
 
-  /* ── ANNOUNCEMENT BANNER ──────────────────────────────────── */
-  const announceBar = document.getElementById('announceBar');
-  const announceClose = document.getElementById('announceClose');
-  if (announceBar && announceClose) {
-    // Restore dismissed state
-    if (sessionStorage.getItem('announceDismissed')) {
-      announceBar.classList.add('hidden');
-    }
-    announceClose.addEventListener('click', () => {
-      announceBar.classList.add('hidden');
-      sessionStorage.setItem('announceDismissed', '1');
-    });
-  }
+  /* ── STATUS BAR (no dismiss — permanent feature) ──────────── */
 
   /* ── ANIMATED STATS COUNTERS ──────────────────────────────── */
   const counterEls = document.querySelectorAll('.stats-strip-num[data-count]');
@@ -510,15 +498,19 @@
   /* ── DARK / LIGHT MODE TOGGLE ─────────────────────────────── */
   const themeToggle = document.getElementById('themeToggle');
   if (themeToggle) {
+    const moonIcon = themeToggle.querySelector('.theme-icon-moon');
+    const sunIcon = themeToggle.querySelector('.theme-icon-sun');
     const saved = localStorage.getItem('theme');
     if (saved === 'light') {
       document.body.classList.add('light-mode');
-      themeToggle.textContent = '☀️';
+      if (moonIcon) moonIcon.style.display = 'none';
+      if (sunIcon) sunIcon.style.display = 'block';
       themeToggle.setAttribute('aria-label', 'Switch to dark mode');
     }
     themeToggle.addEventListener('click', () => {
       const isLight = document.body.classList.toggle('light-mode');
-      themeToggle.textContent = isLight ? '☀️' : '🌙';
+      if (moonIcon) moonIcon.style.display = isLight ? 'none' : 'block';
+      if (sunIcon) sunIcon.style.display = isLight ? 'block' : 'none';
       themeToggle.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
       localStorage.setItem('theme', isLight ? 'light' : 'dark');
     });
