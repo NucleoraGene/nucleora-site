@@ -1944,6 +1944,8 @@ body.light-mode .hero-video { opacity: 0.15; }
 body.light-mode .site-nav { background: rgba(242,245,249,0.9); }
 body.light-mode .drc-terminal { border-color: rgba(0,0,0,0.12); }
 body.light-mode .back-to-top { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+body.light-mode .nav-logo-img,
+body.light-mode .footer-logo { filter: drop-shadow(0 0 1px rgba(0,0,0,0.3)); border-radius: 24%; }
 
 /* ── MOBILE BOTTOM CTA — major upgrade #11 ── */
 .mobile-cta-bar {
