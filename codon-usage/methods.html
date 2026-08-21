@@ -42,6 +42,9 @@
   </style>
 </head>
 <body>
+<div class="status-bar" role="banner">
+  <span class="status-bar-inner"><span class="status-dot"></span>In development<span class="status-sep">/</span>macOS & Windows<span class="status-sep">/</span>Free while in development<span class="status-sep">/</span><a href="../index.html#newsletter">Join early access</a></span>
+</div>
 <a class="skip-link" href="#main-content">Skip to content</a>
 
 <nav class="site-nav" id="site-nav">
@@ -57,7 +60,13 @@
       <li><a href="./index.html">Codon Data</a></li>
       <li><a href="../how-it-works.html">How it works</a></li>
     </ul>
-    <a href="../index.html#newsletter" class="nav-cta btn-primary">Get early access</a>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" type="button" title="Toggle dark/light mode">
+        <svg class="theme-icon theme-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+        <svg class="theme-icon theme-icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <a href="../index.html#newsletter" class="nav-cta btn-primary">Get early access</a>
+    </div>
     <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
