@@ -1,8 +1,5 @@
 User-agent: *
 Disallow: /404.html
-Allow: /
-Allow: /contact.html
-Allow: /how-it-works.html
-Allow: /codon-usage/
+Disallow: /codon-usage/methods.html
 
 Sitemap: https://nucleora.org/sitemap.xml
