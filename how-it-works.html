@@ -90,15 +90,10 @@
     .release-val { color: var(--text); }
 
     .faq-section { padding: 80px 0; border-top: 1px solid var(--border-dim); }
-    .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 48px; }
-    .faq-item { padding: 28px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); }
-    .faq-q { font-size: 16px; font-weight: 400; color: var(--text-bright); margin-bottom: 12px; }
-    .faq-a { font-size: 14px; color: var(--text-dim); line-height: 1.7; }
 
     @media (max-width: 900px) {
       .workflow-grid { grid-template-columns: 1fr; gap: 40px; }
       .workflow-grid.reverse { direction: ltr; }
-      .faq-grid { grid-template-columns: 1fr; }
     }
   </style>
   <script type="application/ld+json">
@@ -364,35 +359,72 @@
 </section>
 
 <!-- FAQ -->
-<section class="faq-section">
+<section class="faq-section" aria-label="Frequently asked questions">
   <div class="container">
     <p class="section-label mono">QUESTIONS - FAQ</p>
     <h2 class="section-heading">Common questions.</h2>
-    <div class="faq-grid">
+    <div class="faq-list" id="faqList">
+
       <div class="faq-item">
-        <p class="faq-q">Does it require an internet connection?</p>
-        <p class="faq-a">No. ViennaRNA fold, codon tables, DRC, and all 41 design tools run entirely on your machine. An internet connection is needed only for RefSeq lookups and the initial download. After that, Nucleora works air-gapped.</p>
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="hiw-faq-a1">
+          Does it require an internet connection?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-a" id="hiw-faq-a1" hidden>
+          <p>No. ViennaRNA fold, codon tables, DRC, and all 41 design tools run entirely on your machine. An internet connection is needed only for RefSeq lookups and the initial download. After that, Nucleora works air-gapped.</p>
+        </div>
       </div>
+
       <div class="faq-item">
-        <p class="faq-q">Can I use it in a BSL-3 or regulated environment?</p>
-        <p class="faq-a">Yes. Local-first means no sequence leaves your infrastructure. Nucleora makes no outbound connections during normal operation. The 21 CFR 11 audit trail and signed release records are designed for regulated workflows.</p>
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="hiw-faq-a2">
+          Can I use it in a BSL-3 or regulated environment?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-a" id="hiw-faq-a2" hidden>
+          <p>Yes. Local-first means no sequence leaves your infrastructure. Nucleora makes no outbound connections during normal operation. The 21 CFR 11 audit trail and signed release records are designed for regulated workflows.</p>
+        </div>
       </div>
+
       <div class="faq-item">
-        <p class="faq-q">What if a species doesn't have a codon table?</p>
-        <p class="faq-a">Nucleora names the closest proxy it found, the distance metric used, and the n-count of the proxy table. It never approximates silently. You always know exactly what data is backing your design.</p>
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="hiw-faq-a3">
+          What if a species doesn't have a codon table?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-a" id="hiw-faq-a3" hidden>
+          <p>Nucleora names the closest proxy it found, the distance metric used, and the n-count of the proxy table. It never approximates silently. You always know exactly what data is backing your design.</p>
+        </div>
       </div>
+
       <div class="faq-item">
-        <p class="faq-q">How do I get access?</p>
-        <p class="faq-a">Nucleora is in active development. Join the early access list at nucleora.org and we'll reach out when your spot is ready. No account required to request access.</p>
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="hiw-faq-a4">
+          How do I get access?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-a" id="hiw-faq-a4" hidden>
+          <p>Nucleora is in active development. Join the early access list at nucleora.org and we'll reach out when your spot is ready. No account required to request access.</p>
+        </div>
       </div>
+
       <div class="faq-item">
-        <p class="faq-q">What CAD operations does the Canvas support?</p>
-        <p class="faq-a">Drag-and-drop part assembly, bidirectional sequence sync, mRNA linear view, IVT plasmid circular view, parametric poly(A) tails, golden-gate and Gibson cloning site design, and automatic re-annotation on sequence change.</p>
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="hiw-faq-a5">
+          What CAD operations does the Canvas support?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-a" id="hiw-faq-a5" hidden>
+          <p>Drag-and-drop part assembly, bidirectional sequence sync, mRNA linear view, IVT plasmid circular view, parametric poly(A) tails, golden-gate and Gibson cloning site design, and automatic re-annotation on sequence change.</p>
+        </div>
       </div>
+
       <div class="faq-item">
-        <p class="faq-q">What's in the Design Studio?</p>
-        <p class="faq-a">41 tools across categories: Cloning (Golden Gate, Gibson, restriction), Codon tools (optimization, tester, lab), Mutagenesis (site-directed, HDR donor designer, prime/base editing, multi-site), Parametric Design, and Parts registry with SBOL2/3 export and SynBioHub sync.</p>
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="hiw-faq-a6">
+          What's in the Design Studio?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-a" id="hiw-faq-a6" hidden>
+          <p>41 tools across categories: Cloning (Golden Gate, Gibson, restriction), Codon tools (optimization, tester, lab), Mutagenesis (site-directed, HDR donor designer, prime/base editing, multi-site), Parametric Design, and Parts registry with SBOL2/3 export and SynBioHub sync.</p>
+        </div>
       </div>
+
     </div>
   </div>
 </section>
