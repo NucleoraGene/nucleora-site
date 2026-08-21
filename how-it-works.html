@@ -122,6 +122,7 @@
       <li><a href="index.html#local">Local-first</a></li>
       <li><a href="codon-usage/index.html">Codon Data</a></li>
       <li><a href="how-it-works.html" aria-current="page" style="color:var(--accent)">How it works</a></li>
+      <li><a href="#try-it">Try it</a></li>
     </ul>
     <div class="nav-right">
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" type="button" title="Toggle dark/light mode">
@@ -429,6 +430,38 @@
   </div>
 </section>
 
+<!-- TRY IT -->
+<section class="seq-analyzer-compact-section" id="try-it" aria-label="Live sequence analyzer">
+  <div class="container">
+    <p class="section-label mono">TRY IT</p>
+    <h2 class="section-heading">Paste a sequence. See the checks fire.</h2>
+    <div class="seq-analyzer" role="region" aria-label="Live sequence analyzer">
+      <div class="seq-analyzer-chrome" aria-hidden="true">
+        <span class="seq-chrome-dot seq-chrome-dot--red"></span>
+        <span class="seq-chrome-dot seq-chrome-dot--yellow"></span>
+        <span class="seq-chrome-dot seq-chrome-dot--green"></span>
+        <span class="seq-chrome-label mono">NUCLEORA · SEQUENCE ANALYZER</span>
+      </div>
+      <div class="seq-analyzer-input-wrap">
+        <label class="seq-analyzer-label mono" for="seqInputHIW">SEQUENCE INPUT</label>
+        <div class="seq-input-row">
+          <textarea id="seqInputHIW" class="seq-input seqInput" placeholder="Paste DNA or mRNA sequence — e.g. ATGAAACCCGGGTTTTAA…" rows="4" maxlength="2000" spellcheck="false" autocorrect="off" autocapitalize="characters" aria-label="Sequence input"></textarea>
+        </div>
+        <div class="seq-input-meta mono">
+          <span class="seq-len">0 nt</span>
+          <span class="seq-type-badge"></span>
+          <button type="button" class="seq-example-btn seqExampleBtn">Load example</button>
+          <button type="button" class="seq-clear-btn seqClearBtn">Clear</button>
+        </div>
+      </div>
+      <div class="seq-results" aria-live="polite">
+        <div class="seq-results-empty mono"><span>Paste a sequence above — checks fire instantly.</span></div>
+      </div>
+    </div>
+    <p class="seq-analyzer-disc mono center">Runs entirely in your browser — no data leaves this page.</p>
+  </div>
+</section>
+
 <!-- EARLY ACCESS CTA -->
 <section class="download-section section-pad-sm">
   <div class="container">
@@ -476,6 +509,7 @@
 </footer>
 
 <script src="assets/js/main.js?v=2" defer></script>
+<script src="assets/js/analyzer.js" defer></script>
 <button class="back-to-top" id="backToTop" aria-label="Back to top" type="button">
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
     <path d="M3 10L8 5l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>

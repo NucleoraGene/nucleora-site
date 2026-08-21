@@ -2782,3 +2782,54 @@ button:focus-visible { outline-offset: 2px; }
 @media (max-width: 480px) {
   .nucleora-toast { font-size: 0.7rem; max-width: 90vw; white-space: normal; text-align: center; }
 }
+
+/* ── SEQUENCE ANALYZER — TERMINAL CHROME ── */
+.seq-analyzer-chrome {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card-2, rgba(255,255,255,0.03));
+}
+.seq-chrome-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.seq-chrome-dot--red    { background: #ff5f57; }
+.seq-chrome-dot--yellow { background: #febc2e; }
+.seq-chrome-dot--green  { background: #28c840; }
+.seq-chrome-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  opacity: 0.55;
+  margin-left: 6px;
+}
+
+/* ── GC BAR ── */
+.seq-gc-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 5px;
+  width: 80px;
+  overflow: hidden;
+}
+.seq-gc-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease, background 0.3s ease;
+}
+
+/* ── COMPACT ANALYZER (secondary pages) ── */
+.seq-analyzer-compact .seq-analyzer {
+  max-width: 100%;
+}
+.seq-analyzer-compact-section {
+  background: var(--bg);
+  padding: 60px 0;
+  border-top: 1px solid var(--border-dim);
+}

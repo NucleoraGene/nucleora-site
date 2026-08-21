@@ -454,37 +454,42 @@
     <p class="section-sub center">No install. No account. A preview of what Nucleora does - right here, right now.</p>
 
     <div class="seq-analyzer" role="region" aria-label="Live sequence analyzer">
+      <div class="seq-analyzer-chrome" aria-hidden="true">
+        <span class="seq-chrome-dot seq-chrome-dot--red"></span>
+        <span class="seq-chrome-dot seq-chrome-dot--yellow"></span>
+        <span class="seq-chrome-dot seq-chrome-dot--green"></span>
+        <span class="seq-chrome-label mono">NUCLEORA · SEQUENCE ANALYZER</span>
+      </div>
       <div class="seq-analyzer-input-wrap">
-        <label class="seq-analyzer-label mono" for="seqInput">SEQUENCE INPUT</label>
+        <label class="seq-analyzer-label mono" for="seqInputMain">SEQUENCE INPUT</label>
         <div class="seq-input-row">
           <textarea
-            id="seqInput"
-            class="seq-input"
-            placeholder="Paste DNA or mRNA sequence here - e.g. ATGAAACCCGGGTTTTAA…"
+            id="seqInputMain"
+            class="seq-input seqInput"
+            placeholder="Paste DNA or mRNA sequence — e.g. ATGAAACCCGGGTTTTAA…"
             rows="4"
-            maxlength="500"
+            maxlength="2000"
             spellcheck="false"
             autocorrect="off"
             autocapitalize="characters"
-            aria-describedby="seq-status"
+            aria-label="Sequence input"
           ></textarea>
         </div>
         <div class="seq-input-meta mono">
-          <span id="seq-len">0 nt</span>
-          <span id="seq-type" class="seq-type-badge"></span>
-          <button type="button" class="seq-example-btn" id="seqExampleBtn">Load example</button>
-          <button type="button" class="seq-clear-btn" id="seqClearBtn">Clear</button>
+          <span class="seq-len">0 nt</span>
+          <span class="seq-type-badge"></span>
+          <button type="button" class="seq-example-btn seqExampleBtn">Load example</button>
+          <button type="button" class="seq-clear-btn seqClearBtn">Clear</button>
         </div>
       </div>
 
-      <div class="seq-results" id="seqResults" aria-live="polite">
-        <!-- Populated by JS -->
-        <div class="seq-results-empty mono" id="seqResultsEmpty">
-          <span>Waiting for sequence input…</span>
+      <div class="seq-results" aria-live="polite">
+        <div class="seq-results-empty mono">
+          <span>Paste a sequence above — checks fire instantly.</span>
         </div>
       </div>
     </div>
-    <p class="seq-analyzer-disc mono center">Running in your browser - no data leaves this page. Full analysis (design rules + ViennaRNA folding) available in the Nucleora app.</p>
+    <p class="seq-analyzer-disc mono center">Runs entirely in your browser — no data leaves this page. Full analysis (design rules + ViennaRNA folding) available in the Nucleora app.</p>
   </div>
 </section>
 
@@ -1131,219 +1136,6 @@
 
 <script src="assets/js/main.js?v=3" defer></script>
 
-<!-- LIVE SEQUENCE ANALYZER JS -->
-<script>
-(function() {
-  'use strict';
-
-  const EXAMPLE_SEQ = 'ATGAAACCCGGGTTTTAAAAAAAAAATTTCCCGGGAAATTTGGGCCCAAAGGGAAACCCTTTTAAAGGGAAACCCGGGTTTTAAACCCGGGAAATTTCCCGGGAAA';
-
-  const input   = document.getElementById('seqInput');
-  const lenEl   = document.getElementById('seq-len');
-  const typeEl  = document.getElementById('seq-type');
-  const results = document.getElementById('seqResults');
-  const emptyEl = document.getElementById('seqResultsEmpty');
-  const exBtn   = document.getElementById('seqExampleBtn');
-  const clrBtn  = document.getElementById('seqClearBtn');
-
-  if (!input) return;
-
-  function clean(s) {
-    return s.toUpperCase().replace(/[^ATGCUN\s]/g, '').replace(/\s/g, '');
-  }
-
-  function detectType(s) {
-    if (!s.length) return '';
-    const hasU = s.includes('U');
-    const hasT = s.includes('T');
-    if (hasU && !hasT) return 'RNA';
-    if (!hasU && hasT) return 'DNA';
-    return 'DNA/RNA';
-  }
-
-  function gcContent(s) {
-    const gc = (s.match(/[GC]/g) || []).length;
-    return s.length ? ((gc / s.length) * 100) : 0;
-  }
-
-  function longestHomopolymer(s) {
-    if (!s.length) return { base: '', len: 0 };
-    let max = 1, cur = 1, maxBase = s[0];
-    for (let i = 1; i < s.length; i++) {
-      if (s[i] === s[i-1]) { cur++; if (cur > max) { max = cur; maxBase = s[i]; } }
-      else cur = 1;
-    }
-    return { base: maxBase, len: max };
-  }
-
-  function countCodons(s) {
-    // rough ORF codon count if divisible by 3
-    if (s.length < 3) return null;
-    const rem = s.length % 3;
-    return { codons: Math.floor(s.length / 3), inFrame: rem === 0 };
-  }
-
-  function hasStartCodon(s) { return s.startsWith('ATG'); }
-  function hasStopCodon(s) {
-    const stops = ['TAA','TAG','TGA','UAA','UAG','UGA'];
-    for (let i = 0; i + 2 < s.length; i += 3) {
-      if (stops.includes(s.slice(i, i+3))) return true;
-    }
-    return false;
-  }
-
-  function runChecks(raw) {
-    const s = clean(raw);
-    const len = s.length;
-    const checks = [];
-
-    if (!len) return null;
-
-    const type = detectType(s);
-    const gc = gcContent(s);
-    const hp = longestHomopolymer(s);
-    const codons = countCodons(s);
-
-    // Summary stats
-    checks.push({ kind: 'summary', len, gc, type });
-
-    // GC content
-    if (len >= 20) {
-      if (gc >= 40 && gc <= 65) {
-        checks.push({ id: 'DRC-001', kind: 'pass', name: 'GC content in range', detail: gc.toFixed(1) + '% (optimal 40-65%)' });
-      } else if (gc < 30 || gc > 75) {
-        checks.push({ id: 'DRC-001', kind: 'fail', name: 'GC content out of range', detail: gc.toFixed(1) + '% - synthesis vendors may reject sequences below 30% or above 75%' });
-      } else {
-        checks.push({ id: 'DRC-001', kind: 'warn', name: 'GC content marginal', detail: gc.toFixed(1) + '% - borderline; check vendor specs' });
-      }
-    }
-
-    // Homopolymer
-    if (len >= 8) {
-      if (hp.len >= 9) {
-        checks.push({ id: 'DRC-014', kind: 'fail', name: 'Homopolymer run detected', detail: hp.base + '×' + hp.len + ' at risk - synthesis vendors typically reject runs ≥ 8 nt' });
-      } else if (hp.len >= 6) {
-        checks.push({ id: 'DRC-014', kind: 'warn', name: 'Homopolymer run (watch)', detail: hp.base + '×' + hp.len + ' - under threshold but worth monitoring' });
-      } else {
-        checks.push({ id: 'DRC-014', kind: 'pass', name: 'No homopolymer runs', detail: 'Longest run: ' + hp.base + '×' + hp.len });
-      }
-    }
-
-    // Frame check
-    if (codons && len >= 9) {
-      if (codons.inFrame) {
-        checks.push({ id: 'DRC-020', kind: 'pass', name: 'Length divisible by 3', detail: codons.codons + ' complete codons' });
-      } else {
-        checks.push({ id: 'DRC-020', kind: 'warn', name: 'Length not divisible by 3', detail: 'Length ' + len + ' - ' + (len % 3) + ' nt remainder; may cause frameshift if this is a CDS' });
-      }
-    }
-
-    // Start codon
-    if (len >= 3) {
-      if (hasStartCodon(s)) {
-        checks.push({ id: 'DRC-022', kind: 'pass', name: 'ATG start codon present', detail: 'Found at position 1' });
-      } else {
-        checks.push({ id: 'DRC-022', kind: 'info', name: 'No ATG at position 1', detail: 'Not required for all constructs (e.g. UTRs, probes)' });
-      }
-    }
-
-    // Length info
-    if (len < 15) {
-      checks.push({ id: 'DRC-003', kind: 'info', name: 'Short sequence', detail: len + ' nt - some checks require ≥ 15 nt for reliable results' });
-    } else if (len >= 15) {
-      checks.push({ id: 'DRC-003', kind: 'pass', name: 'Sequence length adequate', detail: len + ' nt - sufficient for analysis' });
-    }
-
-    return checks;
-  }
-
-  function renderCheck(check) {
-    if (check.kind === 'summary') return null; // handled separately
-    const div = document.createElement('div');
-    div.className = 'seq-check ' + check.kind;
-    div.innerHTML =
-      '<span class="seq-check-id">' + check.id + '</span>' +
-      '<div class="seq-check-inner">' +
-        '<span class="seq-check-name">' + check.name + '</span>' +
-        (check.detail ? '<span class="seq-check-detail">' + check.detail + '</span>' : '') +
-      '</div>' +
-      '<span class="seq-badge ' + check.kind + '">' + check.kind.toUpperCase() + '</span>';
-    return div;
-  }
-
-  function renderSummary(check) {
-    const div = document.createElement('div');
-    div.className = 'seq-summary';
-    div.innerHTML =
-      '<div class="seq-stat"><span class="seq-stat-val">' + check.len + ' nt</span><span class="seq-stat-lbl">Length</span></div>' +
-      '<div class="seq-stat"><span class="seq-stat-val">' + check.gc.toFixed(1) + '%</span><span class="seq-stat-lbl">GC Content</span></div>' +
-      '<div class="seq-stat"><span class="seq-stat-val">' + check.type + '</span><span class="seq-stat-lbl">Type</span></div>' +
-      '<div class="seq-stat"><span class="seq-stat-val">' + Math.floor(check.len / 3) + '</span><span class="seq-stat-lbl">Codons</span></div>';
-    return div;
-  }
-
-  let debounceTimer;
-  function analyze() {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      const raw = input.value;
-      const s = clean(raw);
-      const len = s.length;
-
-      // Update meta
-      if (lenEl) lenEl.textContent = len + ' nt';
-      const type = detectType(s);
-      if (typeEl) {
-        typeEl.textContent = type;
-        typeEl.classList.toggle('visible', !!type);
-      }
-
-      // Clear results
-      while (results.firstChild) results.removeChild(results.firstChild);
-
-      if (!len) {
-        const empty = document.createElement('div');
-        empty.className = 'seq-results-empty mono';
-        empty.id = 'seqResultsEmpty';
-        empty.innerHTML = '<span>Waiting for sequence input…</span>';
-        results.appendChild(empty);
-        return;
-      }
-
-      const checks = runChecks(raw);
-      if (!checks) return;
-
-      checks.forEach((check, i) => {
-        if (check.kind === 'summary') {
-          const el = renderSummary(check);
-          el.style.animationDelay = '0ms';
-          results.appendChild(el);
-        } else {
-          const el = renderCheck(check);
-          if (el) {
-            el.style.animationDelay = (i * 60) + 'ms';
-            results.appendChild(el);
-          }
-        }
-      });
-    }, 180);
-  }
-
-  input.addEventListener('input', analyze);
-
-  if (exBtn) exBtn.addEventListener('click', () => {
-    input.value = EXAMPLE_SEQ;
-    analyze();
-    input.focus();
-  });
-
-  if (clrBtn) clrBtn.addEventListener('click', () => {
-    input.value = '';
-    analyze();
-    input.focus();
-  });
-
-})();
-</script>
+<script src="assets/js/analyzer.js" defer></script>
 </body>
 </html>
