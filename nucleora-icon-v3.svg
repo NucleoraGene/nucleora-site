@@ -1,0 +1,325 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background gradient - richer, deeper -->
+    <linearGradient id="bg" x1="0.1" y1="0" x2="0.3" y2="1">
+      <stop offset="0%" stop-color="#0a4a94"/>
+      <stop offset="35%" stop-color="#0f6da6"/>
+      <stop offset="65%" stop-color="#1490a0"/>
+      <stop offset="100%" stop-color="#16a68c"/>
+    </linearGradient>
+
+    <!-- Background radial depth -->
+    <radialGradient id="bgGlow" cx="50%" cy="48%" r="45%">
+      <stop offset="0%" stop-color="#1a90b8" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#083060" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Background vignette -->
+    <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#041830" stop-opacity="0.35"/>
+    </radialGradient>
+
+    <!-- Bezel outer gradient -->
+    <linearGradient id="bezelOuter" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#60c8d8"/>
+      <stop offset="15%" stop-color="#3aa8c0"/>
+      <stop offset="50%" stop-color="#1888a8"/>
+      <stop offset="85%" stop-color="#0e6890"/>
+      <stop offset="100%" stop-color="#0a5878"/>
+    </linearGradient>
+
+    <!-- Bezel highlight -->
+    <linearGradient id="bezelHighlight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
+      <stop offset="20%" stop-color="#ffffff" stop-opacity="0.15"/>
+      <stop offset="80%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.15"/>
+    </linearGradient>
+
+    <!-- Inner shadow for inset effect -->
+    <filter id="innerShadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
+      <feOffset dx="0" dy="3" result="offsetBlur"/>
+      <feFlood flood-color="#041830" flood-opacity="0.5" result="color"/>
+      <feComposite in="color" in2="offsetBlur" operator="in" result="shadow"/>
+      <feComposite in="shadow" in2="SourceGraphic" operator="over"/>
+    </filter>
+
+    <!-- Pillar front face - bright white/ice -->
+    <linearGradient id="pillarFrontL" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#d8eaf4"/>
+      <stop offset="20%" stop-color="#f8fcff"/>
+      <stop offset="50%" stop-color="#ffffff"/>
+      <stop offset="80%" stop-color="#f0f7fc"/>
+      <stop offset="100%" stop-color="#c4dae8"/>
+    </linearGradient>
+
+    <linearGradient id="pillarFrontR" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#cce0ee"/>
+      <stop offset="25%" stop-color="#f4faff"/>
+      <stop offset="55%" stop-color="#ffffff"/>
+      <stop offset="85%" stop-color="#eef6fb"/>
+      <stop offset="100%" stop-color="#b8cedd"/>
+    </linearGradient>
+
+    <!-- Pillar side face (3D depth) -->
+    <linearGradient id="pillarSide" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#90b8d0"/>
+      <stop offset="100%" stop-color="#7aa8c0"/>
+    </linearGradient>
+
+    <!-- Pillar top face -->
+    <linearGradient id="pillarTop" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#e8f2fa"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+
+    <!-- Pillar vertical shading for roundness -->
+    <linearGradient id="pillarRound" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
+      <stop offset="40%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#0a3060" stop-opacity="0.1"/>
+    </linearGradient>
+
+    <!-- Diagonal main fill -->
+    <linearGradient id="diagFront" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="30%" stop-color="#f4faff"/>
+      <stop offset="60%" stop-color="#daeaf4"/>
+      <stop offset="100%" stop-color="#a8c8dc"/>
+    </linearGradient>
+
+    <!-- Diagonal side shading -->
+    <linearGradient id="diagSide" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#88b0c8"/>
+      <stop offset="100%" stop-color="#6898b0"/>
+    </linearGradient>
+
+    <!-- Glass reflection sweep -->
+    <linearGradient id="glassReflect" x1="0.2" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="35%" stop-color="#ffffff" stop-opacity="0.06"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Glow layers - much more dramatic -->
+    <radialGradient id="glowAmbient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00ffe8" stop-opacity="0.6"/>
+      <stop offset="30%" stop-color="#00e0d0" stop-opacity="0.3"/>
+      <stop offset="60%" stop-color="#00c8c0" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#00a0a0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowBright" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#80fffa" stop-opacity="1"/>
+      <stop offset="30%" stop-color="#40f0e8" stop-opacity="0.7"/>
+      <stop offset="60%" stop-color="#00e0d8" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#00c0b8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowHot" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#c0fff8"/>
+      <stop offset="100%" stop-color="#00eedd" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Shadow filters -->
+    <filter id="dropShadow" x="-15%" y="-10%" width="130%" height="125%">
+      <feDropShadow dx="3" dy="6" stdDeviation="8" flood-color="#041830" flood-opacity="0.4"/>
+    </filter>
+    <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="14"/>
+    </filter>
+    <filter id="tightGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+
+    <!-- Noise texture -->
+    <filter id="noise" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch" result="noise"/>
+      <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise"/>
+      <feBlend in="SourceGraphic" in2="grayNoise" mode="overlay" result="noisy"/>
+      <feComponentTransfer in="noisy">
+        <feFuncA type="linear" slope="1"/>
+      </feComponentTransfer>
+    </filter>
+
+    <clipPath id="innerClip">
+      <rect x="14" y="14" width="484" height="484" rx="82"/>
+    </clipPath>
+    <clipPath id="outerClip">
+      <rect x="0" y="0" width="512" height="512" rx="96"/>
+    </clipPath>
+  </defs>
+
+  <!-- === BEZEL BORDER === -->
+  <rect width="512" height="512" rx="96" fill="url(#bezelOuter)"/>
+  <rect width="512" height="512" rx="96" fill="url(#bezelHighlight)"/>
+
+  <!-- === INNER ICON AREA === -->
+  <rect x="14" y="14" width="484" height="484" rx="82" fill="url(#bg)"/>
+
+  <g clip-path="url(#innerClip)">
+    <!-- Background glow -->
+    <rect x="14" y="14" width="484" height="484" fill="url(#bgGlow)"/>
+
+    <!-- Subtle noise texture overlay -->
+    <rect x="14" y="14" width="484" height="484" fill="#4488aa" opacity="0.03" filter="url(#noise)"/>
+
+    <!-- Molecular structure background details -->
+    <g opacity="0.06" fill="none" stroke="#ffffff" stroke-width="1.2">
+      <!-- Top-right molecular chain -->
+      <circle cx="400" cy="70" r="8"/>
+      <circle cx="430" cy="55" r="6"/>
+      <circle cx="460" cy="72" r="7"/>
+      <circle cx="445" cy="100" r="5"/>
+      <circle cx="475" cy="95" r="6"/>
+      <line x1="408" y1="67" x2="424" y2="58"/>
+      <line x1="436" y1="57" x2="453" y2="68"/>
+      <line x1="455" y1="79" x2="447" y2="95"/>
+      <line x1="450" y1="100" x2="469" y2="97"/>
+      <line x1="465" y1="76" x2="472" y2="89"/>
+      <!-- Top-right second layer -->
+      <circle cx="380" cy="105" r="5"/>
+      <circle cx="410" cy="115" r="7"/>
+      <circle cx="440" cy="130" r="5"/>
+      <line x1="385" y1="105" x2="403" y2="113"/>
+      <line x1="417" y1="117" x2="435" y2="128"/>
+
+      <!-- Bottom-left molecular chain -->
+      <circle cx="55" cy="400" r="7"/>
+      <circle cx="80" cy="385" r="6"/>
+      <circle cx="110" cy="395" r="8"/>
+      <circle cx="90" cy="420" r="5"/>
+      <circle cx="120" cy="430" r="6"/>
+      <circle cx="55" cy="440" r="5"/>
+      <circle cx="140" cy="415" r="5"/>
+      <line x1="62" y1="397" x2="74" y2="388"/>
+      <line x1="86" y1="387" x2="102" y2="393"/>
+      <line x1="107" y1="403" x2="95" y2="418"/>
+      <line x1="95" y1="422" x2="114" y2="428"/>
+      <line x1="58" y1="407" x2="58" y2="435"/>
+      <line x1="117" y1="398" x2="135" y2="413"/>
+      <!-- Bottom-left second layer -->
+      <circle cx="65" cy="460" r="6"/>
+      <circle cx="95" cy="450" r="5"/>
+      <line x1="60" y1="445" x2="63" y2="454"/>
+      <line x1="71" y1="460" x2="90" y2="452"/>
+
+      <!-- Bottom-right accent -->
+      <circle cx="430" cy="440" r="6"/>
+      <circle cx="458" cy="448" r="5"/>
+      <circle cx="445" cy="468" r="7"/>
+      <line x1="436" y1="442" x2="453" y2="446"/>
+      <line x1="455" y1="453" x2="449" y2="462"/>
+      <line x1="439" y1="465" x2="433" y2="446"/>
+    </g>
+
+    <!-- Hexagonal pattern clusters -->
+    <g opacity="0.045" fill="#ffffff" stroke="none">
+      <polygon points="370,60 384,51 398,60 398,74 384,83 370,74"/>
+      <polygon points="402,60 416,51 430,60 430,74 416,83 402,74"/>
+      <polygon points="434,60 448,51 462,60 462,74 448,83 434,74"/>
+      <polygon points="466,60 480,51 494,60 494,74 480,83 466,74"/>
+      <polygon points="386,80 400,71 414,80 414,94 400,103 386,94"/>
+      <polygon points="418,80 432,71 446,80 446,94 432,103 418,94"/>
+      <polygon points="450,80 464,71 478,80 478,94 464,103 450,94"/>
+      <polygon points="402,100 416,91 430,100 430,114 416,123 402,114"/>
+      <polygon points="434,100 448,91 462,100 462,114 448,123 434,114"/>
+      <polygon points="466,100 480,91 494,100 494,114 480,123 466,114"/>
+
+      <polygon points="18,390 32,381 46,390 46,404 32,413 18,404"/>
+      <polygon points="50,390 64,381 78,390 78,404 64,413 50,404"/>
+      <polygon points="82,390 96,381 110,390 110,404 96,413 82,404"/>
+      <polygon points="34,410 48,401 62,410 62,424 48,433 34,424"/>
+      <polygon points="66,410 80,401 94,410 94,424 80,433 66,424"/>
+      <polygon points="98,410 112,401 126,410 126,424 112,433 98,424"/>
+      <polygon points="18,430 32,421 46,430 46,444 32,453 18,444"/>
+      <polygon points="50,430 64,421 78,430 78,444 64,453 50,444"/>
+      <polygon points="82,430 96,421 110,430 110,444 96,453 82,444"/>
+      <polygon points="114,430 128,421 142,430 142,444 128,453 114,444"/>
+      <polygon points="34,450 48,441 62,450 62,464 48,473 34,464"/>
+      <polygon points="66,450 80,441 94,450 94,464 80,473 66,464"/>
+      <polygon points="98,450 112,441 126,450 126,464 112,473 98,464"/>
+    </g>
+
+    <!-- Vignette -->
+    <rect x="14" y="14" width="484" height="484" fill="url(#vignette)"/>
+
+    <!-- ====== LETTER N WITH 3D DEPTH ====== -->
+
+    <!-- Drop shadow layer -->
+    <g filter="url(#dropShadow)" opacity="0.9">
+      <rect x="148" y="112" width="52" height="288" rx="10" fill="#041830" opacity="0.001"/>
+      <rect x="312" y="112" width="52" height="288" rx="10" fill="#041830" opacity="0.001"/>
+      <path d="M 174 112 C 210 200, 302 312, 338 400" stroke="#041830" stroke-width="56" stroke-linecap="round" fill="none" opacity="0.001"/>
+    </g>
+
+    <!-- === DIAGONAL BAR (behind left pillar, in front of right) === -->
+    <!-- Diagonal side/depth face -->
+    <path d="M 178 118 C 214 206, 306 318, 342 406"
+          stroke="url(#diagSide)" stroke-width="60" stroke-linecap="round" fill="none" opacity="0.4"/>
+    <!-- Diagonal front face -->
+    <path d="M 174 112 C 210 200, 302 312, 338 400"
+          stroke="url(#diagFront)" stroke-width="56" stroke-linecap="round" fill="none"/>
+    <!-- Diagonal highlight strip -->
+    <path d="M 174 112 C 210 200, 302 312, 338 400"
+          stroke="#ffffff" stroke-width="16" stroke-linecap="round" fill="none" opacity="0.2"/>
+
+    <!-- === LEFT PILLAR (in front of diagonal) === -->
+    <!-- Left pillar depth/side face -->
+    <rect x="200" y="115" width="8" height="282" rx="2" fill="url(#pillarSide)" opacity="0.7"/>
+    <!-- Left pillar bottom face hint -->
+    <path d="M 148 390 L 148 400 Q 148 410 158 410 L 190 410 Q 200 410 200 400 L 200 397 L 207 400 Q 200 410 190 410 L 158 410 Q 148 410 148 400 Z"
+          fill="#6898b0" opacity="0.3"/>
+    <!-- Left pillar front face -->
+    <rect x="148" y="112" width="52" height="288" rx="10" fill="url(#pillarFrontL)"/>
+    <!-- Left pillar roundness/vertical shading -->
+    <rect x="148" y="112" width="52" height="288" rx="10" fill="url(#pillarRound)"/>
+    <!-- Left pillar left edge shadow -->
+    <rect x="148" y="112" width="8" height="288" rx="4" fill="#8ab0c8" opacity="0.25"/>
+    <!-- Left pillar center highlight -->
+    <rect x="164" y="118" width="14" height="276" rx="7" fill="#ffffff" opacity="0.2"/>
+    <!-- Left pillar right edge highlight -->
+    <rect x="192" y="116" width="4" height="280" rx="2" fill="#ffffff" opacity="0.15"/>
+    <!-- Left pillar top bevel -->
+    <rect x="152" y="112" width="44" height="6" rx="3" fill="#ffffff" opacity="0.3"/>
+
+    <!-- === RIGHT PILLAR === -->
+    <!-- Right pillar depth/side face -->
+    <rect x="364" y="115" width="8" height="282" rx="2" fill="url(#pillarSide)" opacity="0.6"/>
+    <!-- Right pillar front face -->
+    <rect x="312" y="112" width="52" height="288" rx="10" fill="url(#pillarFrontR)"/>
+    <!-- Right pillar roundness -->
+    <rect x="312" y="112" width="52" height="288" rx="10" fill="url(#pillarRound)"/>
+    <!-- Right pillar left edge shadow -->
+    <rect x="312" y="112" width="8" height="288" rx="4" fill="#8ab0c8" opacity="0.2"/>
+    <!-- Right pillar center highlight -->
+    <rect x="328" y="118" width="14" height="276" rx="7" fill="#ffffff" opacity="0.18"/>
+    <!-- Right pillar right edge highlight -->
+    <rect x="356" y="116" width="4" height="280" rx="2" fill="#ffffff" opacity="0.12"/>
+    <!-- Right pillar top bevel -->
+    <rect x="316" y="112" width="44" height="6" rx="3" fill="#ffffff" opacity="0.25"/>
+
+    <!-- ====== GLOW NODE - DRAMATIC ====== -->
+    <!-- Wide ambient bloom -->
+    <circle cx="256" cy="256" r="70" fill="url(#glowAmbient)" filter="url(#softGlow)"/>
+    <!-- Secondary bloom -->
+    <circle cx="256" cy="256" r="40" fill="url(#glowAmbient)" filter="url(#tightGlow)"/>
+    <!-- Light rays (subtle) -->
+    <line x1="256" y1="220" x2="256" y2="196" stroke="#00ffe8" stroke-width="2" opacity="0.15" stroke-linecap="round"/>
+    <line x1="256" y1="292" x2="256" y2="316" stroke="#00ffe8" stroke-width="2" opacity="0.15" stroke-linecap="round"/>
+    <line x1="220" y1="256" x2="200" y2="256" stroke="#00ffe8" stroke-width="2" opacity="0.12" stroke-linecap="round"/>
+    <line x1="292" y1="256" x2="312" y2="256" stroke="#00ffe8" stroke-width="2" opacity="0.12" stroke-linecap="round"/>
+    <!-- Bright mid glow -->
+    <circle cx="256" cy="256" r="28" fill="url(#glowBright)"/>
+    <!-- Hot inner -->
+    <circle cx="256" cy="256" r="16" fill="url(#glowHot)"/>
+    <!-- Core -->
+    <circle cx="256" cy="256" r="8" fill="#ffffff"/>
+    <!-- Specular highlight -->
+    <circle cx="252" cy="252" r="3.5" fill="#ffffff" opacity="0.95"/>
+
+    <!-- ====== GLASS REFLECTION SWEEP ====== -->
+    <rect x="14" y="14" width="484" height="260" fill="url(#glassReflect)"/>
+  </g>
+</svg>
